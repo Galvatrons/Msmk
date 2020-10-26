@@ -6,6 +6,8 @@ import store from './store'
 import './assets/vantImport'
 // axios引入
 import request from "./util/request"
+// rem引入
+import "./assets/rem"
 Vue.config.productionTip = false
 
 // axios全局定义

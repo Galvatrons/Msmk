@@ -1,0 +1,12 @@
+$ git remote add origin https://github.com/Galvatrons/Msmk.git
+
+拉取
+$  git push -u origin main
+
+重置
+git remote rm origin
+
+下载到本地
+ git clone https://github.com/Galvatrons/Msmk.git
+
+git pull origin master   // 拉取最新代码

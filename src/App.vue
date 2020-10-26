@@ -1,9 +1,13 @@
 <template>
-  <div id="app">
-    <van-button type="primary">主要按钮</van-button><br>
-    <van-button type="info">信息按钮</van-button>
-  </div>
+  <div id="app"></div>
 </template>
 
 <style lang="scss">
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  font-size: 0.16rem;
+}
 </style>
