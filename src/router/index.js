@@ -5,21 +5,25 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: '',
-    
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: function () {
-  //     return import(/* webpackChunkName: "about" */ '../views/About.vue')
-  //   }
-  // }
+  // 课程页面
+  {
+    path: '/course',
+    name: 'course',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/yzCourse/course.vue')
+    },
+  },
+  // 搜索页面
+  {
+    path: '/search',
+    name: 'search',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/yzCourse/search.vue')
+    },
+  },
 ]
 
 const router = new VueRouter({

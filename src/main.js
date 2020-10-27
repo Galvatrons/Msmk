@@ -14,7 +14,6 @@ Vue.config.productionTip = false
 Vue.prototype.$http = request
 
 
-
 import 'vant/lib/index.css';
 new Vue({
   router,

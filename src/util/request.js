@@ -6,7 +6,6 @@ import axios from 'axios'
 const serve = axios.create({
     baseURL: '',
     timeout: ""
-
 })
 
 // 请求拦截
