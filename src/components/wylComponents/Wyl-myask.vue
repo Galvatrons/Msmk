@@ -5,27 +5,27 @@
       <div class="top">约课记录</div>
       <van-tabs swipeable>
         <van-tab class="sxlvan1" title="待上课">
-           <img class="picture" src="../assets/img/a.png"/>
+          <img class="picture" src="../../assets/img/a.png" />
           <div class="sxlh6">请登录后查看相关内容</div>
-          <router-link to="/">
+          <router-link to="/Wyl-Login">
             <div class="registration">登录/注册</div>
-            </router-link>
+          </router-link>
         </van-tab>
 
         <van-tab title="已上课">
-           <img class="picture" src="../assets/img/a.png"/>
+          <img class="picture" src="../../assets/img/a.png" />
           <div class="sxlh6">请登录后查看相关内容</div>
-          <router-link to="/">
+          <router-link to="/Wyl-Login">
             <div class="registration">登录/注册</div>
-            </router-link>
+          </router-link>
         </van-tab>
 
         <van-tab title="已取消">
-          <img class="picture" src="../assets/img/a.png"/>
-          <div class="sxlh6">请登录后查看相关内容</div>
-          <router-link to="/">
+          <img class="picture" src="../../assets/img/a.png" />
+          <div class="sxlh6">还没有取消上课记录</div>
+          <router-link to="/Wyl-Login">
             <div class="registration">登录/注册</div>
-            </router-link>
+          </router-link>
         </van-tab>
       </van-tabs>
     </div>
@@ -39,18 +39,14 @@ export default {
     return {};
   },
   methods: {
-    add() {
-      this.$router.push({
-        path: "/",
-      });
-    },
+    
   },
 };
 </script>
 
 <style scoped>
-#id{
-   background: rgb(240, 242, 245);
+#id {
+  background: rgb(240, 242, 245);
 }
 .top {
   width: 100%;

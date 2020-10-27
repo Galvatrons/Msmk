@@ -1,7 +1,12 @@
 $ git remote add origin https://github.com/Galvatrons/Msmk.git
 
+<<<<<<< HEAD
 拉取
 $  git push -u origin master 
+=======
+
+$  git push -u origin master
+>>>>>>> 101cfd2a3c3d8c93a5c80e6a26111ed626729cdf
 
 重置
 git remote rm origin

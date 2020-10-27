@@ -7,12 +7,8 @@
       />
     </div>
     <van-form @submit="onSubmit">
-        <!-- 手机号 -->
-      <van-field
-        v-model="username"
-        name="手机号"
-        placeholder="请输入手机号"
-      />
+      <!-- 手机号 -->
+      <van-field v-model="username" name="手机号" placeholder="请输入手机号" />
       <!-- 密码框 -->
       <van-field
         v-model="password"
@@ -21,12 +17,18 @@
         placeholder="请输入密码"
       />
       <div class="vnt-text">
-          <span @click="add1">找回密码</span>
-          <span @click="add"> 注册/验证码登录</span>
+        <span @click="add1">找回密码</span>
+        <span @click="add"> 注册/验证码登录</span>
       </div>
 
       <div style="margin: 16px">
-        <van-button round block type="info" native-type="submit"  color="linear-gradient(to right, rgb(255, 146, 71),rgb(253, 88, 3))">
+        <van-button
+          round
+          block
+          type="info"
+          native-type="submit"
+          color="linear-gradient(to right, rgb(255, 146, 71),rgb(253, 88, 3))"
+        >
           登录
         </van-button>
       </div>
@@ -46,16 +48,16 @@ export default {
     onSubmit(values) {
       console.log("submit", values);
     },
-    add(){
-        this.$router.push({
-            path:"/wyl-sms"
-        })
+    add() {
+      this.$router.push({
+        path: "/wyl-sms",
+      });
     },
-    add1(){
-       this.$router.push({
-            path:"/wyl-pass"
-        }) 
-    }
+    add1() {
+      this.$router.push({
+        path: "/wyl-pass",
+      });
+    },
   },
 };
 </script>
@@ -81,20 +83,20 @@ export default {
   width: 80vw;
   font-size: 15px;
   color: gray;
-   display: flex;
+  display: flex;
   justify-content: space-between;
   text-align: center;
   margin-left: 0.4rem;
   margin-top: 0.3rem;
 }
-.van-button{
-    width: 70vw;
-    margin-top: 0.6rem;
-    margin-left: 0.4rem;
+.van-button {
+  width: 70vw;
+  margin-top: 0.6rem;
+  margin-left: 0.4rem;
 }
-.van-field{
-    width: 85vw;
-    text-align: center;
-    margin-left: 0.3rem;
+.van-field {
+  width: 85vw;
+  text-align: center;
+  margin-left: 0.3rem;
 }
 </style>

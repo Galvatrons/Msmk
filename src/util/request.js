@@ -4,8 +4,10 @@ import axios from 'axios'
 // 实例化axios
 
 const serve = axios.create({
-    baseURL: '',
-    timeout: ""
+
+    baseURL: 'http://120.53.31.103:84',
+    timeout: "3000"
+
 
 })
 
