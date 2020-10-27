@@ -18,7 +18,9 @@
     <div class="yz_history_container" v-show="!show">
       <div class="history_title">
         <span>历史搜索</span>
-        <div class="yz_remove"><van-icon name="delete" /></div>
+        <div class="yz_remove" @click="onRemove">
+          <van-icon name="delete" />
+        </div>
       </div>
       <div class="history_item_wrapper">
         <span
@@ -56,7 +58,23 @@ export default {
         this.show = true;
       }
     },
-    onSearch() {},
+    onSearch() {
+      var index = this.history.findIndex((item) => {
+        return item == this.searchText;
+      });
+      if (index != -1) {
+        this.history.splice(index, 1);
+      }
+      this.history.unshift(this.searchText);
+      if (this.history.length > 5) {
+        this.history.pop();
+      }
+      localStorage.setItem("history", JSON.stringify(this.history));
+    },
+    onRemove() {
+      localStorage.removeItem("history");
+      this.history = [];
+    },
   },
 };
 </script>

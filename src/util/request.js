@@ -4,8 +4,14 @@ import axios from 'axios'
 // 实例化axios
 
 const serve = axios.create({
+<<<<<<< HEAD
     baseURL: '',
     timeout: ""
+=======
+    baseURL: 'http://120.53.31.103:84',
+    timeout: "3000"
+
+>>>>>>> ab29c76e91578a7b4ca6a4ce791fd06dafc71068
 })
 
 // 请求拦截
