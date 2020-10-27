@@ -5,21 +5,37 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: '',
-    
-  // },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: function () {
-  //     return import(/* webpackChunkName: "about" */ '../views/About.vue')
-  //   }
-  // }
+  // 登录页
+  {
+    path:"/",
+    name:"Wyl-Login",
+    component: () => import('../components/Wyl-Login.vue')
+  },
+  // 注册页
+  {
+    path:"/wyl-sms",
+    name:"Wyl-sms",
+    component: () => import('../components/Wyl-sms.vue')
+  },
+  //找回密码
+  {
+    path:"/wyl-pass",
+    name:"Wyl-pass",
+    component: () => import('../components/Wyl-pass.vue')
+  },
+  //约客记录
+  {
+    path:"/wyl-myask",
+    name:"Wyl-myask",
+    component: () => import('../components/Wyl-myask.vue')
+  },
+  //我的页面
+  {
+    path:"/wyl-Main",
+    name:"Wyl-Main",
+    component: () => import('../components/Wyl-Main.vue')
+  },
+
 ]
 
 const router = new VueRouter({
