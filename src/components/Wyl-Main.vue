@@ -20,6 +20,7 @@
                   <p style=" color: gray;">查看剩余学习币</p>
               </div>
           </div>
+          
       </div>
     </div>
   </div>
@@ -47,7 +48,7 @@ export default {};
 .Main-top .top1{
     width: 100%;
     height: 50%;
-    background: chartreuse;
+    background: rgb(255, 255, 255);
 }
 .Main-top .top2{
     width: 100%;
@@ -63,9 +64,11 @@ export default {};
 }
 .Main-top .top2 div{
   margin: 0px 3px;
-  background: yellow;
+  background: rgb(219, 214, 214);
+  width: 33%;
+  text-align: center;
 }
 .Main-top .top2 p{
-    font-size: 14px;
+    font-size: 12px;
 }
 </style>
