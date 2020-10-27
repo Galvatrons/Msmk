@@ -190,6 +190,8 @@ export default {
         probeType: 3,
         click: true
       });
+      this.getBanner()
+      this.getIndex()
     });
   },
   activated() {},
@@ -201,6 +203,16 @@ export default {
     //   点击进入教师详情页面
     ToCourseDetail() {
       this.$router.push("/course-detail");
+    },
+    // 获取轮播图数据
+   async getBanner(){
+        let data = await this.$http.get("/api/app/banner")
+        console.log(data);
+    },
+    // 获取首页列表数据
+    async getIndex(){
+        let data = await this.$http.get("/api/app/recommend/appIndex")
+        console.log(data);
     }
   },
   filters: {},
