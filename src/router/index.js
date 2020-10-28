@@ -26,7 +26,7 @@ const routes = [
     path: '/lwh_course',
     name: 'lwh_course',
     component: function () {
-      return import( '../views/yzCourse/course.vue')
+      return import('../views/yzCourse/course.vue')
     },
   },
   // 首页路由
@@ -36,6 +36,14 @@ const routes = [
 
     component: function () {
       return import('../views/wsy_component/index')
+    }
+  },
+  // 讲师详情
+  {
+    path: '/teacher',
+    name: 'teacher',
+    component: function () {
+      return import('../views/wsy_component/WsyTeacherInfo')
     }
   },
   // 一对一
@@ -63,7 +71,7 @@ const routes = [
     path: '/lwh_exercise',
     name: 'lwh_exercise',
     component: function () {
-      return import( '../views/lwh_views/lwh_exercise.vue')
+      return import('../views/lwh_views/lwh_exercise.vue')
     }
   },
   // 搜索页面
@@ -74,7 +82,7 @@ const routes = [
       return import('../views/yzCourse/search.vue')
     },
   },
-// 特色课头部封装
+  // 特色课头部封装
   {
     path: '/yzHeader',
     name: 'yzHeader',
@@ -82,7 +90,7 @@ const routes = [
       return import("../components/yzComponents/yzHeader.vue")
     },
   },
-//首页精品课程详情
+  //首页精品课程详情
   {
     path: '/CourseDetail',
     name: 'CourseDetail',
@@ -90,18 +98,66 @@ const routes = [
       return import("../views/wsy_component/CourseDetail.vue")
     },
   },
-   // 注册页
-   {
-    path:"/wyl-sms",
-    name:"Wyl-sms",
+  // 注册页
+  {
+    path: "/wyl-sms",
+    name: "Wyl-sms",
     component: () => import('../components/wylComponents/Wyl-sms.vue')
   },
   //找回密码
   {
-    path:"/wyl-pass",
-    name:"Wyl-pass",
+    path: "/wyl-pass",
+    name: "Wyl-pass",
     component: () => import('../components/wylComponents/Wyl-pass.vue')
   },
+
+  //课程详情
+  {
+    path: "/yz_courseDetail",
+    name: "yz_courseDetail",
+    component: () => import('../views/yzCourse/courseDetail.vue')
+  },
+  {
+    path: "/yzTeacherDetail",
+    name: "yzTeacherDetail",
+    component: () => import("../views/yzCourse/yzTeacherDetail")
+  },
+  {
+    path: "/yzStudyDetail",
+    name: "yzStudyDetail",
+    component: () => import("../views/yzCourse/yzStudyDetail")
+  },
+  {
+    path: "/yzStudyCalendar",
+    name: "yzStudyCalendar",
+    component: () => import("../views/yzCourse/yzStudyCalendar")
+  },
+
+  //我的页面学习币
+  {
+    path:"/wyl-my-currency",
+    name:"Wyl-my-currency",
+    component: () => import('../components/wylComponents/Wyl-my-currency.vue')
+  },
+  //我的页面余额明细
+  {
+    path:"/wyl-my-ye",
+    name:"Wyl-my-ye",
+    component: () => import('../components/wylComponents/Wyl-my-ye.vue')
+  },
+  //我的页面特色课跳转
+  {
+    path:"/wyl-my-study",
+    name:"Wyl-my-study",
+    component: () => import('../components/wylComponents/Wyl-my-study.vue')
+  },
+
+  // 学习日历
+  {
+    path:"/StudyCalendar",
+    name:"StudyCalendar",
+    component:()=> import("../views/wsy_component/StudyCalendar.vue")
+  }
  
 ]
 

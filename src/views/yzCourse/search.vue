@@ -50,31 +50,31 @@ export default {
     onCancel() {
       this.$router.go(-1);
     },
-    onInput(event) {
-      var inputValue = event.target.value;
-      if (inputValue.length == 0) {
-        this.show = false;
-      } else {
-        this.show = true;
-      }
-    },
-    onSearch() {
-      var index = this.history.findIndex((item) => {
-        return item == this.searchText;
-      });
-      if (index != -1) {
-        this.history.splice(index, 1);
-      }
-      this.history.unshift(this.searchText);
-      if (this.history.length > 5) {
-        this.history.pop();
-      }
-      localStorage.setItem("history", JSON.stringify(this.history));
-    },
-    onRemove() {
-      localStorage.removeItem("history");
-      this.history = [];
-    },
+  },
+  onInput(event) {
+    var inputValue = event.target.value;
+    if (inputValue.length == 0) {
+      this.show = false;
+    } else {
+      this.show = true;
+    }
+  },
+  onSearch() {
+    var index = this.history.findIndex((item) => {
+      return item == this.searchText;
+    });
+    if (index != -1) {
+      this.history.splice(index, 1);
+    }
+    this.history.unshift(this.searchText);
+    if (this.history.length > 5) {
+      this.history.pop();
+    }
+    localStorage.setItem("history", JSON.stringify(this.history));
+  },
+  onRemove() {
+    localStorage.removeItem("history");
+    this.history = [];
   },
 };
 </script>

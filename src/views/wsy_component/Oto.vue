@@ -222,7 +222,7 @@ export default {
           type: "M10",
         },
       ],
-      lwh_flag: 1,
+      lwh_flag: 0,
       lwh_date: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
       lwh_arr: [],
       lwh_index: null,
@@ -264,7 +264,7 @@ export default {
             this.bs.scrollTo(0, 0);
           }
         });
-      }, 200);
+      }, 500);
     },
 
     lwh_btn(index) {

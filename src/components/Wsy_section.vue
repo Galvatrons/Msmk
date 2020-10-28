@@ -34,7 +34,7 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
   > .title {
     margin: 0;
     margin-left: 0.2rem;
@@ -56,12 +56,13 @@ export default {
     justify-content: start;
     background: #fff;
     padding: 0 0.15rem;
+    box-sizing: border-box;
     > :nth-child(2) {
       > :nth-child(1) {
         > span {
           color: red;
           font-size: 0.12rem;
-          margin-left: .1rem;
+          margin-left: 0.1rem;
         }
       }
     }
@@ -92,6 +93,7 @@ export default {
   }
 }
 .wsy_ii_item {
+  position: relative;
   width: 100%;
   height: 2rem;
   padding: 0 0.2rem;
@@ -132,6 +134,7 @@ export default {
 }
 .wsy_ii_info {
   width: 100%;
+  margin-top: .15rem;
   height: 0.4rem;
   line-height: 0.4rem;
   display: flex;
