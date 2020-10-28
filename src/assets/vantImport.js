@@ -6,7 +6,7 @@ import { Button,Swipe,
     Tabbar,
     TabbarItem,
     Field,
-    Form,DropdownMenu, DropdownItem } from 'vant';
+    Form,DropdownMenu, DropdownItem ,Toast} from 'vant';
 
 
 
@@ -34,3 +34,4 @@ Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Icon)
 Vue.use(Field)
+Vue.use(Toast)

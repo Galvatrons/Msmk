@@ -35,14 +35,16 @@
           <template slot="a">
             <p class="title">名师阵容</p>
             <div class="wsy_content">
-              <div class="wsy_item" v-for="index in 3" :key="index">
-                <img
-                  src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-                  alt
-                />
+              <div
+                class="wsy_item"
+                @click="toTeacherInfo(item.teacher_id)"
+                v-for="(item,index) in famousTeacher.list"
+                :key="index"
+              >
+                <img :src="item.teacher_avatar" />
                 <div>
-                  <p>马学斌</p>
-                  <p>马学斌111111111111111111111111111111111111111111111111111111111111</p>
+                  <p>{{ item.teacher_name }}</p>
+                  <p>{{ item.introduction }}</p>
                 </div>
               </div>
             </div>
@@ -55,30 +57,37 @@
           <template slot="a">
             <p class="title">精品课程</p>
             <div class="wsy_content">
-              <div class="wsy_ii_item" @click="ToCourseDetail()" v-for="index in 7" :key="index">
-                <p>每时每课特级教师-自主招生冲刺讲座6-多元方程组与可转化为多元方程组问题</p>
+              <div
+                class="wsy_ii_item"
+                @click="ToCourseDetail(item)"
+                v-for="(item,index) in excellentCourse.list"
+                :key="index"
+              >
+                <p>{{ item.title }}</p>
                 <div class="wsy_ii_time">
-                  <p>共一课时</p>
+                  <p>共{{ item.total_periods | periods }}课时</p>
                 </div>
-                <div class="wsy_ii_teacher">
-                  <img
-                    src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-                  />
-                  <p>杨德胜</p>
+                <div class="wsy_ii_teacher" v-for="(it,i) in item.teachers_list" :key="i">
+                  <img :src="it.teacher_avatar" />
+                  <p>{{ it.teacher_name }}</p>
                 </div>
 
                 <div class="wsy_ii_info">
-                  <span>1000人已报名</span>
-                  <!-- <span class='wsy_good'>免费</span> -->
-                  <span class="wsy_price">
+                  <span>{{ item.sales_num }}人已报名</span>
+                  <span class="wsy_good" v-show="item.price == 0">免费</span>
+                  <span class="wsy_price" v-show="item.price != 0">
                     <img
                       src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
-                      alt
                     />
-
-                    <span>1.00</span>
+                    <span>{{ item.price }}</span>
                   </span>
                 </div>
+                <img
+                  v-show="!item.has_buy"
+                  class="wsy_flag_img"
+                  src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
+                  alt
+                />
               </div>
             </div>
           </template>
@@ -90,29 +99,37 @@
           <template slot="a">
             <p class="title">推荐课程</p>
             <div class="wsy_content">
-              <div class="wsy_ii_item" v-for="index in 5" :key="index">
-                <p>每时每课-初二物理-牛顿第一定律＆二力平衡知识点</p>
+              <div
+                class="wsy_ii_item"
+                @click="ToCourseDetail(item)"
+                v-for="(item,index) in recommendedCourse.list"
+                :key="index"
+              >
+                <p>{{ item.title }}</p>
                 <div class="wsy_ii_time">
-                  <p>共一课时</p>
+                  <p>共{{ item.total_periods | periods }}课时</p>
                 </div>
-                <div class="wsy_ii_teacher">
-                  <img
-                    src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-                  />
-                  <p>杨德胜</p>
+                <div class="wsy_ii_teacher" v-for="(it,i) in item.teachers_list" :key="i">
+                  <img :src="it.teacher_avatar" />
+                  <p>{{ it.teacher_name }}</p>
                 </div>
 
                 <div class="wsy_ii_info">
-                  <span>1000人已报名</span>
-                  <!-- <span class='wsy_good'>免费</span> -->
-                  <span class="wsy_price">
+                  <span>{{ item.sales_num }}人已报名</span>
+                  <span class="wsy_good" v-show="item.price == 0">免费</span>
+                  <span class="wsy_price" v-show="item.price != 0">
                     <img
                       src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
-                      alt
                     />
-                    <span>1.00</span>
+                    <span>{{ item.price }}</span>
                   </span>
                 </div>
+                <img
+                  v-show="!item.has_buy"
+                  class="wsy_flag_img"
+                  src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
+                  alt
+                />
               </div>
             </div>
           </template>
@@ -124,17 +141,19 @@
           <template slot="a">
             <p class="title">名师讲师</p>
             <div class="wsy_content">
-              <div class="wsy_item" v-for="index in 7" :key="index">
-                <img
-                  src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-                  alt
-                />
+              <div
+                class="wsy_item"
+                @click="toTeacherInfo(item.teacher_id)"
+                v-for="(item,index) in starLecturer.list"
+                :key="index"
+              >
+                <img :src="item.teacher_avatar" />
                 <div>
                   <p>
-                    马学斌
+                    {{ item.teacher_name }}
                     <span>M10</span>
                   </p>
-                  <p>马学斌111111111111111111111111111111111111111111111111111111111111</p>
+                  <p>{{ item.introduction }}</p>
                 </div>
               </div>
             </div>
@@ -180,18 +199,29 @@ export default {
           img:
             "data:image/png;base64,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"
         }
-      ]
+      ],
+      // 名师阵容区域数据
+      famousTeacher: {},
+      // 精品课程数据
+      excellentCourse: {},
+      // 推荐课程数据
+      recommendedCourse: {},
+      // 明星讲师
+      starLecturer: {}
     };
   },
   created() {},
   mounted() {
     this.$nextTick(() => {
-      this.bs = new BetterScroll(this.$refs.scrollBox, {
-        probeType: 3,
-        click: true
-      });
-      this.getBanner()
-      this.getIndex()
+      setTimeout(() => {
+        this.bs = new BetterScroll(this.$refs.scrollBox, {
+          probeType: 3,
+          click: true
+        });
+      }, 800);
+
+      this.getBanner();
+      this.getIndex();
     });
   },
   activated() {},
@@ -200,28 +230,68 @@ export default {
     next();
   },
   methods: {
-    //   点击进入教师详情页面
-    ToCourseDetail() {
-      this.$router.push("/CourseDetail");
+    //   点击进入课程详情页面
+    ToCourseDetail(info) {
+      window.localStorage.setItem("CourseInfo", JSON.stringify(info));
+      this.$router.push({ name: "CourseDetail", params: info });
     },
     // 获取轮播图数据
-   async getBanner(){
-        let data = await this.$http.get("/api/app/banner")
-        console.log(data);
+    async getBanner() {
+      let data = await this.$http.get("/api/app/banner");
+      // console.log(data);
     },
     // 获取首页列表数据
-    async getIndex(){
-        let data = await this.$http.get("/api/app/recommend/appIndex")
-        console.log(data);
+    async getIndex() {
+      let { data } = await this.$http.get("/api/app/recommend/appIndex");
+      this.famousTeacher = data.data[4];
+      this.excellentCourse = data.data[1];
+      this.recommendedCourse = data.data[3];
+      this.starLecturer = data.data[0];
+    },
+    // 点击名师阵容跳转到讲师详情
+    toTeacherInfo(id) {
+      this.$router.push(`/teacher?id=${id}`);
     }
   },
-  filters: {},
+  filters: {
+    periods(val) {
+      switch (val) {
+        case 0:
+          return "零";
+          break;
+        case 1:
+          return "一";
+          break;
+        case 2:
+          return "二";
+          break;
+        case 3:
+          return "三";
+          break;
+        case 4:
+          return "四";
+          break;
+        case 5:
+          return "五";
+          break;
+        case 6:
+          return "六";
+      }
+    }
+  },
   computed: {},
   watch: {}
 };
 </script>
 
 <style lang='scss' scoped>
+.wsy_flag_img {
+  width: 0.5rem;
+  height: 0.4rem;
+  position: absolute;
+  right: 0.2rem;
+  top: 0.8rem;
+}
 .wsy_box {
   width: 100%;
   height: 100%;
