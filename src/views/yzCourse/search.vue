@@ -45,10 +45,10 @@ export default {
   },
   methods: {
     onBack() {
-      this.$router.push("/course");
+      this.$router.push("/lwh_course");
     },
     onCancel() {
-      this.$router.push("/course");
+      this.$router.push("/lwh_course");
     },
     onInput(event) {
       var inputValue = event.target.value;

@@ -75,11 +75,7 @@ export default {
 }
 .yz_dropdown {
   width: 100%;
-  position: fixed;
-  top: 0.48rem;
-  left: 0;
   background-color: white;
-  z-index: 1000;
 }
 .van-dropdown-menu__bar{
   box-shadow: 0 0 0 !important;
