@@ -45,10 +45,10 @@ export default {
   },
   methods: {
     onBack() {
-      this.$router.push("/course");
+      this.$router.go(-1);
     },
     onCancel() {
-      this.$router.push("/course");
+      this.$router.go(-1);
     },
     onInput(event) {
       var inputValue = event.target.value;
