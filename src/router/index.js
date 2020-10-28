@@ -102,7 +102,24 @@ const routes = [
     name:"Wyl-pass",
     component: () => import('../components/wylComponents/Wyl-pass.vue')
   },
- 
+  //我的页面学习币
+  {
+    path:"/wyl-my-currency",
+    name:"Wyl-my-currency",
+    component: () => import('../components/wylComponents/Wyl-my-currency.vue')
+  },
+  //我的页面余额明细
+  {
+    path:"/wyl-my-ye",
+    name:"Wyl-my-ye",
+    component: () => import('../components/wylComponents/Wyl-my-ye.vue')
+  },
+  //我的页面特色课跳转
+  {
+    path:"/wyl-my-study",
+    name:"Wyl-my-study",
+    component: () => import('../components/wylComponents/Wyl-my-study.vue')
+  },
 ]
 
 const router = new VueRouter({
