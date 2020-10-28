@@ -8,8 +8,12 @@ import {
     Toast ,
     TabbarItem,
     Field,
+<<<<<<< HEAD
     Form, DropdownMenu, DropdownItem
 } from 'vant';
+=======
+    Form,DropdownMenu, DropdownItem ,Toast} from 'vant';
+>>>>>>> 7fa56eb194582121cffec2b2fb4f5729ce6ebc7f
 
 
 
@@ -31,5 +35,9 @@ Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Icon)
 Vue.use(Field)
+<<<<<<< HEAD
 
 
+=======
+Vue.use(Toast)
+>>>>>>> 7fa56eb194582121cffec2b2fb4f5729ce6ebc7f
