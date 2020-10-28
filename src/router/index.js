@@ -111,6 +111,7 @@ const routes = [
     component: () => import('../components/wylComponents/Wyl-pass.vue')
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   //课程详情
   {
     path: "/yz_courseDetail",
@@ -132,6 +133,26 @@ const routes = [
     name: "yzStudyCalendar",
     component: () => import("../views/yzCourse/yzStudyCalendar")
   }
+=======
+  //我的页面学习币
+  {
+    path:"/wyl-my-currency",
+    name:"Wyl-my-currency",
+    component: () => import('../components/wylComponents/Wyl-my-currency.vue')
+  },
+  //我的页面余额明细
+  {
+    path:"/wyl-my-ye",
+    name:"Wyl-my-ye",
+    component: () => import('../components/wylComponents/Wyl-my-ye.vue')
+  },
+  //我的页面特色课跳转
+  {
+    path:"/wyl-my-study",
+    name:"Wyl-my-study",
+    component: () => import('../components/wylComponents/Wyl-my-study.vue')
+  },
+>>>>>>> 4a5c7068c595e81a8c659c76eeb2a27ec9f5cc7a
 =======
   // 学习日历
   {
