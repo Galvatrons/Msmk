@@ -38,6 +38,14 @@ const routes = [
       return import('../views/wsy_component/index')
     }
   },
+  // 讲师详情
+  {
+    path: '/teacher',
+    name: 'teacher',
+    component: function () {
+      return import('../views/wsy_component/WsyTeacherInfo')
+    }
+  },
   // 一对一
   {
     path: '/oto',
@@ -102,6 +110,7 @@ const routes = [
     name:"Wyl-pass",
     component: () => import('../components/wylComponents/Wyl-pass.vue')
   },
+<<<<<<< HEAD
   //我的页面学习币
   {
     path:"/wyl-my-currency",
@@ -120,6 +129,15 @@ const routes = [
     name:"Wyl-my-study",
     component: () => import('../components/wylComponents/Wyl-my-study.vue')
   },
+=======
+  // 学习日历
+  {
+    path:"/StudyCalendar",
+    name:"StudyCalendar",
+    component:()=> import("../views/wsy_component/StudyCalendar.vue")
+  }
+ 
+>>>>>>> 7fa56eb194582121cffec2b2fb4f5729ce6ebc7f
 ]
 
 const router = new VueRouter({
