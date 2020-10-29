@@ -4,7 +4,7 @@
       <div>
         <div
           class="yz_list_slide"
-          v-for="(item, index) in list"
+          v-for="(item, index) in showData"
           :key="index"
           @click="onClickDetail(item)"
         >
@@ -16,13 +16,17 @@
             <div class="yz_time_date">{{ item.time }}</div>
             <div class="yz_gang">|</div>
             <div class="yz_time_hour">
-              共<span>{{ item.hour }}</span
+              共<span>{{ item.total_periods }}</span
               >课时
             </div>
           </div>
           <div class="yz_list_slide_user">
-            <div class="yz_user_image"><img src="" alt="" /></div>
-            <div class="yz_user_name">{{ item.username }}</div>
+            <div class="yz_user_image">
+              <img :src="item.teachers_list[0].teacher_avatar" alt="" />
+            </div>
+            <div class="yz_user_name">
+              {{ item.teachers_list[0].teacher_name }}
+            </div>
             <img
               src="../../assets/img/apply.png"
               alt=""
@@ -32,12 +36,12 @@
           </div>
           <div class="yz_list_slide_apply">
             <div class="yz_apply_peo">
-              <span>{{ item.peo }}</span
+              <span>{{ item.sales_num }}</span
               >人已报名
             </div>
             <div
               :class="
-                item.price === Number ? 'yz_apply_price_true' : 'yz_apply_price'
+                item.price === '免费' ? 'yz_apply_price' : 'yz_apply_price_true'
               "
             >
               {{ item.price }}
@@ -54,74 +58,27 @@ import BetterScroll from "better-scroll";
 export default {
   data() {
     return {
-      list: [
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: 123,
-          apply: true,
-        },
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: 340,
-          apply: true,
-        },
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: "免费",
-          apply: false,
-        },
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: "免费",
-          apply: true,
-        },
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: "免费",
-          apply: false,
-        },
-        {
-          title: "李老师16号到22号地理大课堂开课了",
-          time: "03月6日 18:30 ~ 0.月22日 15:00",
-          hour: "8",
-          username: "杨铮",
-          peo: 134,
-          price: "免费",
-          apply: false,
-        },
-      ],
+      courseList: [],
       yz_bs: null,
+      appCourseType: [],
+      newData: [],
     };
   },
   methods: {
     onClickDetail(item) {
-      this.$router.push({
-        name: "yz_courseDetail",
-        params: item,
-      });
+      console.log(item.teachers_list[0].teacher_avatar);
+      console.log(item.teachers_list[0].teacher_name);
+      this.$router.push("/yz_courseDetail");
+      var obj = {
+        id: item.id,
+        teacher_avatar: item.teachers_list[0].teacher_avatar,
+        teacher_name: item.teachers_list[0].teacher_name,
+      };
+      localStorage.setItem("couDetailId", JSON.stringify(obj));
     },
   },
   mounted() {
+    console.log(this.filterId);
     window.onscroll = () => {
       var clientHeight = document.documentElement.clientHeight;
       // console.log(clientHeight); // 可视区域高度
@@ -143,16 +100,43 @@ export default {
     };
     // 滑动插件
     this.$nextTick(() => {
-      console.log(BetterScroll);
       this.yz_bs = new BetterScroll(".yz_list_container", {
         probeType: 2,
         click: true,
       });
       // 上滑禁止
-      this.yz_bs.on("scroll", (pos) => {
-        console.log(pos);
+      this.yz_bs.on("scroll", (pos) => {});
+    });
+    // console.log(this.filterId);
+    // 特色课列表数据
+    this.$http.get("/api/app/courseBasis?page=1&limit=10&").then((res) => {
+      this.courseList = res.data.data.list;
+      this.newData = res.data.data.list;
+      console.log(this.courseList);
+      this.courseList.forEach((element) => {
+        if (element.price == 0) {
+          element.price = "免费";
+        }
       });
     });
+  },
+  watch: {},
+  computed: {
+    showData() {
+      var temp = [];
+      this.courseList.forEach((element) => {
+        if (element.course_type == this.filterId) {
+          temp.push(element);
+        } else if (this.filterId == 0) {
+          temp = this.newData;
+        }
+      });
+      console.log(temp);
+      return temp;
+    },
+    filterId() {
+      return this.$store.state.filterId;
+    },
   },
 };
 </script>
@@ -167,7 +151,7 @@ export default {
   overflow: hidden;
   > div {
     width: 100%;
-    min-height: 101%;
+    min-height: 275%;
     padding-top: 0.1rem;
     padding-bottom: 0.2rem;
   }
@@ -214,6 +198,11 @@ export default {
         height: 0.3rem;
         background-color: skyblue;
         border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
       }
       .yz_user_name {
         font-size: 0.14rem;

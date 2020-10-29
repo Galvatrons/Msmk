@@ -112,7 +112,7 @@ export default {
       // 上滑禁止
       this.lwh_bs.on("scroll", (pos) => {
         if (pos.y >= 0) {
-          console.log(pos.y);
+          // console.log(pos.y);
           this.lwh_bs.scrollTo(0, 0);
         }
       });

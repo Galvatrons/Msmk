@@ -7,9 +7,17 @@
         </div>
         <div class="head_title" v-show="headShow == false">课程详情</div>
         <div class="head_title_active" v-show="headShow">
-          <span>课程介绍</span>
-          <span>课程大纲</span>
-          <span>课程评价</span>
+          <span
+            @click="onIntroduce"
+            :class="spanActive == 1 ? 'span_active' : ''"
+            >课程介绍</span
+          >
+          <span @click="onOutline" :class="spanActive == 2 ? 'span_active' : ''"
+            >课程大纲</span
+          >
+          <span @click="onPing" :class="spanActive == 3 ? 'span_active' : ''"
+            >课程评价</span
+          >
         </div>
         <div class="head_icon" @click="showPopup">
           <img src="../../assets/fenxiang.png" alt="" />
@@ -20,7 +28,7 @@
       <div>
         <div class="course_info">
           <div class="info_title">
-            <span>李老师9号地理大课堂开课啦</span>
+            <span>{{ ccc.title }}</span>
             <div class="wujiaoWrapper">
               <img
                 src="../../assets/img/wujiaoxing.png"
@@ -36,27 +44,29 @@
               />
             </div>
           </div>
-          <div class="info_price">{{ data.price }}</div>
+          <div class="info_price">{{ ccc.price }}</div>
           <div class="info_classify">
-            共<span>{{ data.hour }}</span
-            >课时 <span>|</span>&nbsp; <span>{{ data.peo }}</span
+            共<span>{{ ccc.total_periods }}</span
+            >课时 <span>|</span>&nbsp; <span>{{ ccc.sales_num }}</span
             >人已报名
           </div>
           <div class="info_time">
-            开课时间: <span>{{ data.time }}</span>
+            开课时间: <span>{{ ccc.start_play_year + "." }}</span>
+            <span>{{ ccc.start_play_date | startDate }}</span>
+            <span>{{ ccc.end_play_date | endDate }}</span>
           </div>
         </div>
         <div class="teach_team">
           <div>教学团队</div>
           <div class="teach_wrapper">
             <div class="teach_left" @click="onTeacherDetail">
-              <img src="favicon.ico" alt="" />
-              <span>{{ data.username }}</span>
+              <img :src="couDetailId.teacher_avatar" alt="" />
+              <span>{{ couDetailId.teacher_name }}</span>
             </div>
             <div class="teach_right"></div>
           </div>
         </div>
-        <div class="classify_jieshao">课程介绍</div>
+        <div class="classify_jieshao" ref="introduceView">课程介绍</div>
         <div class="classify_outline">
           <p>课程大纲</p>
           <div class="classify_slide" v-for="item in 6" :key="item">
@@ -67,7 +77,7 @@
                 <div class="classify_title">第一讲第一课时</div>
               </div>
               <div class="classify_slide_right_bottom">
-                <span>{{ data.username }}</span>
+                <span>{{}}</span>
                 <span>03月20日 08:00 - 10:30</span>
               </div>
             </div>
@@ -133,12 +143,18 @@ import BetterScroll from "better-scroll";
 export default {
   data() {
     return {
-      data: this.$route.query,
+      id: this.$route.params.id,
       yz_bs: null,
       gradeValue: 3,
       show: false,
       wujiaoShow: false,
       headShow: false,
+      spanActive: 1,
+      ccc: {},
+      couDetailId: JSON.parse(localStorage.getItem("couDetailId")),
+      courseInfo: {},
+      courseTitle: "",
+      coursePrice: "",
       commentData: [
         {
           username: "1231321",
@@ -156,16 +172,26 @@ export default {
     };
   },
   mounted() {
-    console.log(this.data);
+    // 课程详情数据
+    this.$http
+      .get(`/api/app/courseInfo/basis_id=${this.couDetailId.id}`)
+      .then((res) => {
+        var ccc = JSON.stringify(res.data.data);
+        this.courseInfo = JSON.parse(JSON.stringify(res.data.data));
+        this.ccc = this.courseInfo.info;
+        if (this.ccc.price == 0) {
+          this.ccc.price = "免费";
+        }
+        console.log(this.ccc);
+      });
     this.$nextTick(() => {
-      console.log(BetterScroll);
       this.yz_bs = new BetterScroll(".info_box", {
         probeType: 3,
         click: true,
       });
       // 上滑禁止
       this.yz_bs.on("scroll", (pos) => {
-        console.log(pos.y);
+        // console.log(pos.y);
         if (pos.y < -34) {
           this.headShow = true;
         } else {
@@ -173,6 +199,12 @@ export default {
         }
       });
     });
+    // console.log(this.couDetailId);
+
+    // 课程评论数据
+    // this.$http.post(`/api/app/courseComment`).then((res) => {
+    //   console.log(res);
+    // });
   },
   methods: {
     onBack() {
@@ -197,9 +229,38 @@ export default {
         path: "/yzTeacherDetail",
       });
     },
-    onStudy(){
-      this.$router.push("/yzStudyDetail")
-    }
+    onStudy() {
+      this.$router.push("/yzStudyDetail");
+    },
+    handleScroll() {
+      let scrolltop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      console.log(scrolltop + "      handleScroll");
+      // scrolltop > 30 ? (this.fixeditem = true) : (this.fixeditem = false);
+    },
+    onIntroduce() {
+      document.documentElement.scrollTop = 100;
+      this.spanActive = 1;
+    },
+    onOutline() {
+      this.spanActive = 2;
+    },
+    onPing() {
+      this.spanActive = 3;
+    },
+  },
+  filters: {
+    startDate(val) {
+      var date = new Date(val * 1000);
+      var timeStr = `${date.getMonth()}.${date.getDate()} ${date.getHours()}0:${date.getMinutes()}0 -`;
+
+      return timeStr;
+    },
+    endDate(val) {
+      var date = new Date(val * 1000);
+      var timeStr = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()} ${date.getHours()}0:${date.getMinutes()}0`;
+      return timeStr;
+    },
   },
 };
 </script>
@@ -253,6 +314,14 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      span {
+        color: gray;
+        font-size: 0.15rem;
+      }
+      .span_active {
+        color: black;
+        font-size: 0.16rem;
+      }
     }
     .head_icon {
       width: 0.27rem;
@@ -319,7 +388,8 @@ export default {
       align-items: center;
       flex-direction: column;
       img {
-        width: 0.3rem;
+        width: 0.35rem;
+        height: 0.35rem;
         border-radius: 50%;
       }
       span {
