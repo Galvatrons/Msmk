@@ -128,7 +128,6 @@
                   v-show="!item.has_buy"
                   class="wsy_flag_img"
                   src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
-                  alt
                 />
               </div>
             </div>
@@ -162,16 +161,20 @@
         <!-- 名师讲师区 -->
       </div>
     </div>
+    <!-- <WsyLogin></WsyLogin> -->
+    <WsyLogin v-if='this.$store.state.wsy_isClose'></WsyLogin>
   </div>
 </template>
 
 <script>
 import Section from "@/components/Wsy_section.vue";
+import WsyLogin from "@/components/wsy_login";
 import BetterScroll from "better-scroll";
 export default {
   name: "wsy_index",
   components: {
-    Section
+    Section,
+    WsyLogin
   },
   props: {},
   data() {
@@ -227,6 +230,12 @@ export default {
   activated() {},
   update() {},
   beforeRouteUpdate(to, from, next) {
+    console.log(to,from);
+    
+    // if(from.path == "/lwh_main" && to.path == "/StudyCalendar"){
+    //     this.$store.commit("wsy_Close",true)
+    //     next(false)
+    // }
     next();
   },
   methods: {
@@ -290,7 +299,7 @@ export default {
   height: 0.4rem;
   position: absolute;
   right: 0.2rem;
-  top: 0.8rem;
+  top: 0.4rem;
 }
 .wsy_box {
   width: 100%;
