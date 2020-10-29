@@ -142,7 +142,7 @@ body,
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 100000;
 }
 .lwh_leave {
   width: 100%;
@@ -150,7 +150,7 @@ body,
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 100001;
   background: #f2f3f5;
 }
 </style>
