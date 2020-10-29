@@ -61,32 +61,35 @@
           <p>课程相关</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="关注的老师" />
-          <van-grid-item icon="star-o" text="我的收藏" />
+          <van-grid-item icon="contact" text="关注的老师" @click="onlickcontact" />
+          <van-grid-item icon="star-o" text="我的收藏" @click="onlicksc"/>
         </van-grid>
         <!-- 订单相关 -->
         <div class="list_title">
           <p>订单相关</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="关注的老师" />
-          <van-grid-item icon="star-o" text="我的收藏" />
+          <van-grid-item icon="contact" text="课程订单" @click="onlickKc"/>
+          <van-grid-item icon="star-o" text="会员订单"  @click="onlickHy"/>
+          <van-grid-item icon="star-o" text="约客订单" @click="onlickYk"/>
         </van-grid>
         <!-- 我的账户 -->
         <div class="list_title">
           <p>我的账户</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="关注的老师" />
-          <van-grid-item icon="star-o" text="我的收藏" />
+          <van-grid-item icon="contact" text="优惠卷" @click="onlickYh"/>
+          <van-grid-item icon="star-o" text="学习卡" />
+          <van-grid-item icon="star-o" text="会员" />
         </van-grid>
         <!-- 自助服务 -->
         <div class="list_title">
           <p>自助服务</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="关注的老师" />
-          <van-grid-item icon="star-o" text="我的收藏" />
+          <van-grid-item icon="contact" text="我的消息" />
+          <van-grid-item icon="star-o" text="意见反馈" />
+          <van-grid-item icon="star-o" text="在线客服" />
         </van-grid>
       </div>
     </div>
@@ -142,6 +145,34 @@ export default {
     popup() {
       this.show = true;
     },
+    onlickcontact(){
+      this.$router.push({
+        path: "/Wyl-concern",
+      });
+    },
+    onlicksc(){
+      this.$router.push({
+        path: "/Wyl-collect",
+      });
+    },
+    //课程跳转
+    onlickKc(){
+      this.$router.push({
+        path: "/Wyl-Kc",
+      });
+    },
+    //会员跳转
+    onlickHy(){
+      this.$router.push({
+        path: "/Wyl-Hy",
+      });
+    },
+    //约客跳转
+    onlickYk(){
+      this.$router.push({
+        path: "/Wyl-Yk",
+      });
+    }
   },
 };
 </script>
@@ -266,7 +297,7 @@ export default {
   margin-top: 0.1rem;
 }
 .popus {
-  width: 100%;
-  height: 100%;
+  width: 3.4rem;
+  height: 6.5rem;
 }
 </style>
