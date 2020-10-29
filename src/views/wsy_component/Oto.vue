@@ -73,8 +73,12 @@
     </div>
     <!-- 开始时间 -->
     <van-popup v-model="show" position="bottom" :style="{ height: '45%' }">
-        
-      <van-datetime-picker v-model="currentTime" @cancel="show=false" type="time" @confirm="btn"  />
+      <van-datetime-picker
+        v-model="currentTime"
+        @cancel="show = false"
+        type="time"
+        @confirm="btn"
+      />
     </van-popup>
     <!-- 结束时间 -->
     <van-popup v-model="shows" position="bottom" :style="{ height: '45%' }">
@@ -82,7 +86,7 @@
         v-model="leavetime"
         type="time"
         @confirm="lwh_confirm"
-        @cancel="shows=false"
+        @cancel="shows = false"
     /></van-popup>
     <div class="wsy_scroll" ref="scrollBox">
       <div class="scrollBox">
@@ -104,9 +108,83 @@
           </p>
         </div>
         <!-- 预约老师条件 -->
-        <div class="lwh_term lwh_cont" v-show="lwh_flag == 2">预约老师条件</div>
+        <div class="lwh_term lwh_cont" v-if="lwh_flag == 2">
+          <!-- 老师类型 -->
+          <div>
+            <p class="lwh_tit">老师类型</p>
+            <ul>
+              <li
+                v-for="(item, index) in lwh_term_list"
+                :key="index"
+                :class="{ lwh_term_default: index == lwh_term_listIndex }"
+                @click="lwh_btn_type(index, item)"
+              >
+                {{ item }}
+              </li>
+            </ul>
+          </div>
+          <!-- 只看 -->
+          <div>
+            <p class="lwh_tit">只看</p>
+            <div>
+              <p
+                v-for="(item, index) in lwh_term_check"
+                :key="index"
+                @click="lwh_btn_check(index, item)"
+              >
+                <img :src="item.flag ? item.imgs : item.img" alt="" /><span>{{
+                  item.cont
+                }}</span>
+              </p>
+            </div>
+          </div>
+          <!-- 性别 -->
+          <div>
+            <p class="lwh_tit">性别</p>
+            <div>
+              <p
+                v-for="(item, index) in lwh_term_six"
+                :key="index"
+                :class="{ lwh_term_six: index == lwh_term_sixIndex }"
+                @click="lwh_term_sixIndex = index"
+              >
+                {{ item }}
+              </p>
+            </div>
+          </div>
+          <!-- 年级 -->
+          <div>
+            <p class="lwh_tit">年级</p>
+            <div>
+              <p
+                v-for="(item, index) in lwh_term_grade"
+                :key="index"
+                :class="{ lwh_term_grade: index == lwh_term_gradeIndex }"
+                @click="lwh_term_gradeIndex = index"
+              >
+                {{ item }}
+              </p>
+            </div>
+          </div>
+          <!-- 学科 -->
+
+          <div>
+            <p class="lwh_tit">学科</p>
+            <div>
+              <p
+                v-for="(item, index) in lwh_term_subject"
+                :key="index"
+                :class="{ lwh_term_subject: index == lwh_term_subjectIndex }"
+                @click="lwh_term_subjectIndex = index"
+              >
+                {{ item }}
+              </p>
+            </div>
+          </div>
+        </div>
+
         <!-- 全部老师选择 -->
-        <div class="lwh_cont" v-show="lwh_flag == 0">
+        <div class="lwh_cont" v-if="lwh_flag == 0">
           <div class="wsy_item" v-for="(item, index) in lwh_list" :key="index">
             <div>
               <img :src="item.img" />
@@ -230,10 +308,61 @@ export default {
       shows: false,
       currentTime: "开始时间",
       leavetime: "结束时间",
+      lwh_term_list: [],
+      lwh_term_check: [
+        {
+          cont: "关注的",
+          flag: false,
+          imgs:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTBDMUJFQTBCNzRDMTFFOTlEMzU4OTdFRjlDNjMxNjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTBDMUJFQTFCNzRDMTFFOTlEMzU4OTdFRjlDNjMxNjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MEMxQkU5RUI3NEMxMUU5OUQzNTg5N0VGOUM2MzE2MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MEMxQkU5RkI3NEMxMUU5OUQzNTg5N0VGOUM2MzE2MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr/wXDYAAAKySURBVHja7JmxattQFIYluaM8eKzboRAChjxAp8Yl7hZw6NC0g5cQx2OgTxD8BIWubfCSpVmCAx5j6mRpHiAQMIYOjTMGKo113P+Q/7YHtapjR74SJQd+jKQrnU/33nOu7rH745XzL3sMrUGr0AJUhHwnGQuhITSAOlA7tz/+FtfYjQEVoCa0AeUcOzaCWtAOgIfRi95fbqhC51DdIqRDX+LzfLTuVieBbkMHUF6dO4IaUInn3YSU5zMb9GFMzh8Adjtu6KuENPB9aAvqzbUb98c3477ulvHzAVrkpWvoJa4f6h6VObmnjk+gp/OGjAD36PNEjfYeXqCoQZtquPuM9CvHsgH2ir77aho0zdBLCvqqAue55Z78M/xvpsFnlQ2eeHyDnAqcnpOycRocqWyw5jGZG/vkZMc0y6rHFcfYcYZANcuCx4g3dpEhUM1S9CJrdzjFg1zm2S9QAI1jFLDNFu+57TzVLP6DGd/2IfPuyi3a+syPojdQDbqc1qE3A6Q7BWTUVnivawO0PiOkhq3bAN1MIFA2bYAuJQC6ZAM0iS983wZoKnYPeg/6P4KGCfgNbYCeJQB6ZgN0NwHQXRugH6HuHSC7fMbcQcf8VOvOCFnjM6xEvXxPvmCV43RCcIRs0+A9l7M4lO1yoNbefEJRfaftMrfMwvLdvKz0qK6cPcpQ6tR7uaGADtSJ5QyBapaBgHbUidcZAtUsHQFts2wiVoHKaROypFMxh8IooFKObql2UvorpAhZIIOxlpTMTXra4f5bbJG9XEgJsu38rpEGZPuVR4dMxNc8fsbcV7Y83Kf07ZClZur50T8bpBz9LrIQSFVNClbHLLMklWd9psNlBk5FXRPIt4B8rxN+1KosEuRTmqYBe/Jw0hIqDUr8cBjZnKL0WYpCxvWotsz8IfZTgAEAf3S9TaQBanUAAAAASUVORK5CYII=",
+          img:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAAXNSR0IArs4c6QAAAqpJREFUWAntmT1Lw0AcxpNIKYV0cOlQpRUkxS/hCzgKFieXLg6ugp9A/ASCq4KLi5NUcBR8mfwG0iDYog7t4JBAKcXW5znvQpqqg16bCjm43iV3vf/vnrtc6FPT+CG5rjuL5nKv11tDOY+cR7aRdSQfg7wiP1qWdYmy6jjO83cDm181NBqNfLvd3jdNc6vf70991Uf3PcR6R6yTTCazVygUOIGBNAQKFdeh4Cl6ZQd6ju/Cg8IVqHsRDjkAWqvVdtB4gJlZoU5XqJ+lUqlb27Zfcrkcl+zPqdls2r7vz3S73SUMtom8qgaFuj3Ud0ul0mFwT1WoJADPFSQ6u8jbmNmN6jPKEvGXEfsI2WEcwiJvKGWFonJPPqBdLDc63KXT6XKxWHwbJVx07Hq9Pt3pdKqAXZRtHvbsAvesWGI+OCFINw5IglEYxoZQrgTNSjbD5BGEGTwhi6cbG3llXMstYYYKbgM80NdsAPQ78hwVLStI1K/ihiScZOBDbEi2siUPc95jOvssJuIzYCEjFeUbRyQeQaoedxlhmScoX4si8ZxU9bjLCEueoMG7W9dhrmOSERaboP8iJaC6lylRNFFUtwK6x0v2aKKobgV0j5fs0URR3QroHi/Zo6NQNLBoaLPoDvDb8VqtVtj78rn0gXNGL+i3A+v+nud5wW85MhL0UQWRhpW6jLWMsNBDFSaqgqKrNikpYCEjFa3SNpF0q7RT4iaVDMKGlGxVC/bJM2yTEwWH+hFdNXU97pKxyaDiko2M4hylHY0Gj41ocGj9xQEbsh2FR0omyWYIUOE/wo6GzHR6CbsI2PtxbgPGYkzGJgNZsDcrys8XRi4bmP6FNf6JahiY2UT+2SCWXkGyxMa9oB2N6nHoNAh3GUldxjpmbDJEgwwsfbQR6k7MH2IfQYM7P4m00d0AAAAASUVORK5CYII=",
+        },
+        {
+          cont: "上过课的",
+          flag: false,
+          imgs:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTBDMUJFQTBCNzRDMTFFOTlEMzU4OTdFRjlDNjMxNjEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTBDMUJFQTFCNzRDMTFFOTlEMzU4OTdFRjlDNjMxNjEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MEMxQkU5RUI3NEMxMUU5OUQzNTg5N0VGOUM2MzE2MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MEMxQkU5RkI3NEMxMUU5OUQzNTg5N0VGOUM2MzE2MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr/wXDYAAAKySURBVHja7JmxattQFIYluaM8eKzboRAChjxAp8Yl7hZw6NC0g5cQx2OgTxD8BIWubfCSpVmCAx5j6mRpHiAQMIYOjTMGKo113P+Q/7YHtapjR74SJQd+jKQrnU/33nOu7rH745XzL3sMrUGr0AJUhHwnGQuhITSAOlA7tz/+FtfYjQEVoCa0AeUcOzaCWtAOgIfRi95fbqhC51DdIqRDX+LzfLTuVieBbkMHUF6dO4IaUInn3YSU5zMb9GFMzh8Adjtu6KuENPB9aAvqzbUb98c3477ulvHzAVrkpWvoJa4f6h6VObmnjk+gp/OGjAD36PNEjfYeXqCoQZtquPuM9CvHsgH2ir77aho0zdBLCvqqAue55Z78M/xvpsFnlQ2eeHyDnAqcnpOycRocqWyw5jGZG/vkZMc0y6rHFcfYcYZANcuCx4g3dpEhUM1S9CJrdzjFg1zm2S9QAI1jFLDNFu+57TzVLP6DGd/2IfPuyi3a+syPojdQDbqc1qE3A6Q7BWTUVnivawO0PiOkhq3bAN1MIFA2bYAuJQC6ZAM0iS983wZoKnYPeg/6P4KGCfgNbYCeJQB6ZgN0NwHQXRugH6HuHSC7fMbcQcf8VOvOCFnjM6xEvXxPvmCV43RCcIRs0+A9l7M4lO1yoNbefEJRfaftMrfMwvLdvKz0qK6cPcpQ6tR7uaGADtSJ5QyBapaBgHbUidcZAtUsHQFts2wiVoHKaROypFMxh8IooFKObql2UvorpAhZIIOxlpTMTXra4f5bbJG9XEgJsu38rpEGZPuVR4dMxNc8fsbcV7Y83Kf07ZClZur50T8bpBz9LrIQSFVNClbHLLMklWd9psNlBk5FXRPIt4B8rxN+1KosEuRTmqYBe/Jw0hIqDUr8cBjZnKL0WYpCxvWotsz8IfZTgAEAf3S9TaQBanUAAAAASUVORK5CYII=",
+          img:
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAAXNSR0IArs4c6QAAAqpJREFUWAntmT1Lw0AcxpNIKYV0cOlQpRUkxS/hCzgKFieXLg6ugp9A/ASCq4KLi5NUcBR8mfwG0iDYog7t4JBAKcXW5znvQpqqg16bCjm43iV3vf/vnrtc6FPT+CG5rjuL5nKv11tDOY+cR7aRdSQfg7wiP1qWdYmy6jjO83cDm181NBqNfLvd3jdNc6vf70991Uf3PcR6R6yTTCazVygUOIGBNAQKFdeh4Cl6ZQd6ju/Cg8IVqHsRDjkAWqvVdtB4gJlZoU5XqJ+lUqlb27Zfcrkcl+zPqdls2r7vz3S73SUMtom8qgaFuj3Ud0ul0mFwT1WoJADPFSQ6u8jbmNmN6jPKEvGXEfsI2WEcwiJvKGWFonJPPqBdLDc63KXT6XKxWHwbJVx07Hq9Pt3pdKqAXZRtHvbsAvesWGI+OCFINw5IglEYxoZQrgTNSjbD5BGEGTwhi6cbG3llXMstYYYKbgM80NdsAPQ78hwVLStI1K/ihiScZOBDbEi2siUPc95jOvssJuIzYCEjFeUbRyQeQaoedxlhmScoX4si8ZxU9bjLCEueoMG7W9dhrmOSERaboP8iJaC6lylRNFFUtwK6x0v2aKKobgV0j5fs0URR3QroHi/Zo6NQNLBoaLPoDvDb8VqtVtj78rn0gXNGL+i3A+v+nud5wW85MhL0UQWRhpW6jLWMsNBDFSaqgqKrNikpYCEjFa3SNpF0q7RT4iaVDMKGlGxVC/bJM2yTEwWH+hFdNXU97pKxyaDiko2M4hylHY0Gj41ocGj9xQEbsh2FR0omyWYIUOE/wo6GzHR6CbsI2PtxbgPGYkzGJgNZsDcrys8XRi4bmP6FNf6JahiY2UT+2SCWXkGyxMa9oB2N6nHoNAh3GUldxjpmbDJEgwwsfbQR6k7MH2IfQYM7P4m00d0AAAAASUVORK5CYII=",
+        },
+      ],
+      lwh_term_six: ["男", "女"],
+      lwh_term_grade: [
+        "一年级",
+        "二年级",
+        "三年级",
+        "四年级",
+        "五年级",
+        "六年级",
+        "初一",
+        "初二",
+        "初三",
+        "高一",
+        "高二",
+        "高三",
+      ],
+      lwh_term_gradeIndex: null,
+      lwh_term_subject: [
+        "语文",
+        "数学",
+        "英语",
+        "物理",
+        "化学",
+        "生物",
+        "信息技术",
+      ],
+      lwh_term_subjectIndex: null,
+      lwh_term_sixIndex: null,
+      lwh_term_listIndex: null,
+      lwh_trem_obj: {
+        trem_type: "",
+      },
     };
   },
   created() {},
   mounted() {
+    this.lwh_btn_list();
     this.lwh_btn_data();
     this.$nextTick(() => {
       this.lwh_bsBox();
@@ -257,6 +386,9 @@ export default {
         this.bs = new BetterScroll(this.$refs.scrollBox, {
           probeType: 3,
           click: true,
+          bounce: {
+            bottom: false,
+          },
         });
         // 下滑禁用
         this.bs.on("scroll", (pos) => {
@@ -264,7 +396,7 @@ export default {
             this.bs.scrollTo(0, 0);
           }
         });
-      }, 500);
+      }, 200);
     },
 
     lwh_btn(index) {
@@ -275,32 +407,68 @@ export default {
       } else {
         this.lwh_flag = index;
       }
+      setTimeout(() => {
+        this.bs.refresh();
+      }, 200);
     },
     // 时间获取
     lwh_btn_data() {
       let date = new Date();
       let num = 0;
-      for (let index = -2; index < 12; index++) {
+      // 晚上12点时间获取
+      const start = new Date(
+        new Date(new Date().toLocaleDateString()).getTime() +
+          24 * 60 * 60 * 1000 -
+          1
+      );
+      console.log(start); //Mon Dec 04 2017 23:59:59 GMT+0800 (中国标准时间)
+      // 现在时间获取
+      let b = date.getTime();
+      // 12点时间-现在时间
+      let c = start.getTime() - b;
+      // 保存下标到本地
+      let indexadd = JSON.parse(window.localStorage.getItem("indexadd"));
+      let indexdel = JSON.parse(window.localStorage.getItem("indexdel"));
+      // 倒计时到达12点数值减1
+      setTimeout(() => {
+        indexadd--;
+        window.localStorage.setItem("indexadd", indexadd);
+        indexdel--;
+        window.localStorage.setItem("indexdel", indexdel);
+
+        if (indexdel == 0) {
+          indexadd = 0;
+          window.localStorage.setItem("indexadd", indexadd);
+          indexdel = 13;
+          window.localStorage.setItem("indexdel", indexdel);
+        }
+      }, c);
+      let onum = 0;
+      for (let index = indexadd; index <= indexdel; index++) {
+        onum++;
         if (this.lwh_dates(index) == date.getDate()) {
-          this.lwh_arr.push({
+          this.lwh_arr[onum] = {
             date: this.lwh_dates(index),
             flag: true,
             id: index,
-          });
+          };
           num = index;
         } else {
-          this.lwh_arr.push({
+          this.lwh_arr[onum] = {
             date: this.lwh_dates(index),
             flag: false,
             id: index,
-          });
+          };
         }
       }
+      onum = 0;
       this.lwh_arr.map((i) => {
         if (i.id < num) {
           i.dis = true;
         }
       });
+      this.lwh_arr.splice(0, 1);
+      console.log(indexadd, indexdel);
       console.log(this.lwh_arr);
     },
     lwh_dates(num) {
@@ -316,15 +484,24 @@ export default {
       }
     },
     lwh_confirm(val) {
-     
       this.leavetime = val;
-      this.shows=false
-
+      this.shows = false;
     },
     btn(value) {
-  
       this.currentTime = value;
-      this.show=false
+      this.show = false;
+    },
+    lwh_btn_list() {
+      for (let index = 0; index < 20; index++) {
+        this.lwh_term_list.push(`M${index + 1}`);
+      }
+    },
+    lwh_btn_type(index, time) {
+      this.lwh_term_listIndex = index;
+      this.lwh_trem_obj.trem_type = time;
+    },
+    lwh_btn_check(index, item) {
+      this.lwh_term_check[index].flag = !this.lwh_term_check[index].flag;
     },
   },
   filters: {},
@@ -332,7 +509,6 @@ export default {
   watch: {},
 };
 </script>
-
 <style lang='scss' scoped>
 .wsy_oto {
   width: 100%;
@@ -450,7 +626,7 @@ export default {
   z-index: 2;
   > div:nth-of-type(1) {
     width: 100%;
-    height: 1.95rem;
+    
     background: #fff;
     > p {
       width: 100%;
@@ -468,7 +644,7 @@ export default {
     }
     > div {
       width: 100%;
-      height: 1.32rem;
+      height: 1.5rem;
       box-sizing: border-box;
       padding: 0.1rem 0 0 0;
       display: flex;
@@ -585,11 +761,146 @@ export default {
 }
 .lwh_term {
   width: 100%;
-
-  top: 0.53rem;
-  left: 0;
-  position: absolute;
+  margin-top: 0.01rem;
   background: #fff;
+  margin-top: 0.01rem;
+  box-sizing: border-box;
+  padding: 0 0.1rem 0.45rem;
+  .lwh_tit {
+    width: 100%;
+    padding: 0.16rem 0 0.1rem 0;
+    box-sizing: border-box;
+    height: 0.39rem;
+    font-size: 0.12rem;
+  }
+  > div:nth-of-type(1) {
+    width: 100%;
+    height: 2.55rem;
+    border-bottom: 0.01rem solid #f1f1f1;
+
+    > ul {
+      width: 100%;
+      height: 2.05rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      > li {
+        width: 0.65rem;
+        height: 0.3rem;
+        background: #f5f5f5;
+        color: #646464;
+        font-size: 0.14rem;
+        text-align: center;
+        line-height: 0.3rem;
+      }
+      > .lwh_term_default {
+        color: #eb6100;
+      }
+    }
+  }
+  > div:nth-of-type(2) {
+    width: 100%;
+    height: 0.72rem;
+    box-sizing: border-box;
+    padding-bottom: 0.1rem;
+    border-bottom: 0.01rem solid #f1f1f1;
+    > div {
+      width: 100%;
+      height: 0.22rem;
+      display: flex;
+      align-items: center;
+      > p {
+        display: flex;
+        margin-right: 0.2rem;
+        > img {
+          width: 0.15rem;
+          margin-right: 0.02rem;
+        }
+        span {
+          font-size: 0.12rem;
+          color: #8c8c8c;
+        }
+      }
+    }
+  }
+  > div:nth-of-type(3) {
+    width: 100%;
+    height: 0.91rem;
+    box-sizing: border-box;
+    padding-bottom: 0.1rem;
+    border-bottom: 0.01rem solid #f1f1f1;
+    > div {
+      width: 100%;
+      height: 0.4rem;
+      display: flex;
+      > p {
+        text-align: center;
+        line-height: 0.33rem;
+        width: 0.7rem;
+        height: 0.33rem;
+        background: #f5f5f5;
+        color: #646464;
+        margin-right: 0.23rem;
+      }
+      > .lwh_term_six {
+        color: #eb6100;
+      }
+    }
+  }
+  > div:nth-of-type(4) {
+    width: 100%;
+    height: 1.73rem;
+    box-sizing: border-box;
+    padding-bottom: 0.1rem;
+    border-bottom: 0.01rem solid #f1f1f1;
+    > div {
+      width: 100%;
+      height: 1.22rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      > p {
+        width: 0.7rem;
+        height: 0.33rem;
+        text-align: center;
+        line-height: 0.33rem;
+        background: #f5f5f5;
+        color: #646464;
+        margin-right: 0.23rem;
+      }
+      > .lwh_term_grade {
+        color: #eb6100;
+      }
+    }
+  }
+  > div:nth-of-type(5) {
+    width: 100%;
+
+    box-sizing: border-box;
+    padding-bottom: 0.1rem;
+    border-bottom: 0.01rem solid #f1f1f1;
+    > div {
+      width: 100%;
+      height: 0.82rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      > p {
+        width: 0.7rem;
+        height: 0.33rem;
+        text-align: center;
+        line-height: 0.33rem;
+        background: #f5f5f5;
+        color: #646464;
+        margin-right: 0.23rem;
+      }
+      > .lwh_term_subject {
+        color: #eb6100;
+      }
+    }
+  }
 }
 .lwh_default {
   color: #eb6100;

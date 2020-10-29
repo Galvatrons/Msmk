@@ -32,4 +32,5 @@ serve.interceptors.response.use(config => {
     return config
 })
 
+serve.post
 export default serve
