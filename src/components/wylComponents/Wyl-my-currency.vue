@@ -20,11 +20,14 @@
       </div>
     </div>
     <!-- 充值弹出层 -->
-    <van-button  @click="showPopup" 
+    <div class="button-vant">
+        <van-button  @click="showPopup" 
     type="primary"
      size="large"
      color=" rgb(255, 81, 0)"
      >立即充值</van-button>
+    </div>
+   
 
    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
        <p><input type="radio" name="wx" id="">微信</p>
@@ -104,5 +107,18 @@ export default {
   height: 0.5rem;
   float: right;
   /* background: tomato; */
+}
+/* .van-button {
+  display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+} */
+.button-vant{
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+ 
 }
 </style>
