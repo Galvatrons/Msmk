@@ -135,20 +135,20 @@ const routes = [
 
   //我的页面学习币
   {
-    path:"/wyl-my-currency",
-    name:"Wyl-my-currency",
+    path: "/wyl-my-currency",
+    name: "Wyl-my-currency",
     component: () => import('../components/wylComponents/Wyl-my-currency.vue')
   },
   //我的页面余额明细
   {
-    path:"/wyl-my-ye",
-    name:"Wyl-my-ye",
+    path: "/wyl-my-ye",
+    name: "Wyl-my-ye",
     component: () => import('../components/wylComponents/Wyl-my-ye.vue')
   },
   //我的页面特色课跳转
   {
-    path:"/wyl-my-study",
-    name:"Wyl-my-study",
+    path: "/wyl-my-study",
+    name: "Wyl-my-study",
     component: () => import('../components/wylComponents/Wyl-my-study.vue')
   },
  //我的页面关注跳转
@@ -183,11 +183,22 @@ const routes = [
 },
   // 学习日历
   {
-    path:"/StudyCalendar",
-    name:"StudyCalendar",
-    component:()=> import("../views/wsy_component/StudyCalendar.vue")
+    path: "/StudyCalendar",
+    name: "StudyCalendar",
+    component: () => import("../views/wsy_component/StudyCalendar.vue")
+  },
+  // 提交订单页面
+  {
+    path: "/Purchase",
+    name: "Purchase",
+    component: () => import("../views/wsy_component/WsyPurchase.vue")
+  },
+  // 课程学习页面
+  {
+    path: "/study-detail",
+    name: "study-detail",
+    component: () => import("../views/wsy_component/WsyStudyDetail.vue")
   }
- 
 ]
 
 const router = new VueRouter({

@@ -122,6 +122,8 @@
       </van-popup>
       <!-- 分享弹出层 -->
     </div>
+    <div class="wsy_bottom" v-show="!wsy_Flag" @click='toStudy'>立即学习</div>
+    <div class="wsy_bottom" v-show="wsy_Flag" @click='toPurchase'>立即报名</div>
   </div>
 </template>
 
@@ -150,7 +152,8 @@ export default {
           time: "2020-09-02 21:03"
         }
       ],
-      CourseInfo: {}
+      CourseInfo: {},
+      wsy_Flag:null,
     };
   },
   created() {},
@@ -161,7 +164,7 @@ export default {
         click: true
       });
       this.CourseInfo = JSON.parse(window.localStorage.getItem("CourseInfo")) || this.$route.params;
-      console.log(this.CourseInfo)
+      this.wsy_Flag = this.CourseInfo.has_buy
 
       // 上滑禁止
       // this.wsy_bs.on("scroll", pos => {
@@ -185,6 +188,14 @@ export default {
     //   返回首页
     onClickLeft() {
       this.$router.back(1);
+    },
+    // 跳转到提交订单页面
+    toPurchase(){
+      this.$router.push("/Purchase")
+    },
+    // 跳转到课程学习页面
+    toStudy(){
+      this.$router.push("/study-detail")
     }
   },
   filters: {
@@ -518,5 +529,16 @@ export default {
     width: 0.1rem;
     height: 0.1rem;
   }
+}
+.wsy_bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  text-align: center;
+  background: #eb6100;
+  color: #fff;
 }
 </style>
