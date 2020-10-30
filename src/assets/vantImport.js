@@ -5,11 +5,10 @@ import {
     SwipeItem, NavBar,
     Icon, Search, Popup,
     Tabbar,
-    Toast,
     TabbarItem,
     Field,
-
-    Form, DropdownMenu, DropdownItem
+    DatetimePicker,
+    Form, DropdownMenu, DropdownItem, Area
 } from 'vant';
 
 
@@ -26,7 +25,6 @@ Vue.use(DropdownItem)
 Vue.use(Swipe);
 Vue.use(SwipeItem);
 Vue.use(NavBar);
-Vue.use(Toast);
 Vue.use(Icon);
 Vue.use(Search);
 Vue.use(Popup);
@@ -34,3 +32,5 @@ Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Icon)
 Vue.use(Field)
+Vue.use(DatetimePicker);
+Vue.use(Area);

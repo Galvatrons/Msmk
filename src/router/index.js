@@ -13,11 +13,6 @@ const routes = [
   },
   // 登录路由
   {
-    path: '/Wyl-Login',
-    name: "Wyl-Login",
-    component: () => import('../components/wylComponents/Wyl-Login.vue')
-  },
-  {
     path: '/',
     name: '/',
   },
@@ -98,18 +93,6 @@ const routes = [
       return import("../views/wsy_component/CourseDetail.vue")
     },
   },
-  // 注册页
-  {
-    path: "/wyl-sms",
-    name: "Wyl-sms",
-    component: () => import('../components/wylComponents/Wyl-sms.vue')
-  },
-  //找回密码
-  {
-    path: "/wyl-pass",
-    name: "Wyl-pass",
-    component: () => import('../components/wylComponents/Wyl-pass.vue')
-  },
 
   //课程详情
   {
@@ -151,36 +134,36 @@ const routes = [
     name: "Wyl-my-study",
     component: () => import('../components/wylComponents/Wyl-my-study.vue')
   },
- //我的页面关注跳转
- {
-  path:"/wyl-concern",
-  name:"Wyl-concern",
-  component: () => import('../components/wylComponents/Wyl-concern.vue')
-},
-//我的页面我的收藏
-{
-  path:"/wyl-collect",
-  name:"Wyl-collect",
-  component: () => import('../components/wylComponents/Wyl-collect.vue')
-},
-//我的-课程订单
-{
-  path:"/wyl-Kc",
-  name:"Wyl-Kc",
-  component: () => import('../components/wylComponents/Wyl-Kc.vue')
-},
-//我的-会员订单
-{
-  path:"/wyl-Hy",
-  name:"Wyl-Hy",
-  component: () => import('../components/wylComponents/Wyl-Hy.vue')
-},
-//我的-约课订单
-{
-  path:"/wyl-Yk",
-  name:"Wyl-Yk",
-  component: () => import('../components/wylComponents/Wyl-Yk.vue')
-},
+  //我的页面关注跳转
+  {
+    path: "/wyl-concern",
+    name: "Wyl-concern",
+    component: () => import('../components/wylComponents/Wyl-concern.vue')
+  },
+  //我的页面我的收藏
+  {
+    path: "/wyl-collect",
+    name: "Wyl-collect",
+    component: () => import('../components/wylComponents/Wyl-collect.vue')
+  },
+  //我的-课程订单
+  {
+    path: "/wyl-Kc",
+    name: "Wyl-Kc",
+    component: () => import('../components/wylComponents/Wyl-Kc.vue')
+  },
+  //我的-会员订单
+  {
+    path: "/wyl-Hy",
+    name: "Wyl-Hy",
+    component: () => import('../components/wylComponents/Wyl-Hy.vue')
+  },
+  //我的-约课订单
+  {
+    path: "/wyl-Yk",
+    name: "Wyl-Yk",
+    component: () => import('../components/wylComponents/Wyl-Yk.vue')
+  },
   // 学习日历
   {
     path: "/StudyCalendar",
@@ -198,11 +181,110 @@ const routes = [
     path: "/study-detail",
     name: "study-detail",
     component: () => import("../views/wsy_component/WsyStudyDetail.vue")
+  },
+  //登陆页面
+  {
+    path: "/yzLogin",
+    name: "yzLogin",
+    component: () => import("../views/yzCourse/yzLogin.vue"),
+    meta: {
+      title: "登陆"
+    }
+  },
+  // 找回密码页面
+  {
+    path: "/yzForgetpass",
+    name: "yzForgetpass",
+    component: () => import("../views/yzCourse/yzForgetpass.vue"),
+    meta: {
+      title: "找回密码"
+    }
+  },
+  // 注册页面
+  {
+    path: "/yzRegister",
+    name: "yzRegister",
+    component: () => import("../views/yzCourse/yzRegister.vue"),
+    meta: {
+      title: "注册"
+    }
+  },
+  // 设置密码页面
+  {
+    path: "/SetPassword",
+    name: "SetPassword",
+    component: () => import("../views/yzCourse/SetPassword.vue"),
+    meta: {
+      title: "设置密码"
+    }
+  },
+  // 信息填写页
+  {
+    path: "/yzMessage",
+    name: "yzMessage",
+    component: () => import("../views/yzCourse/yzMessage.vue")
+  },
+  // 修改昵称页面
+  {
+    path: "/yzSetname",
+    name: "yzSetname",
+    component: () => import("../views/yzCourse/yzSetname.vue")
+  },
+  // 修改年龄页面
+  {
+    path: "/yzSetage",
+    name: "yzSetage",
+    component: () => import("../views/yzCourse/yzSetage.vue")
+  },
+  // 修改学科页面
+  {
+    path: "/yzSetsubject",
+    name: "yzSetsubject",
+    component: () => import("../views/yzCourse/yzSetsubject.vue")
+  },
+  // 修改密码页面
+  {
+    path: "/yzAmendPass",
+    name: "yzAmendPass",
+    component: () => import("../views/yzCourse/yzAmendPass.vue")
+  },
+  // 设置页面
+  {
+    path: "/yzSetting",
+    name: "yzSetting",
+    component: () => import("../views/yzCourse/yzSetting")
+  },
+  // 修改密码页面
+  {
+    path: "/yzChangePass",
+    name: "yzChangePass",
+    component: () => import("../views/yzCourse/yzChangePass")
   }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+//设置路由导航守卫
+router.beforeEach((to, from, next) => {
+  // to要去的页面 from从哪里来 next放行
+  document.title = to.meta.title
+  next()
+
+
+  let token = sessionStorage.getItem("token")
+  if (to.name == "yz_courseDetail"
+    || to.name == 'yzTeacherDetail'
+    || to.name == "lwh_my") {
+    if (token) {
+      next()
+    } else {
+      next("/yzLogin")
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

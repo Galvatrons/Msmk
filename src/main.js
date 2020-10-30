@@ -27,8 +27,9 @@ Vue.use(ElementUI)
 router.beforeEach((to, from, next) => {
   let wsy_str = '/StudyCalendar/teacher'
   if (wsy_str.includes(to.path)) {
-    store.commit("wsy_Close", true)
+    // store.commit("wsy_Close", true)
     store.commit('lwh_btn', true)
+    next(true)
     return false
   }
   let lwh_str = "/lwh_course/lwh_main/lwh_york/lwh_exercise/lwh_my"

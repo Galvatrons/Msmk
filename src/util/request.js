@@ -1,4 +1,8 @@
 import axios from 'axios'
+import Vue from 'vue';
+import { Toast } from 'vant';
+
+Vue.use(Toast);
 // 路由引入
 // import router from '../router'
 // 实例化axios
@@ -17,6 +21,11 @@ serve.interceptors.request.use((config) => {
     // if (window.sessionStorage.getItem('token')) {
     //     config.headers.Authorization = window.sessionStorage.getItem('token')
     // }
+    Toast.loading({
+        duration: 3000,
+        message: '加载中...',
+        forbidClick: true,
+    });
     return config
 })
 
@@ -26,7 +35,7 @@ serve.interceptors.response.use(config => {
     // if(config.data.meta.status == 400){
     //     window.sessionStorage.removeItem("token")
     // }
-
+    Toast.clear()
 
     // 在最后必须 return config
     return config
