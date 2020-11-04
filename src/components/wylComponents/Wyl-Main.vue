@@ -78,7 +78,7 @@
           <p>我的账户</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="优惠卷" @click="onlickYh"/>
+          <van-grid-item icon="contact" text="优惠卷"/>
           <van-grid-item icon="star-o" text="学习卡" />
           <van-grid-item icon="star-o" text="会员" />
         </van-grid>

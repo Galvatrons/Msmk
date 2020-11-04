@@ -1,15 +1,12 @@
 <template>
-  <div>
+  <div class="wsy_box">
     <div class="yz_header">
       <yzHeader />
     </div>
     <div class="yz_dropdown">
       <yzDropdown />
     </div>
-    <div class="yz_listitem">
-      <yzListItem />
-    </div>
-   
+    <yzListItem />
   </div>
 </template>
 
@@ -22,13 +19,18 @@ export default {
   components: {
     yzHeader,
     yzDropdown,
-    yzListItem,
-
-  },
+    yzListItem
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+.wsy_box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 // .yz_header{
 //     width: 100%;
 //     height: 0.48rem;

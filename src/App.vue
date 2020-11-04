@@ -10,8 +10,7 @@
           :key="index"
           :to="item.path"
           :icon="index == active ? item.icons : item.icon"
-          >{{ item.cont }}</van-tabbar-item
-        >
+          >{{ item.cont }}</van-tabbar-item>
       </van-tabbar>
     </div>
     <!-- 点击留言 -->

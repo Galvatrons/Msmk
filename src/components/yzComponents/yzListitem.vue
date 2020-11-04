@@ -1,52 +1,38 @@
 <template>
-  <div>
-    <div class="yz_list_container">
-      <div>
-        <div
-          class="yz_list_slide"
-          v-for="(item, index) in showData"
-          :key="index"
-          @click="onClickDetail(item)"
-        >
-          <div class="yz_list_slide_title">
-            {{ item.title }}
+  <div class="yz_list_container">
+    <div>
+      <div
+        class="yz_list_slide"
+        v-for="(item, index) in newData"
+        :key="index"
+        @click="onClickDetail(item)"
+      >
+        <div class="yz_list_slide_title">{{ item.title }}</div>
+        <div class="yz_list_slide_time">
+          <van-icon name="clock-o" />
+          <div class="yz_time_date">{{ item.time }}</div>
+          <div class="yz_gang">|</div>
+          <div class="yz_time_hour">
+            共
+            <span>{{ item.total_periods }}</span>课时
           </div>
-          <div class="yz_list_slide_time">
-            <van-icon name="clock-o" />
-            <div class="yz_time_date">{{ item.time }}</div>
-            <div class="yz_gang">|</div>
-            <div class="yz_time_hour">
-              共<span>{{ item.total_periods }}</span
-              >课时
-            </div>
+        </div>
+        <div class="yz_list_slide_user">
+          <div class="yz_user_image">
+            <img :src="item.teachers_list[0].teacher_avatar" alt />
           </div>
-          <div class="yz_list_slide_user">
-            <div class="yz_user_image">
-              <img :src="item.teachers_list[0].teacher_avatar" alt="" />
-            </div>
-            <div class="yz_user_name">
-              {{ item.teachers_list[0].teacher_name }}
-            </div>
-            <img
-              src="../../assets/img/apply.png"
-              alt=""
-              v-show="item.apply"
-              class="yz_img_apply"
-            />
+          <div class="yz_user_name">{{ item.teachers_list[0].teacher_name }}</div>
+          <img src="../../assets/img/apply.png" alt v-show="item.apply" class="yz_img_apply" />
+        </div>
+        <div class="yz_list_slide_apply">
+          <div class="yz_apply_peo">
+            <span>{{ item.sales_num }}</span>人已报名
           </div>
-          <div class="yz_list_slide_apply">
-            <div class="yz_apply_peo">
-              <span>{{ item.sales_num }}</span
-              >人已报名
-            </div>
-            <div
-              :class="
-                item.price === '免费' ? 'yz_apply_price' : 'yz_apply_price_true'
-              "
-            >
-              {{ item.price }}
-            </div>
-          </div>
+          <div v-show="item.price == 0" class="yz_apply_price">免费</div>
+          <div
+          v-show="item.price != 0"
+          class="yz_apply_price_true"
+          >{{ item.price | toFixed }}</div>
         </div>
       </div>
     </div>
@@ -55,6 +41,7 @@
 
 <script>
 import BetterScroll from "better-scroll";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -62,6 +49,7 @@ export default {
       yz_bs: null,
       appCourseType: [],
       newData: [],
+      limit:4
     };
   },
   methods: {
@@ -72,10 +60,25 @@ export default {
       var obj = {
         id: item.id,
         teacher_avatar: item.teachers_list[0].teacher_avatar,
-        teacher_name: item.teachers_list[0].teacher_name,
+        teacher_name: item.teachers_list[0].teacher_name
       };
       localStorage.setItem("couDetailId", JSON.stringify(obj));
     },
+    async lwh_AaaAjax(a = 0, b = 0, c = "",limit=4) {
+      let { data } = await this.$http.get(
+        `/api/app/courseBasis?page=1&limit=${limit}&`,
+        {
+          params: {
+            course_type: a,
+            classify_id: "",
+            order_by: b,
+            attr_val_id: c,
+            is_vip: 0
+          }
+        }
+      );
+      this.newData = data.data.list;
+    }
   },
   mounted() {
     console.log(this.filterId);
@@ -90,68 +93,91 @@ export default {
         setTimeout(() => {
           console.log(this.list.slice(2, 4));
           var newList = this.list.slice(2, 4);
-          newList.forEach((element) => {
-            console.log(element);
+          newList.forEach(element => {
             this.list.push(element);
           });
-          console.log(this.list);
         }, 1000);
       }
     };
+    this.lwh_AaaAjax();
     // 滑动插件
     this.$nextTick(() => {
       this.yz_bs = new BetterScroll(".yz_list_container", {
         probeType: 2,
-        click: true,
+        click: true
       });
-      // 上滑禁止
-      this.yz_bs.on("scroll", (pos) => {});
+      let flag = true
+      this.yz_bs.on("scroll", pos => {
+        if(pos.y <= this.yz_bs.maxScrollY + 50 && flag){
+          flag = false
+          setTimeout(()=>{
+            this.limit += 1
+            this.lwh_AaaAjax(0,0,"",this.limit);
+            this.yz_bs.refresh();
+            flag = true
+          },2000)
+        }
+      });
     });
     // console.log(this.filterId);
     // 特色课列表数据
-    this.$http.get("/api/app/courseBasis?page=1&limit=10&").then((res) => {
-      this.courseList = res.data.data.list;
-      this.newData = res.data.data.list;
-      console.log(this.courseList);
-      this.courseList.forEach((element) => {
-        if (element.price == 0) {
-          element.price = "免费";
-        }
-      });
-    });
+    // this.$http.get("/api/app/courseBasis?page=1&limit=10&").then((res) => {
+    //   this.courseList = res.data.data.list;
+    //   this.newData = res.data.data.list;
+    //   console.log(this.courseList);
+    //   this.courseList.forEach((element) => {
+    //     if (element.price == 0) {
+    //       element.price = "免费";
+    //     }
+    //   });
+    // });
   },
-  watch: {},
-  computed: {
-    showData() {
-      var temp = [];
-      this.courseList.forEach((element) => {
-        if (element.course_type == this.filterId) {
-          temp.push(element);
-        } else if (this.filterId == 0) {
-          temp = this.newData;
-        }
+  watch: {
+    newData() {
+      this.$nextTick(() => {
+        this.yz_bs.refresh();
       });
-      console.log(temp);
-      return temp;
     },
+    lwh_list: {
+      handler(val) {
+        console.log(val);
+        this.lwh_AaaAjax(val[0].course_type, val[0].order_by);
+      },
+      deep: true
+    }
+  },
+  computed: {
+    // showData() {
+    //   var temp = [];
+    //   this.courseList.forEach((element) => {
+    //     if (element.course_type == this.filterId) {
+    //       temp.push(element);
+    //     } else if (this.filterId == 0) {
+    //       temp = this.newData;
+    //     }
+    //   });
+    //   console.log(temp);
+    //   return temp;
+    // },
     filterId() {
       return this.$store.state.filterId;
     },
-  },
+    ...mapState(["lwh_list"])
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .yz_list_container {
   width: 100%;
-  height: 6.68rem;
+  flex: 1;
   background-color: #f0f2f5;
   padding: 0.15rem;
   box-sizing: border-box;
   overflow: hidden;
   > div {
     width: 100%;
-    min-height: 275%;
+    min-height: 101%;
     padding-top: 0.1rem;
     padding-bottom: 0.2rem;
   }

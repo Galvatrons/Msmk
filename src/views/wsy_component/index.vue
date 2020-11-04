@@ -11,10 +11,8 @@
             :autoplay="2000"
             indicator-color="white"
           >
-            <van-swipe-item v-for="index in 4" :key="index">
-              <img
-                src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019LnKumseuhw1569839569.jpg"
-              />
+            <van-swipe-item v-for="(item,index) in bannerList" :key="index">
+              <img :src="item.banner_img" />
             </van-swipe-item>
           </van-swipe>
         </div>
@@ -30,15 +28,15 @@
           </ul>
         </div>
         <!-- 王淑岩上部导航区域 -->
-        <!-- 名师阵容区 -->
-        <Section>
-          <template slot="a">
-            <p class="title">名师阵容</p>
+        <div class="wsy_list" v-for="(item,index) in list" :key="index">
+          <!-- 名师阵容区 -->
+          <template v-if="(item.channel_info.type == 3)">
+            <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_item"
                 @click="toTeacherInfo(item.teacher_id)"
-                v-for="(item,index) in famousTeacher.list"
+                v-for="(item,index) in item.list"
                 :key="index"
               >
                 <img :src="item.teacher_avatar" />
@@ -49,18 +47,15 @@
               </div>
             </div>
           </template>
-        </Section>
-        <!-- 名师阵容区 -->
-
-        <!-- 精品课程区 -->
-        <Section>
-          <template slot="a">
-            <p class="title">精品课程</p>
+          <!-- 名师阵容区 -->
+          <!-- 精品课程区 -->
+          <template v-if="(item.channel_info.type == 1)">
+            <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_ii_item"
-                @click="ToCourseDetail(item)"
-                v-for="(item,index) in excellentCourse.list"
+                @click="ToCourseDetail(item.id,item.course_type)"
+                v-for="(item,index) in item.list"
                 :key="index"
               >
                 <p>{{ item.title }}</p>
@@ -79,11 +74,11 @@
                     <img
                       src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
                     />
-                    <span>{{ item.price }}</span>
+                    <span>{{ item.price | toFixed }}</span>
                   </span>
                 </div>
                 <img
-                  v-show="!item.has_buy"
+                  v-show="item.has_buy != 0"
                   class="wsy_flag_img"
                   src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
                   alt
@@ -91,18 +86,15 @@
               </div>
             </div>
           </template>
-        </Section>
-        <!-- 精品课程区 -->
-
-        <!-- 推荐课程区 -->
-        <Section>
-          <template slot="a">
-            <p class="title">推荐课程</p>
+          <!-- 精品课程区 -->
+          <!-- 推荐课程区 -->
+          <!-- <template  v-if='(item.channel_info.type == 1)'>
+            <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_ii_item"
                 @click="ToCourseDetail(item)"
-                v-for="(item,index) in recommendedCourse.list"
+                v-for="(item,index) in item.list"
                 :key="index"
               >
                 <p>{{ item.title }}</p>
@@ -131,19 +123,16 @@
                 />
               </div>
             </div>
-          </template>
-        </Section>
-        <!-- 推荐课程区 -->
-
-        <!-- 名师讲师区 -->
-        <Section>
-          <template slot="a">
-            <p class="title">名师讲师</p>
+          </template>-->
+          <!-- 推荐课程区 -->
+          <!-- 名师讲师区 -->
+          <!-- <template  v-if='(item.channel_info.type == 3)'>
+            <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_item"
                 @click="toTeacherInfo(item.teacher_id)"
-                v-for="(item,index) in starLecturer.list"
+                v-for="(item,index) in item.list"
                 :key="index"
               >
                 <img :src="item.teacher_avatar" />
@@ -156,24 +145,24 @@
                 </div>
               </div>
             </div>
-          </template>
-        </Section>
-        <!-- 名师讲师区 -->
+          </template>-->
+          <!-- 名师讲师区 -->
+        </div>
       </div>
     </div>
     <!-- <WsyLogin></WsyLogin> -->
-    <WsyLogin v-if='this.$store.state.wsy_isClose'></WsyLogin>
+    <WsyLogin v-if="this.$store.state.wsy_isClose"></WsyLogin>
   </div>
 </template>
 
 <script>
-import Section from "@/components/Wsy_section.vue";
+// import Section from "@/components/Wsy_section.vue";
 import WsyLogin from "@/components/wsy_login";
 import BetterScroll from "better-scroll";
 export default {
   name: "wsy_index",
   components: {
-    Section,
+    // Section,
     WsyLogin
   },
   props: {},
@@ -182,6 +171,7 @@ export default {
       // better-scroll实例
       bs: null,
       index: 1,
+      bannerList: [], //轮播图数据
       //   导航区域数据
       wsy_nav: [
         {
@@ -210,28 +200,30 @@ export default {
       // 推荐课程数据
       recommendedCourse: {},
       // 明星讲师
-      starLecturer: {}
+      starLecturer: {},
+      list: [] //列表数据
     };
   },
   created() {},
   mounted() {
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.bs = new BetterScroll(this.$refs.scrollBox, {
-          probeType: 3,
-          click: true
-        });
-      }, 800);
+    this.getBanner();
+    this.getIndex();
 
-      this.getBanner();
-      this.getIndex();
+    this.bs = new BetterScroll(this.$refs.scrollBox, {
+      probeType: 3,
+      click: true
+    });
+    this.bs.on("scroll", pos => {
+      if (pos.y >= 0) {
+        this.bs.scrollTo(0, 0);
+      }
     });
   },
   activated() {},
   update() {},
   beforeRouteUpdate(to, from, next) {
-    console.log(to,from);
-    
+    console.log(to, from);
+
     // if(from.path == "/lwh_main" && to.path == "/StudyCalendar"){
     //     this.$store.commit("wsy_Close",true)
     //     next(false)
@@ -240,22 +232,30 @@ export default {
   },
   methods: {
     //   点击进入课程详情页面
-    ToCourseDetail(info) {
-      window.localStorage.setItem("CourseInfo", JSON.stringify(info));
-      this.$router.push({ name: "CourseDetail", params: info });
+    ToCourseDetail(id,course_type) {
+      // window.localStorage.setItem("CourseInfo", JSON.stringify(info));
+      this.$router.push({
+        path:"/CourseDetail",
+        query:{
+          id,
+          course_type
+        }
+      });
     },
     // 获取轮播图数据
     async getBanner() {
-      let data = await this.$http.get("/api/app/banner");
-      // console.log(data);
+      let { data } = await this.$http.get("/api/app/banner");
+      this.bannerList = data.data;
     },
     // 获取首页列表数据
     async getIndex() {
       let { data } = await this.$http.get("/api/app/recommend/appIndex");
-      this.famousTeacher = data.data[4];
-      this.excellentCourse = data.data[1];
-      this.recommendedCourse = data.data[3];
-      this.starLecturer = data.data[0];
+      this.list = data.data;
+      // this.famousTeacher = data.data[4];
+      // this.excellentCourse = data.data[1];
+      // this.recommendedCourse = data.data[3];
+      // this.starLecturer = data.data[0];
+      console.log(this.list);
     },
     // 点击名师阵容跳转到讲师详情
     toTeacherInfo(id) {
@@ -289,11 +289,21 @@ export default {
     }
   },
   computed: {},
-  watch: {}
+  watch: {
+    list() {
+      this.$nextTick(() => {
+        this.bs.refresh();
+      });
+    }
+  }
 };
 </script>
 
 <style lang='scss' scoped>
+.wsy_list {
+  width: 100%;
+  margin-bottom: 0.1rem;
+}
 .wsy_flag_img {
   width: 0.5rem;
   height: 0.4rem;
@@ -372,6 +382,136 @@ export default {
       }
     }
   }
+}
+// 名师阵容区域样式
+.wsy_topTeacher {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.2rem;
+}
+.title {
+  font-size: 0.17rem;
+  margin: 0;
+  margin-left: 0.2rem;
+  padding-left: 0.1rem;
+  border-left: 0.05rem #eb6100 solid;
+  color: #595959;
+}
+.wsy_content {
+  flex: 1;
+  padding: 0.1rem 0.12rem;
+  > .wsy_item {
+    margin-top: 0.1rem;
+    width: 100%;
+    height: 0.8rem;
+    border-radius: 0.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    background: #fff;
+    padding: 0 0.15rem;
+    box-sizing: border-box;
+    > :nth-child(2) {
+      > :nth-child(1) {
+        > span {
+          color: red;
+          font-size: 0.12rem;
+          margin-left: 0.1rem;
+        }
+      }
+    }
+    > img {
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+    }
+    > div {
+      height: 0.4rem;
+      margin-left: 0.15rem;
+      flex: 1;
+      > p {
+        margin: 0.01rem;
+      }
+      > :nth-child(1) {
+        color: #595959;
+      }
+      > :nth-child(2) {
+        width: 3rem;
+        font-size: 0.12rem;
+        color: #b7b7b7;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+.wsy_ii_item {
+  position: relative;
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.2rem;
+  margin-top: 0.1rem;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 0.05rem;
+  > :nth-child(1) {
+    width: 3.5rem;
+    padding-top: 0.2rem;
+    margin: 0;
+  }
+}
+.wsy_ii_time {
+  display: flex;
+  align-items: center;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  > p {
+    margin: 0;
+    font-size: 0.1rem;
+    color: #8c8c8c;
+  }
+}
+.wsy_ii_teacher {
+  width: 100%;
+  height: 0.7rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.12rem;
+  color: #8c8c8c;
+  > img {
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    margin-right: 0.1rem;
+  }
+}
+.wsy_ii_info {
+  width: 100%;
+  margin-top: 0.15rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.01rem rgb(238, 238, 238) solid;
+  > :nth-child(1) {
+    font-size: 0.12rem;
+    color: #8c8c8c;
+  }
+  img {
+    width: 0.2rem;
+    height: 0.2rem;
+  }
+}
+.wsy_good {
+  color: #44a426;
+  font-size: 0.18rem;
+}
+.wsy_price {
+  color: red;
+  font-size: 0.18rem;
 }
 </style>
 |

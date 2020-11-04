@@ -12,19 +12,17 @@
         <div class="wsy_teacher_info">
           <div class="wsy_item">
             <div>
-              <img
-                src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-              />
+              <img :src="teacherInfo.avatar" />
               <div>
                 <p>
-                  马学斌
+                  <span>{{ teacherInfo.real_name }}</span>
                   <span>M10</span>
                 </p>
                 <p>30年教龄</p>
               </div>
             </div>
-            <div v-show="!attentionFlag" @click="attentionTeacher()">关注</div>
-            <p v-show="attentionFlag" @click="attentionTeacher()">已关注</p>
+            <div v-show="attentionFlag == 2" @click="attentionTeacher()">关注</div>
+            <p v-show="attentionFlag == 1" @click="attentionTeacher()">已关注</p>
           </div>
         </div>
         <div class="wsy_tab">
@@ -53,35 +51,35 @@
             <!-- 主讲课程区域 -->
             <van-tab title="主讲课程" name="b">
               <ul class="masterCourse">
-                <li v-for="index in 7" :key="index">
+                <li v-for="(item,index) in mainCourse" :key="index">
                   <div class="wsy_ii_item" @click="ToCourseDetail()">
                     <p>每时每课特级教师-自主招生冲刺讲座6-多元方程组与可转化为多元方程组问题</p>
                     <div class="wsy_ii_time">
-                      <p>共一课时</p>
+                      <!-- <p>共{{ item. }}课时</p> -->
                     </div>
-                    <div class="wsy_ii_teacher">
-                      <img
-                        src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-                      />
-                      <p>杨德胜</p>
+                    <div
+                      class="wsy_ii_teacher"
+                      v-for="(item,index) in item.teachers_list"
+                      :key="index"
+                    >
+                      <img :src="item.teacher_avatar" />
+                      <p>{{ item.teacher_name }}</p>
                     </div>
 
                     <div class="wsy_ii_info">
-                      <span>1000人已报名</span>
-                      <span class="wsy_good">免费</span>
-                      <!-- <span class="wsy_price">
-                    <img
-                      src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
-                      alt
-                    />
-
-                    <span>1.00</span>
-                      </span>-->
+                      <span>{{ item.sales_num }}人已报名</span>
+                      <span class="wsy_good" v-show="item.price == 0">免费</span>
+                      <span class="wsy_price" v-show="item.price != 0">
+                        <img
+                          src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
+                        />
+                        <span>{{ item.price | toFixed }}</span>
+                      </span>
                     </div>
                     <img
+                      v-show="item.is_buy != 0"
                       class="wsy_flag_img"
                       src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
-                      alt
                     />
                   </div>
                 </li>
@@ -90,7 +88,7 @@
             <!-- 主讲课程区域 -->
             <!-- 学员评价区域 -->
             <van-tab title="学员评价" name="c">
-              <div class="wsy_empty">
+              <div class="wsy_empty" v-show="CourseComment.length == 0">
                 <img src="https://wap.365msmk.com/img/empty.0d284c2e.png" />
                 <span>暂无评论</span>
               </div>
@@ -100,13 +98,18 @@
         </div>
       </div>
     </div>
-    <div class="wsy_bottom">立即报名</div>
+    <div class="wsy_bottom" @click="toOtoPlan()">立即预约</div>
   </div>
 </template>
 
 <script>
+// teacher:
+// avatar: "http://120.53.31.103:84/uploads/image/2020-05-27/BwPKN7CZyHgF8rLypp2dMH1XBkv8zgkRYsXN5UtF.jpeg"
+// id: 45
+// introduction: "不肯能"
+// real_name: "杨岭"
 import BetterScroll from "better-scroll";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   name: "",
   components: {},
@@ -116,21 +119,31 @@ export default {
       bs: null,
       activeName: "a",
       teacherId: 0,
-      attentionFlag:false
+      attentionFlag: false,
+      teacherInfo: {},
+      mainCourse: [],
+      CourseComment:[]
     };
   },
   created() {},
   mounted() {
+    this.teacherId = this.$route.query.id;
+    this.getTeacherInfo(this.teacherId);
+    this.getmainCourse();
+    this.getCourseComment();
     this.$nextTick(() => {
       setTimeout(() => {
         this.bs = new BetterScroll(this.$refs.scrollBox, {
-          probeType: 2,
+          probeType: 3,
           click: true
         });
-      }, 1500);
+        this.bs.on("scroll", pos => {
+          if (pos.y >= 0) {
+            this.bs.scrollTo(0, 0);
+          }
+        });
+      }, 500);
     });
-    this.teacherId = this.$route.query.id;
-    this.getTeacherInfo(this.teacherId);
   },
   activated() {},
   update() {},
@@ -144,22 +157,58 @@ export default {
     },
     // 获取老师详情
     async getTeacherInfo(id) {
-      let data = await this.$http.get(`/api/app/teacher/info/${id}`);
-      console.log(data);
+      // let { data } = await this.$http.get(`/api/app/teacher/info/${id}`);
+      let { data: dataB } = await this.$http.get(`/api/app/teacher/${id}`);
+      // console.log(data.data);
+      console.log(dataB.data);
+      this.attentionFlag = dataB.data.flag;
+      this.teacherInfo = dataB.data.teacher;
     },
     // 关注讲师
-   async attentionTeacher(){
-     this.attentionFlag = !this.attentionFlag
-     let data = await this.$http.get(`/api/app/teacher/collect/${this.teacherId}`);
-      console.log(data);
-      if(data.data.code == 202){
+    async attentionTeacher() {
+      // this.attentionFlag = !this.attentionFlag;
+      let data = await this.$http.get(
+        `/api/app/teacher/collect/${this.teacherId}`
+      );
+      // console.log(data);
+      if (data.data.code == 200) {
         Toast.fail(data.data.msg);
+        this.getTeacherInfo(this.teacherId);
       }
+    },
+    // 获取主讲课程数据
+    async getmainCourse() {
+      let { data } = await this.$http.post("/api/app/teacher/mainCourse", {
+        limit: 10,
+        page: 1,
+        teacher_id: this.teacherId
+      });
+      this.mainCourse = data.data.list;
+      console.log(this.mainCourse);
+    },
+    // 获取课程评价
+    async getCourseComment() {
+      let { data } = await this.$http.post("/api/app/teacher/comment", {
+        limit: 10,
+        page: 1,
+        teacher_id: this.teacherId
+      });
+     this.CourseComment = data.data.comment.list
+    },
+    // 跳转到预约课程页面
+    toOtoPlan() {
+      this.$router.push(`/wsyOto-plan?id=${this.teacherId}`);
     }
   },
   filters: {},
   computed: {},
-  watch: {}
+  watch: {
+    activeName() {
+      this.$nextTick(() => {
+        this.bs.refresh();
+      });
+    }
+  }
 };
 </script>
 
@@ -232,7 +281,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  > :nth-child(2) {   /* 关注按钮样式 */ 
+  > :nth-child(2) {
+    /* 关注按钮样式 */
     width: 0.6rem;
     height: 0.3rem;
     line-height: 0.3rem;
@@ -241,7 +291,7 @@ export default {
     background: #ebeefe;
     color: #eb6100;
   }
-  >p{
+  > p {
     width: 0.6rem;
     height: 0.3rem;
     line-height: 0.3rem;
@@ -262,9 +312,9 @@ export default {
       margin-left: 0.15rem;
       // flex: 1;
       > p {
-        width: 1rem;
+        width: 1.5rem;
         margin: 0.01rem;
-        > span {
+        :nth-child(2){
           color: red;
           font-size: 0.12rem;
           margin-left: 0.1rem;
@@ -402,13 +452,13 @@ export default {
   align-items: center;
   flex-direction: column;
   background: #fff;
-  >img{
+  > img {
     width: 1rem;
     height: 1rem;
   }
-  >span{
-    font-size: .16rem;
-    color: #8C9ABC;
+  > span {
+    font-size: 0.16rem;
+    color: #8c9abc;
   }
 }
 </style>

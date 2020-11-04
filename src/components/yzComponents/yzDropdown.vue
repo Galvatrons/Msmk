@@ -10,10 +10,9 @@
               <span
                 v-for="(item, index) in grade"
                 :key="index"
-                @click="onGrade(index)"
+                @click="onGrade(index,item)"
                 :class="gradeActive == index ? 'grade_active' : ''"
-                >{{ item }}</span
-              >
+              >{{ item.name }}</span>
             </div>
           </div>
           <div class="yz_classify_wrapper">
@@ -23,9 +22,8 @@
                 v-for="(item, index) in classify"
                 :key="index"
                 :class="classifyActive == index ? 'grade_active' : ''"
-                @click="onClassify(index)"
-                >{{ item }}</span
-              >
+                @click="onClassify(index,item)"
+              >{{ item.name }}</span>
             </div>
           </div>
           <div class="yz_button_wrapper">
@@ -34,12 +32,14 @@
           </div>
         </van-dropdown-item>
         <!-- 下拉菜单排序部分 -->
-        <van-dropdown-item title="排序">
-          <div class="yz_sort_item">综合排序</div>
-          <div class="yz_sort_item">最新</div>
-          <div class="yz_sort_item">最热</div>
-          <div class="yz_sort_item">价格从低到高</div>
-          <div class="yz_sort_item">价格从高到低</div>
+        <van-dropdown-item title="排序" ref="sort">
+          <div
+            class="yz_sort_item"
+            :class="{lwh_AjaxType:index==lwh_AjaxTypeIndex}"
+            @click="lwh_AjaxType(item,index)"
+            v-for="(item,index) in lwh_AjaxList "
+            :key="index"
+          >{{item.cont}}</div>
         </van-dropdown-item>
         <!-- 下拉菜单筛选部分 -->
         <van-dropdown-item title="筛选" ref="filter">
@@ -47,11 +47,11 @@
             <div
               v-for="(item, index) in appCourseType"
               :key="index"
-              :class="filterActive == index ? 'yz_filter_active' : 'yz_filter_item'"
-              @click="onFilter(item, index)"
-            >
-              {{ item.name }}
-            </div>
+              :class="
+                filterActive == index ? 'yz_filter_active' : 'yz_filter_item'
+              "
+              @click="onFilter(item,index)"
+            >{{ item.name }}</div>
           </div>
         </van-dropdown-item>
       </van-dropdown-menu>
@@ -63,8 +63,58 @@
 export default {
   data() {
     return {
-      grade: ["初一", "初二", "初三", "高一", "高二"],
-      classify: ["语文", "数学", "英语", "物理", "化学"],
+      grade: [
+        {
+          id: 1,
+          name: "初一"
+        },
+        {
+          id: 2,
+          name: "初二"
+        },
+        {
+          id: 3,
+          name: "初三"
+        },
+        {
+          id: 4,
+          name: "高一"
+        },
+        {
+          id: 5,
+          name: "高二"
+        }
+      ],
+      classify: [
+        {
+          id: 7,
+          name: "语文"
+        },
+        {
+          id: 8,
+          name: "数学"
+        },
+        {
+          id: 9,
+          name: "英语"
+        },
+        {
+          id: 12,
+          name: "物理"
+        },
+        {
+          id: 13,
+          name: "化学"
+        }
+      ],
+      lwh_AjaxList: [
+        { id: 0, cont: "综合排序" },
+        { id: 1, cont: "最新" },
+        { id: 2, cont: "最热" },
+        { id: 3, cont: "价格由低到高" },
+        { id: 4, cont: "价格由高到低" }
+      ],
+      lwh_AjaxTypeIndex: null,
       gradeActive: -1,
       classifyActive: -1,
       filterActive: -1,
@@ -78,25 +128,31 @@ export default {
         "音频课",
         "系统课",
         "图文课",
-        "会员课",
+        "会员课"
       ],
+      lwh_arr_a: "",
+      lwh_arr_b: "",
       courseList: [],
-      appCourseType: [],
+      appCourseType: []
     };
   },
   mounted() {
     // 特色课分类下拉数据
-    this.$http.get("/api/app/courseClassify").then((res) => {
+    this.$http.get("/api/app/courseClassify").then(res => {
       console.log(res.data.data.appCourseType);
       this.appCourseType = res.data.data.appCourseType;
     });
+    // 下拉数据获取
+    this.lwh_AjaxAdd();
   },
   methods: {
-    onGrade(index) {
+    onGrade(index, item) {
       this.gradeActive = index;
+      this.arr_a = item.id;
     },
-    onClassify(index) {
+    onClassify(index, item) {
       this.classifyActive = index;
+      this.arr_b = item.id;
     },
     onClickReset() {
       this.$refs.item.toggle();
@@ -105,13 +161,24 @@ export default {
     },
     onClickOk() {
       this.$refs.item.toggle();
+      this.$store.commit("lwh_add", this.arr_a + "," + this.arr_b);
     },
     onFilter(item, index) {
-      this.$store.commit("filterId",item.id)
+      this.$store.commit("lwh_adx", item.id);
       this.filterActive = index;
       this.$refs.filter.toggle();
     },
-  },
+    // 获取接口数据
+    async lwh_AjaxAdd() {
+      let { data } = await this.$http.get("/api/app/courseClassify");
+    },
+    // type类型选择
+    lwh_AjaxType(item, index) {
+      this.$refs.sort.toggle();
+      this.lwh_AjaxTypeIndex = index;
+      this.$store.commit("lwh_ads", item.id);
+    }
+  }
 };
 </script>
 
@@ -184,6 +251,9 @@ export default {
     border: 0.001rem solid rgb(212, 212, 212);
     border-radius: 0.05rem;
   }
+}
+.lwh_AjaxType {
+  color: orange;
 }
 .yz_sort_item {
   width: 100%;

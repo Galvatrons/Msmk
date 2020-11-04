@@ -23,13 +23,28 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
 
+// 时间过滤器插件
+import moment from 'moment/moment'
+// 定义全局过滤器
+Vue.filter('moment', function (value, formatString) {
+  formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
+  // return moment(value).format(formatString); // value可以是普通日期 20170723
+  return moment.unix(value).format(formatString); // 这是时间戳转时间
+});
+
+
 
 router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+
   let wsy_str = '/StudyCalendar/teacher'
-  if (wsy_str.includes(to.path)) {
+
+  if (wsy_str.includes(to.path) && !window.localStorage.getItem("token")) {
     store.commit("wsy_Close", true)
     store.commit('lwh_btn', true)
     return false
+  }else{
+    store.commit("wsy_Close", false)
   }
   let lwh_str = "/lwh_course/lwh_main/lwh_york/lwh_exercise/lwh_my"
   if (lwh_str.includes(to.path)) {
@@ -42,6 +57,10 @@ router.beforeEach((to, from, next) => {
 
   }
 
+})
+
+Vue.filter("toFixed",(val)=>{
+  return (val/100).toFixed(2)
 })
 
 

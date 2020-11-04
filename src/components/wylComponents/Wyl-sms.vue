@@ -3,59 +3,210 @@
     <div class="Login-img">
       <img
         src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019pILfAg7Avr1567732916.png"
-        alt=""
       />
     </div>
-    <van-form @submit="onSubmit">
-      <van-field v-model="username" name="手机号" placeholder="请输入手机号" />
-      <van-field
-        v-model="password"
-        type="password"
-        name="验证码"
-        placeholder="请输入短信验证码"
-      />
-      <div class="vnt-text">
-        <span >*未注册的手机号将自动注册</span>
-        <span @click="add"> 注册/验证码登录</span>
-      </div>
-
-      <div style="margin: 16px">
-        <van-button
-          round
-          block
-          type="info"
-          native-type="submit"
-          color="linear-gradient(to right, rgb(255, 146, 71),rgb(253, 88, 3))"
-        >
-          登录
-        </van-button>
+    <van-form>
+      <div class="wsy_box">
+        <div class="wsy_mobile wsy_input" :class="[wsy_Active == 1 ? 'wsy_active' : '']">
+          <input
+            type="text"
+            v-model="mobile"
+            @focus="wsy_inputFcous(1)"
+            @blur="wsy_inputBlur()"
+            placeholder="请输入手机号"
+          />
+          <div class="getCAPTCHA" v-show="!CAPTCHAFlag" @click="getCAPTCHA()">获取验证码</div>
+          <div class="getCAPTCHAA" v-show="CAPTCHAFlag">获取验证码({{ wsy_second }})</div>
+          <p class="wsy_toast" v-show="!wsy_mobileFlag">请输入正确的手机号码</p>
+        </div>
+        <div class="wsy_pass wsy_input" :class="[wsy_Active == 2 ? 'wsy_active' : '']">
+          <input
+            type="text"
+            v-model="captcha"
+            @focus="wsy_inputFcous(2)"
+            @blur="wsy_inputBlur()"
+            placeholder="请输入短信验证码"
+          />
+          <p class="wsy_toast" v-show="!wsy_passFlag">请输入验证码</p>
+        </div>
+        <div class="wsy-text">
+          <span>*未注册的手机号将自动注册</span>
+          <span @click="wsy_toggle()">使用密码登录</span>
+        </div>
+        <div>
+          <van-button
+            round
+            block
+            type="info"
+            native-type="submit"
+            color="linear-gradient(to right, rgb(255, 146, 71),rgb(253, 88, 3))"
+            @click="wsy_Login()"
+          >登录</van-button>
+        </div>
       </div>
     </van-form>
+    <div></div>
   </div>
 </template>
 
 <script>
+import { Toast } from "vant"
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      mobile: "", //手机号码
+      captcha: "", //验证码
+      wsy_Active: null,
+      wsy_mobileFlag: true,
+      wsy_passFlag: true,
+      wsy_flag: false,
+      CAPTCHAFlag: false,
+      wsy_second: 60
     };
   },
   methods: {
-    onSubmit(values) {
-      console.log("submit", values);
+    // /输入框获取焦点事件
+    wsy_inputFcous(num) {
+      this.wsy_Active = num;
     },
-    add() {
-      this.$router.push({
-        path: "/Wyl-Login",
-      });
+    wsy_inputBlur() {
+      this.wsy_Active = null;
+      let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      if (mobileReg.test(this.mobile)) {
+        this.wsy_mobileFlag = true;
+      } else {
+        this.wsy_mobileFlag = false;
+      }
+      if (this.captcha.length == 0) {
+        this.wsy_passFlag = false;
+      } else {
+        this.wsy_passFlag = true;
+      }
+      if (this.wsy_mobileFlag && this.wsy_passFlag) {
+        this.wsy_flag = true;
+      }
     },
-  },
+    wsy_toggle() {
+      this.$router.push("/wyl-Login");
+    },
+    // 获取验证码
+    async getCAPTCHA() {
+      let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      if (mobileReg.test(this.mobile)) {
+        this.wsy_mobileFlag = true;
+      } else {
+        this.wsy_mobileFlag = false;
+        return false;
+      }
+      if (this.wsy_mobileFlag) {
+        this.CAPTCHAFlag = true;
+        setInterval(() => {
+          this.wsy_second--;
+          if (this.wsy_second == 0) {
+            this.wsy_second = 0;
+            this.CAPTCHAFlag = !this.CAPTCHAFlag;
+          }
+        }, 1000);
+        this.wsy_second = 60;
+        let { data }= await this.$http.post("/api/app/smsCode", {
+          mobile: this.mobile,
+          sms_type: "login"
+        });
+        console.log(data);
+        if(data.code == 201){
+          Toast.fail('请勿重复获取短信验证码');
+        }else if(data.code == 200){
+          Toast.success('发送成功');
+        }
+      }
+
+      // this.CAPTCHAFlag = !this.CAPTCHAFlag
+    },
+    // 登陆方法
+    async wsy_Login() {
+      if (this.wsy_flag) {
+        let {data} = await this.$http.post("/api/app/login", {
+          mobile: this.mobile,
+          sms_code: this.captcha,
+          client: 1,
+          type: 2
+        });
+        console.log(data);
+         window.localStorage.setItem("token",JSON.stringify(data.data.remember_token))
+        if (data.data.is_new != 1) {
+          this.$router.push("/lwh_my");
+        } else {
+          this.$router.push("/wsySetPass");
+        }
+      }
+    }
+    // onSubmit(values) {
+    //   console.log("submit", values);
+    // },
+    // add() {
+    //   this.$router.push({
+    //     path: "/wsy-sms",
+    //   });
+    // },
+    // add1() {
+    //   this.$router.push({
+    //     path: "/wsy-pass",
+    //   });
+    // },
+  }
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+.wsy_toast {
+  color: red;
+  font-size: 0.1rem;
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+}
+.getCAPTCHA {
+  font-size: 0.12rem;
+  color: #eb6100;
+  position: absolute;
+  right: 0;
+  top: 0.2rem;
+}
+.getCAPTCHAA {
+  font-size: 0.12rem;
+  color: #8c8c8c;
+  position: absolute;
+  right: 0;
+  top: 0.2rem;
+}
+.wsy_mobile {
+  position: relative;
+}
+.wsy_box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wsy_input {
+  width: 3rem;
+  padding-top: 0.2rem 0;
+  box-sizing: border-box;
+  border-bottom: 0.01rem solid rgb(238, 238, 238);
+  position: relative;
+  > input {
+    margin: 0.2rem 0;
+    border: 0;
+  }
+  > input::placeholder {
+    font-size: 0.16rem;
+    color: #bebebe;
+  }
+}
+.wsy_active {
+  border-bottom: 0.01rem solid #eb6100;
+}
 .Login-box {
   width: 100vw;
   height: 100vh;
@@ -72,29 +223,23 @@ export default {
   height: 0.6rem;
 }
 
-.vnt-text {
-  width: 80vw;
-  font-size: 0.15rem;
-  color: gray;
+.wsy-text {
+  width: 3rem;
+  font-size: 0.12rem;
+  color: #999999;
   display: flex;
   justify-content: space-between;
   text-align: center;
-  margin-left: 0.4rem;
-  margin-top: 0.3rem;
+  margin-top: 0.2rem;
 }
 .van-button {
-  width: 70vw;
-  margin-top: 0.6rem;
-  margin-left: 0.4rem;
+  width: 3rem;
+  margin-top: 0.4rem;
+  // margin-left: 0.4rem;
 }
 .van-field {
   width: 85vw;
   text-align: center;
   margin-left: 0.3rem;
-}
-.van-button {
-  width: 70vw;
-  margin-top: 0.6rem;
-  margin-left: 0.4rem;
 }
 </style>
