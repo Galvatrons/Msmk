@@ -39,8 +39,9 @@ router.beforeEach((to, from, next) => {
 
   let wsy_str = '/StudyCalendar/teacher'
 
-  if (wsy_str.includes(to.path) && !window.localStorage.getItem("token")) {
+  if (wsy_str.includes(to.path) && !window.sessionStorage.getItem("token")) {
     store.commit("wsy_Close", true)
+
     store.commit('lwh_btn', true)
     return false
   }else{

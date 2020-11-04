@@ -132,7 +132,7 @@ export default {
           type: 2
         });
         console.log(data);
-         window.localStorage.setItem("token",JSON.stringify(data.data.remember_token))
+         window.sessionStorage.setItem("token",JSON.stringify(data.data.remember_token))
         if (data.data.is_new != 1) {
           this.$router.push("/lwh_my");
         } else {

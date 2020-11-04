@@ -4,8 +4,7 @@
       <img src="https://wap.365msmk.com/img/feiji.decaf161.png" alt />
       <p>赶紧登陆一下吧</p>
       <p>立即预约一对一辅导，浏览更多视频课程~</p>
-      <van-button color="#EB6100" round type="primary" block @click='toLogin()'>立即登录</van-button>
-      <!-- <van-button color="#EB6100" round type="primary" block @click="onClickLogin">立即登录</van-button> -->
+      <van-button color="#EB6100" round type="primary" block @click="onClickLogin">立即登录</van-button>
       <van-icon name="cross" class="cross" size="20px" color="#B8B8B8" @click="close()" />
     </div>
   </div>
@@ -27,17 +26,12 @@ export default {
     next();
   },
   methods: {
-    // 取消登陆，隐藏立即登陆弹出框
     close() {
       this.$store.commit("wsy_Close", false);
     },
-    // 跳转到login页面
-    toLogin(){
-      this.$router.push("/Wyl-Login")
-    // onClickLogin(){
-    //   this.$router.push("/yzLogin")
-    // }
-  }
+    onClickLogin(){
+      this.$router.push("/yzLogin")
+    }
   },
   filters: {},
   computed: {},

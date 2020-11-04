@@ -61,24 +61,28 @@
           <p>课程相关</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="关注的老师" @click="onlickcontact" />
-          <van-grid-item icon="star-o" text="我的收藏" @click="onlicksc"/>
+          <van-grid-item
+            icon="contact"
+            text="关注的老师"
+            @click="onlickcontact"
+          />
+          <van-grid-item icon="star-o" text="我的收藏" @click="onlicksc" />
         </van-grid>
         <!-- 订单相关 -->
         <div class="list_title">
           <p>订单相关</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="课程订单" @click="onlickKc"/>
-          <van-grid-item icon="star-o" text="会员订单"  @click="onlickHy"/>
-          <van-grid-item icon="star-o" text="约客订单" @click="onlickYk"/>
+          <van-grid-item icon="contact" text="课程订单" @click="onlickKc" />
+          <van-grid-item icon="star-o" text="会员订单" @click="onlickHy" />
+          <van-grid-item icon="star-o" text="约客订单" @click="onlickYk" />
         </van-grid>
         <!-- 我的账户 -->
         <div class="list_title">
           <p>我的账户</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="优惠卷"/>
+          <van-grid-item icon="contact" text="优惠卷" />
           <van-grid-item icon="star-o" text="学习卡" />
           <van-grid-item icon="star-o" text="会员" />
         </van-grid>
@@ -90,6 +94,7 @@
           <van-grid-item icon="contact" text="我的消息" />
           <van-grid-item icon="star-o" text="意见反馈" />
           <van-grid-item icon="star-o" text="在线客服" />
+          <van-grid-item icon="setting-o" text="设置" @click="onSetting" />
         </van-grid>
       </div>
     </div>
@@ -145,34 +150,38 @@ export default {
     popup() {
       this.show = true;
     },
-    onlickcontact(){
+    onlickcontact() {
       this.$router.push({
         path: "/Wyl-concern",
       });
     },
-    onlicksc(){
+    onlicksc() {
       this.$router.push({
         path: "/Wyl-collect",
       });
     },
     //课程跳转
-    onlickKc(){
+    onlickKc() {
       this.$router.push({
         path: "/Wyl-Kc",
       });
     },
     //会员跳转
-    onlickHy(){
+    onlickHy() {
       this.$router.push({
         path: "/Wyl-Hy",
       });
     },
     //约客跳转
-    onlickYk(){
+    onlickYk() {
       this.$router.push({
         path: "/Wyl-Yk",
       });
-    }
+    },
+    // 设置跳转
+    onSetting() {
+      this.$router.push("/yzSetting");
+    },
   },
 };
 </script>

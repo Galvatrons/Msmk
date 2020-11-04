@@ -77,7 +77,7 @@
                 <div class="classify_title">第一讲第一课时</div>
               </div>
               <div class="classify_slide_right_bottom">
-                <span>{{}}</span>
+                <span></span>
                 <span>03月20日 08:00 - 10:30</span>
               </div>
             </div>
@@ -184,6 +184,8 @@ export default {
         }
         console.log(this.ccc);
       });
+
+    // 评论数据
     this.$nextTick(() => {
       this.yz_bs = new BetterScroll(".info_box", {
         probeType: 3,

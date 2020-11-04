@@ -119,7 +119,7 @@ export default {
       bs: null,
       activeName: "a",
       teacherId: 0,
-      attentionFlag: false,
+      attentionFlag: 1,
       teacherInfo: {},
       mainCourse: [],
       CourseComment:[]
@@ -162,15 +162,16 @@ export default {
       // console.log(data.data);
       console.log(dataB.data);
       this.attentionFlag = dataB.data.flag;
+      console.log(this.attentionFlag);
+      
       this.teacherInfo = dataB.data.teacher;
     },
     // 关注讲师
     async attentionTeacher() {
-      // this.attentionFlag = !this.attentionFlag;
       let data = await this.$http.get(
         `/api/app/teacher/collect/${this.teacherId}`
       );
-      // console.log(data);
+      console.log(data.data);
       if (data.data.code == 200) {
         Toast.fail(data.data.msg);
         this.getTeacherInfo(this.teacherId);

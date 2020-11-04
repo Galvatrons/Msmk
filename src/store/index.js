@@ -15,7 +15,13 @@ export default new Vuex.Store({
     wsy_Site:"请选择",
     wsy_Subject:"请选择",
     wsy_Class:"请选择",
-    lwh_list:[{course_type:0,order_by:0,attr_val_id:""}]
+    lwh_list:[{course_type:0,order_by:0,attr_val_id:""}],
+    yz_Mess: [],
+    yz_Age: "",
+    yz_Date: "",
+    yz_Subject: [],
+    yz_Grade: "",
+    yzLoginMess: {},
   },
   mutations: {
     lwh_btn(s, v) {
@@ -25,10 +31,10 @@ export default new Vuex.Store({
       state.filterId = id
       console.log(state.filterId);
     },
-    wsy_Close(state,bool){
+    wsy_Close(state, bool) {
       state.wsy_isClose = bool
     },
-    wsy_Hint(state,bool){
+    wsy_Hint(state, bool) {
       console.log(bool);
       state.wsy_isHint = bool
     },
@@ -69,12 +75,32 @@ export default new Vuex.Store({
     },
     lwh_adx(s,v){
       s.lwh_list[0].course_type = v
-    }
+    },
+    yz_Mess(state, item) {
+      state.yz_Mess = item
+    },
+    yz_Age(state, item) {
+      state.yz_Age = item
+      console.log(state.yz_Age);
+    },
+    yz_Date(state, item) {
+      state.yz_Date = item
+    },
+    yz_Subject(state, item) {
+      state.yz_Subject = [...item]
+      console.log(state.yz_Subject);
+    },
+    yz_Grade(state, item) {
+      state.yz_Grade = item
+    },
+    yzLoginMess(state, item) {
+      state.yzLoginMess = item
+    },
   },
   actions: {
   },
-  getters:{
-    
+  getters: {
+
   },
   modules: {
   },

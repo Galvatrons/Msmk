@@ -1,11 +1,13 @@
 import axios from 'axios'
 import { Guid } from "./guid"
+import Vue from 'vue';
+import { Toast } from 'vant';
+
+Vue.use(Toast);
 // 路由引入
 // import router from '../router'
 // 实例化axios
-import {
-    Toast
-} from 'vant';
+
 
 // Vue.prototype.toast = Toast
 let deviceid = null;
@@ -28,7 +30,7 @@ const serve = axios.create({
 // 请求拦截
 serve.interceptors.request.use((config) => {
     // token验证请求
-    let token = JSON.parse(window.localStorage.getItem("token"))
+    let token = JSON.parse(window.sessionStorage.getItem("token"))
     if(token){
         config.headers.Authorization = `Bearer ${token}`
     }
@@ -41,6 +43,9 @@ serve.interceptors.request.use((config) => {
         message: '加载中...',
         forbidClick: true,
         loadingType: 'spinner',
+        duration: 3000,
+        message: '加载中...',
+        forbidClick: true,
     });
     return config
 })
