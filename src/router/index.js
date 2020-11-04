@@ -252,36 +252,6 @@ const routes = [
     title:"我的约课"
   }
 },
-  //我的页面关注跳转
-  {
-    path: "/wyl-concern",
-    name: "Wyl-concern",
-    component: () => import('../components/wylComponents/Wyl-concern.vue')
-  },
-  //我的页面我的收藏
-  {
-    path: "/wyl-collect",
-    name: "Wyl-collect",
-    component: () => import('../components/wylComponents/Wyl-collect.vue')
-  },
-  //我的-课程订单
-  {
-    path: "/wyl-Kc",
-    name: "Wyl-Kc",
-    component: () => import('../components/wylComponents/Wyl-Kc.vue')
-  },
-  //我的-会员订单
-  {
-    path: "/wyl-Hy",
-    name: "Wyl-Hy",
-    component: () => import('../components/wylComponents/Wyl-Hy.vue')
-  },
-  //我的-约课订单
-  {
-    path: "/wyl-Yk",
-    name: "Wyl-Yk",
-    component: () => import('../components/wylComponents/Wyl-Yk.vue')
-  },
   // 学习日历
   {
     path: "/StudyCalendar",
