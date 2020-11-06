@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
 
     store.commit('lwh_btn', true)
     return false
-  }else{
+  } else {
     store.commit("wsy_Close", false)
   }
   let lwh_str = "/lwh_course/lwh_main/lwh_york/lwh_exercise/lwh_my"
@@ -57,11 +57,26 @@ router.beforeEach((to, from, next) => {
     next(true)
 
   }
+  if (to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path !="/Wyl-Login") {
+
+    next()
+    store.commit("lwh_loadBtn", true)
+    setTimeout(() => {
+      next("/Wyl-Login")
+      store.commit("lwh_loadBtn", false)
+    }, 200);
+  } else if( to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path =="/Wyl-Login"){
+    next("/lwh_main")
+  } else {
+    next()
+
+  }
+
 
 })
 
-Vue.filter("toFixed",(val)=>{
-  return (val/100).toFixed(2)
+Vue.filter("toFixed", (val) => {
+  return (val / 100).toFixed(2)
 })
 
 

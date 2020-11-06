@@ -27,7 +27,7 @@
     <!-- 顶部导航栏 -->
     <div class="wsy_info" ref="scrollBox">
       <div class="scrollBox">
-        <div class="course_info">
+        <div class="course_info" ref="lwh_ke1">
           <div class="info_title">
             <p>{{ CourseInfo.title }}</p>
             <van-icon
@@ -58,7 +58,7 @@
             >人已报名
           </div>
         </div>
-        <div class="teach_team">
+        <div class="teach_team" ref="lwh_ke2">
           <div>教学团队</div>
           <div class="teach_wrapper">
             <div class="teach_left">
@@ -68,11 +68,11 @@
             <div class="teach_right"></div>
           </div>
         </div>
-        <div class="classify_jieshao">
+        <div class="classify_jieshao" ref="lwh_ke3">
           <p class="title">课程介绍</p>
           <p class="font">{{ CourseInfo.course_statement }}</p>
         </div>
-        <div class="classify_outline">
+        <div class="classify_outline" ref="lwh_ke4">
           <p>课程大纲</p>
           <div class="classify_slide" @click='jumpVideo'>
             <div class="dian"></div>
@@ -89,7 +89,7 @@
             </div>
           </div>
         </div>
-        <div class="classify_comment">
+        <div class="classify_comment" ref="lwh_ke5">
           <p>课程评论</p>
           <div class="comment_wrapper">
             <div
@@ -187,7 +187,6 @@ export default {
   },
   created() {},
   mounted() {
-    
     this.$nextTick(() => {
       this.wsy_bs = new BetterScroll(this.$refs.scrollBox, {
         probeType: 3,
@@ -200,11 +199,11 @@ export default {
         } else {
           this.wsy_topFlag = false;
         }
-        if (pos.y <= -315 && pos.y > -440) {
+        if (pos.y < -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight) && pos.y > -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight)-30) {
           this.active = 0;
-        } else if (pos.y <= -440 && pos.y > -550) {
+        } else if (pos.y < -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight)-30 && pos.y > -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight+this.$refs.lwh_ke4.clientHeight)-44) {
           this.active = 1;
-        } else if (pos.y <= -550) {
+        } else if (pos.y < -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight+this.$refs.lwh_ke4.clientHeight)-44) {
           this.active = 2;
         }
       });
@@ -223,10 +222,10 @@ export default {
       let { data } = await this.$http.get(
         `/api/app/courseInfo/basis_id=${this.$route.query.id}`
       );
-      console.log(data.data,1111);
+
       this.lwh_list = data.data.teachers[0]
       this.CourseInfo = data.data.info;
-      console.log(this.lwh_list )
+
     },
     async ajaxCouse() {
       let { data } = await this.$http.post("/api/app/courseComment", {
@@ -246,9 +245,14 @@ export default {
       this.$router.back(1);
     },
     // 跳转到提交订单页面
-    toPurchase() {
+    async toPurchase() {
       if (this.CourseInfo.price == 0) {
-        this.$router.push("/study-detail");
+        let {data} = await this.$http.post("https://www.365msmk.com/api/app/order/downOrder",{
+          shop_id:this.CourseInfo.id,
+          type:this.CourseInfo.course_type,
+        })
+        this.ajaxDetail()
+        // this.$router.push("/study-detail");
       } else {
         this.$router.push("/Purchase");
       }
@@ -286,13 +290,14 @@ export default {
     },
     // 点击滚动置顶高度
     wsy_scr(index) {
+      console.log(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight) 
       this.active = index;
       if (index == 0) {
-        this.wsy_bs.scrollTo(0, -315, 1000);
+        this.wsy_bs.scrollTo(0, -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight)-27, 1000);
       } else if (index == 1) {
-        this.wsy_bs.scrollTo(0, -440, 1000);
+        this.wsy_bs.scrollTo(0, -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight)-44, 1000);
       } else if (index == 2) {
-        this.wsy_bs.scrollTo(0, -550, 1000);
+        this.wsy_bs.scrollTo(0, -(this.$refs.lwh_ke1.clientHeight+this.$refs.lwh_ke2.clientHeight+this.$refs.lwh_ke3.clientHeight+this.$refs.lwh_ke4.clientHeight)-54, 1000);
       }
     },
     // 跳转到视频

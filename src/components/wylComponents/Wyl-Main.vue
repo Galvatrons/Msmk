@@ -5,7 +5,14 @@
       <div class="Main-box"></div>
       <div class="Main-top">
         <div class="top1" @click="lwh_MyInfo()">
-          <van-image
+          <van-image  v-if="lwh_token==''"
+            class="lwh_img_head"
+            round
+            width="0.58rem"
+            height="0.58rem"
+            :src="lwh_head_cont.avatar"
+          />
+          <van-image v-if="lwh_token !=''"
             class="lwh_img_head"
             round
             width="0.58rem"
@@ -16,7 +23,7 @@
             <span>{{ lwh_head_cont.nickname }}</span>
             <p><van-icon size="18" color="#f2995a" name="edit" /></p>
           </div>
-          <div class="lwh_text" @click="onClickyk">去约课</div>
+          <div class="lwh_text" @click.stop="onClickyk">去约课</div>
         </div>
         <div class="top2">
           <div @click.stop="onClickfeature">
@@ -167,6 +174,7 @@ export default {
       show: false,
       lwh_head_cont: [],
       lwh_head_list: [],
+      lwh_token:window.localStorage.getItem("token") || ""
     };
   },
   mounted() {
@@ -454,8 +462,8 @@ export default {
   margin-top: 0.1rem;
 }
 .popus {
-  width: 3.4rem;
-  height: 6.5rem;
+  width: 3.2rem;
+  height: 6rem;
 }
 .lwh_img_head {
   border: 0.02rem solid #bdcdf1;

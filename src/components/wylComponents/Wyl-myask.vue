@@ -2,14 +2,16 @@
   <div id="shopping">
     <div class="content">
       <div class="top">约课记录</div>
-      <van-tabs v-model="active" @click="onTitle">
+      <van-tabs v-model="active" @click="onTitle" title-active-color="#eb6100" color="#eb6100" line-width="20px" line-height="2px"		 >
         <van-tab
           v-for="(item, index) in title"
           :key="index"
           :title="item.title"
+          
         ></van-tab>
       </van-tabs>
-      <div v-show="token">
+     <div class="lwh_main">
+        <div v-show="token">
         <div class="btn_wrapper" v-show="isShow">
           <img src="@/assets/img/a.png" alt="" />
           <div class="hnit" v-show="hnitShow == 1">还没有待上课记录哦</div>
@@ -28,6 +30,7 @@
           <button @click="onLogin">登陆/注册</button>
         </div>
       </div>
+     </div>
     </div>
   </div>
 </template>
@@ -112,6 +115,15 @@ export default {
 #id {
   background: rgb(240, 242, 245);
 }
+.content{
+  width: 100%;
+  height: 100%;
+}
+.lwh_main{
+  width: 100%;
+  height: 100%;
+  background: #f0f2f5;
+}
 .top {
   width: 100%;
   height: 0.5rem;
@@ -119,7 +131,7 @@ export default {
   line-height: 0.5rem;
   color: #898989;
   font-size: 0.2rem;
-  border-bottom: 1px solid gray;
+  border-bottom: 0.01rem solid #eee;
 }
 .dsktitle {
   width: 100%;
@@ -158,7 +170,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 0.1rem;
+
   div {
     width: 100%;
     text-align: center;
