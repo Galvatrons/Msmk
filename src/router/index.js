@@ -10,15 +10,10 @@ const routes = [
     path: '/',
     name: '/',
     redirect: "/lwh_main",
-<<<<<<< HEAD
     meta:{
       title:"每时每课"
-=======
-    meta: {
-      title: "首页"
->>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
-    }
-  },
+  }
+},
   // 登录路由
   {
     path: '/Wyl-Login',
@@ -201,13 +196,8 @@ const routes = [
     path: "/wyl-my-currency",
     name: "Wyl-my-currency",
     component: () => import('../components/wylComponents/Wyl-my-currency.vue'),
-<<<<<<< HEAD
     meta:{
       title:"我的余额"
-=======
-    meta: {
-      title: "我的学习币"
->>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
     }
   },
   //我的页面余额明细
@@ -462,7 +452,6 @@ const routes = [
   {
     path: "/yzChangePass",
     name: "yzChangePass",
-<<<<<<< HEAD
     component: () => import("../views/yzCourse/yzChangePass"),
     meta: {
       title: "修改密码"
@@ -560,9 +549,6 @@ const routes = [
       title: "会员"
     }
   },
-=======
-    component: () => import("../views/yzCourse/yzChangePass")
-  },
   // 订单详情
   {
     path:"/yzOrderDetail",
@@ -570,7 +556,7 @@ const routes = [
     component: () => import("../views/yzCourse/yzOrderDetail")
   },
   obj
->>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
+
 ]
 
 const router = new VueRouter({
