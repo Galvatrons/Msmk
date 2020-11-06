@@ -1,66 +1,70 @@
 <template>
   <div class="wsy_box">
-    <div class="yz_search_head">
-      <div class="back_icon">
-        <van-icon name="arrow-left" @click="onBack" />
-      </div>
-      <div class="search_input">
-        <input type="text" v-model="searchText" @input="onInput()" placeholder="请输入内容" />
-      </div>
-      <div class="yz_cancel" v-show="!show" @click="onCancel">取消</div>
-      <div class="yz_cancel" v-show="show" @click="onSearch">搜索</div>
-    </div>
-    <div class="yz_history_container"  ref="scrollBox" v-show="!show">
+    <div class="wsy_main" ref="scrollBox">
       <div class="wsy_scrollBox">
-        <div class="history_title">
-          <span>历史搜索</span>
-          <div class="yz_remove" @click="onRemove">
-            <van-icon name="delete" />
+        <div class="yz_search_head">
+          <div class="back_icon">
+            <van-icon name="arrow-left" @click="onBack" />
           </div>
+          <div class="search_input">
+            <input type="text" v-model="searchText" @input="onInput()" placeholder="请输入内容" />
+          </div>
+          <div class="yz_cancel" v-show="!show" @click="onCancel">取消</div>
+          <div class="yz_cancel" v-show="show" @click="onSearch">搜索</div>
         </div>
-        <div class="history_item_wrapper">
-          <span
-            class="history_item"
-            v-for="(item, index) in history"
-            :key="index"
-            @click="search(item)"
-          >{{ item }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="yz_history_container" style="background:#F8F8F8;padding:0 .15rem;" ref="scrollBox" v-show="show">
-      <div class="wsy_scrollBox">
         <div
-          class="wsy_ii_item"
-          @click="ToCourseDetail(item.id,item.course_type)"
-          v-for="(item,index) in search_list"
-          :key="index"
+          class="yz_history_container"
+          style="background:#F8F8F8;padding:0 .15rem;"
+          v-show="!show"
         >
-          <p>{{ item.title }}</p>
-          <div class="wsy_ii_time">
-            <p>共{{ item.total_periods }}课时</p>
+          <div class="history_title">
+            <span>历史搜索</span>
+            <div class="yz_remove" @click="onRemove">
+              <van-icon name="delete" />
+            </div>
           </div>
-          <div class="wsy_ii_teacher" v-for="(it,i) in item.teachers_list" :key="i">
-            <img :src="it.teacher_avatar" />
-            <p>{{ it.teacher_name }}</p>
+          <div class="history_item_wrapper">
+            <span
+              class="history_item"
+              v-for="(item, index) in history"
+              :key="index"
+              @click="search(item)"
+            >{{ item }}</span>
           </div>
+        </div>
+        <div class="yz_history_container" style="background:#F8F8F8;" v-show="show">
+          <div
+            class="wsy_ii_item"
+            @click="ToCourseDetail(item.id,item.course_type)"
+            v-for="(item,index) in search_list"
+            :key="index"
+          >
+            <p>{{ item.title }}</p>
+            <div class="wsy_ii_time">
+              <p>共{{ item.total_periods }}课时</p>
+            </div>
+            <div class="wsy_ii_teacher" v-for="(it,i) in item.teachers_list" :key="i">
+              <img :src="it.teacher_avatar" />
+              <p>{{ it.teacher_name }}</p>
+            </div>
 
-          <div class="wsy_ii_info">
-            <span>{{ item.sales_num }}人已报名</span>
-            <span class="wsy_good" v-show="item.price == 0">免费</span>
-            <span class="wsy_price" v-show="item.price != 0">
-              <img
-                src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
-              />
-              <span>{{ item.price | toFixed }}</span>
-            </span>
+            <div class="wsy_ii_info">
+              <span>{{ item.sales_num }}人已报名</span>
+              <span class="wsy_good" v-show="item.price == 0">免费</span>
+              <span class="wsy_price" v-show="item.price != 0">
+                <img
+                  src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
+                />
+                <span>{{ item.price | toFixed }}</span>
+              </span>
+            </div>
+            <img
+              v-show="item.has_buy != 0"
+              class="wsy_flag_img"
+              src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
+              alt
+            />
           </div>
-          <img
-            v-show="item.has_buy != 0"
-            class="wsy_flag_img"
-            src="https://wap.365msmk.com/img/has-buy.6cfbd83d.png"
-            alt
-          />
         </div>
       </div>
     </div>
@@ -76,19 +80,21 @@ export default {
       show: false,
       history: JSON.parse(localStorage.getItem("history")) || [],
       search_list: [],
-      bs:null
+      bs: null
     };
   },
   mounted() {
-    this.bs = new BetterScroll(this.$refs.scrollBox, {
-      probeType: 2,
-      click: true
+    this.$nextTick(() => {
+      this.bs = new BetterScroll(this.$refs.scrollBox, {
+        probeType: 3,
+        click: true
+      });
+      this.bs.on("scroll",(pos)=>{
+        if(pos.y >= 0){
+          this.bs.scrollTo(0,0)
+        }
+      })
     });
-    // this.bs.on("scroll", pos => {
-    //   if (pos.y >= 0) {
-    //     this.bs.scrollTo(0, 0);
-    //   }
-    // });
   },
   methods: {
     onBack() {
@@ -110,7 +116,6 @@ export default {
       );
       this.search_list = data.data.list;
       console.log(this.search_list);
-      
 
       var index = this.history.findIndex(item => {
         return item == this.searchText;
@@ -134,19 +139,27 @@ export default {
       this.onSearch();
     },
     //   点击进入课程详情页面
-    ToCourseDetail(id,course_type) {
+    ToCourseDetail(id, course_type) {
       // window.localStorage.setItem("CourseInfo", JSON.stringify(info));
       this.$router.push({
-        path:"/CourseDetail",
-        query:{
+        path: "/CourseDetail",
+        query: {
           id,
           course_type
         }
       });
-    },
+    }
   },
-  filters:{
-    
+  filters: {},
+  watch: {
+    search_list: {
+      handler() {
+        this.$nextTick(() => {
+          this.bs.refresh();
+        });
+      },
+      deep: true
+    }
   }
 };
 </script>
@@ -162,10 +175,20 @@ export default {
 .wsy_box {
   width: 100%;
   height: 100%;
+}
+.wsy_main {
+  width: 100%;
+  height: 100%;
   background: #f8f8f8;
   display: flex;
   flex-direction: column;
-  // overflow: hidden;
+  overflow: hidden;
+}
+.wsy_scrollBox {
+  width: 100%;
+  // height:auto!important; 
+  padding-bottom: 80%;margin-bottom: 80%;
+  min-height: 101%;
 }
 .yz_search_head {
   flex-shrink: 1;
@@ -198,15 +221,10 @@ export default {
 }
 
 .yz_history_container {
-  flex: 1;
-  overflow: hidden;
-  // width: 100%;
-  // min-height: 101%;
+  width: 100%;
   background: #fff;
-  >.wsy_scrollBox{
-    width: 100%;
-    min-height: 101%;
-  }
+  padding: 0 0.2rem;
+  box-sizing: border-box;
   .history_title {
     width: 100%;
     height: 0.43rem;
@@ -307,10 +325,10 @@ export default {
 }
 .wsy_good {
   color: #44a426;
-  font-size: 0.18rem;
+  font-size: 0.14rem;
 }
 .wsy_price {
   color: red;
-  font-size: 0.18rem;
+  font-size: 0.14rem;
 }
 </style>

@@ -14,11 +14,11 @@
       </van-tabbar>
     </div>
     <!-- 点击留言 -->
-    <div class="lwh_fixed" @click="lwh_Aflag = true" v-drag>
+    <div class="lwh_fixed" @click="wsyShowLeave()" v-drag>
       <van-icon name="comment" color="#fff" size="0.3rem" />
     </div>
     <!-- 留言框弹出 -->
-    <v-leave v-show="lwh_Aflag" @lwh_leave="lwh_leaves"></v-leave>
+    <v-leave v-show="this.$store.state.wsyFlag"></v-leave>
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
       // 标签拦下标
       active: JSON.parse(window.sessionStorage.getItem("lwh_active")) || 0,
       // 留言组件显示条件
-      lwh_Aflag: false,
+      lwh_Aflag: this.$store.state.wsyFlag,
       // 标签栏内容渲染
       lwh_list: [
         {
@@ -78,14 +78,18 @@ export default {
   },
   methods: {
     // 子组件传值隐藏
-    lwh_leaves() {
-      this.lwh_Aflag = false;
-    },
+    // lwh_leaves() {
+    //   this.lwh_Aflag = false;
+    // },
+    
     // 路由跳转保存到本地
     lwh_btn_active(num) {
       window.sessionStorage.setItem("lwh_active", num);
       this.active = JSON.parse(window.sessionStorage.getItem("lwh_active"));
     },
+    wsyShowLeave(){
+      this.$store.commit("wsyShowLeave",true)
+    }
   },
   watch: {
     // 路由跳转保存到本地

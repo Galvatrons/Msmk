@@ -84,16 +84,16 @@
         <van-grid>
           <van-grid-item icon="contact" text="优惠卷" />
           <van-grid-item icon="star-o" text="学习卡" />
-          <van-grid-item icon="star-o" text="会员" />
+          <van-grid-item icon="star-o" text="会员" @click='toVip()' />
         </van-grid>
         <!-- 自助服务 -->
         <div class="list_title">
           <p>自助服务</p>
         </div>
         <van-grid>
-          <van-grid-item icon="contact" text="我的消息" />
-          <van-grid-item icon="star-o" text="意见反馈" />
-          <van-grid-item icon="star-o" text="在线客服" />
+          <van-grid-item icon="contact" text="我的消息" @click='toMessage()' />
+          <van-grid-item icon="star-o" text="意见反馈" @click='toFeedback()' />
+          <van-grid-item icon="star-o" text="在线客服" @click="showLeave()" />
           <van-grid-item icon="setting-o" text="设置" @click="onSetting" />
         </van-grid>
       </div>
@@ -182,6 +182,22 @@ export default {
     onSetting() {
       this.$router.push("/yzSetting");
     },
+    // 显示留言组件
+    showLeave(){
+      this.$store.commit("wsyShowLeave",true)
+    },
+    // 跳转到信息反馈
+    toFeedback(){
+      this.$router.push("/wsyFeedback")
+    },
+    // 跳转到我的通知
+    toMessage(){
+      this.$router.push("/message")
+    },
+    // 跳转到会员购买页面
+    toVip(){
+      this.$router.push("/vip")
+    }
   },
 };
 </script>

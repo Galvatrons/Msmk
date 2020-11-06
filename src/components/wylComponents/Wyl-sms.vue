@@ -17,7 +17,7 @@
           />
           <div class="getCAPTCHA" v-show="!CAPTCHAFlag" @click="getCAPTCHA()">获取验证码</div>
           <div class="getCAPTCHAA" v-show="CAPTCHAFlag">获取验证码({{ wsy_second }})</div>
-          <p class="wsy_toast" v-show="!wsy_mobileFlag">请输入正确的手机号码</p>
+          <!-- <p class="wsy_toast" v-show="!wsy_mobileFlag">请输入正确的手机号码</p> -->
         </div>
         <div class="wsy_pass wsy_input" :class="[wsy_Active == 2 ? 'wsy_active' : '']">
           <input
@@ -27,7 +27,7 @@
             @blur="wsy_inputBlur()"
             placeholder="请输入短信验证码"
           />
-          <p class="wsy_toast" v-show="!wsy_passFlag">请输入验证码</p>
+          <!-- <p class="wsy_toast" v-show="!wsy_passFlag">请输入验证码</p> -->
         </div>
         <div class="wsy-text">
           <span>*未注册的手机号将自动注册</span>
@@ -57,9 +57,9 @@ export default {
       mobile: "", //手机号码
       captcha: "", //验证码
       wsy_Active: null,
-      wsy_mobileFlag: true,
-      wsy_passFlag: true,
-      wsy_flag: false,
+      // wsy_mobileFlag: true,
+      // wsy_passFlag: true,
+      // wsy_flag: false,
       CAPTCHAFlag: false,
       wsy_second: 60
     };
@@ -71,40 +71,40 @@ export default {
     },
     wsy_inputBlur() {
       this.wsy_Active = null;
-      let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
-      if (mobileReg.test(this.mobile)) {
-        this.wsy_mobileFlag = true;
-      } else {
-        this.wsy_mobileFlag = false;
-      }
-      if (this.captcha.length == 0) {
-        this.wsy_passFlag = false;
-      } else {
-        this.wsy_passFlag = true;
-      }
-      if (this.wsy_mobileFlag && this.wsy_passFlag) {
-        this.wsy_flag = true;
-      }
+      // let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      // if (mobileReg.test(this.mobile)) {
+      //   this.wsy_mobileFlag = true;
+      // } else {
+      //   this.wsy_mobileFlag = false;
+      // }
+      // if (this.captcha.length == 0) {
+      //   this.wsy_passFlag = false;
+      // } else {
+      //   this.wsy_passFlag = true;
+      // }
+      // if (this.wsy_mobileFlag && this.wsy_passFlag) {
+      //   this.wsy_flag = true;
+      // }
     },
     wsy_toggle() {
       this.$router.push("/wyl-Login");
     },
     // 获取验证码
     async getCAPTCHA() {
-      let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
-      if (mobileReg.test(this.mobile)) {
-        this.wsy_mobileFlag = true;
-      } else {
-        this.wsy_mobileFlag = false;
-        return false;
-      }
-      if (this.wsy_mobileFlag) {
-        this.CAPTCHAFlag = true;
+      // let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      // if (mobileReg.test(this.mobile)) {
+      //   this.wsy_mobileFlag = true;
+      // } else {
+      //   this.wsy_mobileFlag = false;
+      //   return false;
+      // }
+      // if (this.wsy_mobileFlag) {
+        // this.CAPTCHAFlag = true;
         setInterval(() => {
           this.wsy_second--;
           if (this.wsy_second == 0) {
             this.wsy_second = 0;
-            this.CAPTCHAFlag = !this.CAPTCHAFlag;
+            // this.CAPTCHAFlag = !this.CAPTCHAFlag;
           }
         }, 1000);
         this.wsy_second = 60;
@@ -118,13 +118,13 @@ export default {
         }else if(data.code == 200){
           Toast.success('发送成功');
         }
-      }
+      // }
 
       // this.CAPTCHAFlag = !this.CAPTCHAFlag
     },
     // 登陆方法
     async wsy_Login() {
-      if (this.wsy_flag) {
+      // if (this.wsy_flag) {
         let {data} = await this.$http.post("/api/app/login", {
           mobile: this.mobile,
           sms_code: this.captcha,
@@ -138,7 +138,7 @@ export default {
         } else {
           this.$router.push("/wsySetPass");
         }
-      }
+      // }
     }
     // onSubmit(values) {
     //   console.log("submit", values);

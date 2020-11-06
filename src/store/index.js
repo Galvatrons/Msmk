@@ -8,7 +8,9 @@ export default new Vuex.Store({
     lwh_flag: true,
     filterId: "",
     wsy_isClose:false,   //控制立即登录弹框状态
-    wsy_isHint:true,
+    wsy_isHint:false,
+    wsy_isVerify:false,  //控制确认充值弹框状态
+    wsy_isVerifyB:false,  //控制去充值弹框状态
     wsy_mobile:"15076978269",
     wsy_sex:"保密",
     wsy_Date:"请选择",
@@ -22,6 +24,7 @@ export default new Vuex.Store({
     yz_Subject: [],
     yz_Grade: "",
     yzLoginMess: {},
+    wsyFlag:false  //留言组件显隐状态
   },
   mutations: {
     lwh_btn(s, v) {
@@ -35,8 +38,13 @@ export default new Vuex.Store({
       state.wsy_isClose = bool
     },
     wsy_Hint(state, bool) {
-      console.log(bool);
       state.wsy_isHint = bool
+    },
+    wsy_Verify(state, bool) {
+      state.wsy_isVerify = bool
+    },
+    wsy_VerifyB(state, bool) {
+      state.wsy_isVerifyB = bool
     },
     changeMobile(state,value){
       state.wsy_mobile = value
@@ -96,6 +104,9 @@ export default new Vuex.Store({
     yzLoginMess(state, item) {
       state.yzLoginMess = item
     },
+    wsyShowLeave(state,bool){
+      state.wsyFlag = bool
+    }
   },
   actions: {
   },

@@ -73,10 +73,9 @@ export default {
   },
   methods: {
     onBack() {
-      this.$router.push("/yzLogin");
+      this.$router.back(1);
     },
     onFocusPhone() {
-      console.log(111);
       this.inputActive = 1;
     },
     onFocusYzPass() {
@@ -213,7 +212,8 @@ export default {
     border-radius: 0.25rem;
     border: none;
     color: white;
-    background-color: orangered;
+    // background-color: orangered;
+    background: linear-gradient(to right, rgb(255, 146, 71),rgb(253, 88, 3));
     margin-top: 0.4rem;
   }
 }

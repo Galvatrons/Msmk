@@ -22,7 +22,7 @@
             @blur="wsy_inputBlur()"
             placeholder="请输入手机号"
           />
-          <p class="wsy_toast" v-show="!wsy_mobileFlag">请输入正确的手机号码</p>
+          <!-- <p class="wsy_toast" v-show="!wsy_mobileFlag">请输入正确的手机号码</p> -->
         </div>
         <div class="wsy_pass wsy_input" :class="[wsy_Active == 2 ? 'wsy_active' : '']">
           <input
@@ -32,7 +32,7 @@
             @blur="wsy_inputBlur()"
             placeholder="请输入密码"
           />
-          <p class="wsy_toast" v-show="!wsy_passFlag">请输入正确的密码</p>
+          <!-- <p class="wsy_toast" v-show="!wsy_passFlag">请输入正确的密码</p> -->
         </div>
         <div class="wsy-text">
           <span @click="toSetPass()">找回密码</span>
@@ -61,9 +61,9 @@ export default {
       mobile: "",
       password: "",
       wsy_Active: null,
-      wsy_mobileFlag:true,
-      wsy_passFlag:true,
-      wsy_flag: false
+      // wsy_mobileFlag:true,
+      // wsy_passFlag:true,
+      // wsy_flag: false
     };
   },
   methods: {
@@ -73,20 +73,20 @@ export default {
     },
     wsy_inputBlur() {
       this.wsy_Active = null;
-      let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
-      if(mobileReg.test(this.mobile)){
-        this.wsy_mobileFlag = true
-      }else{
-        this.wsy_mobileFlag = false
-      }
-      if(this.password.length==0){
-        this.wsy_passFlag = false
-      }else{
-        this.wsy_passFlag = true
-      }
-      if(this.wsy_mobileFlag && this.wsy_passFlag){
-        this.wsy_flag = true
-      }
+      // let mobileReg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      // if(mobileReg.test(this.mobile)){
+      //   this.wsy_mobileFlag = true
+      // }else{
+      //   this.wsy_mobileFlag = false
+      // }
+      // if(this.password.length==0){
+      //   this.wsy_passFlag = false
+      // }else{
+      //   this.wsy_passFlag = true
+      // }
+      // if(this.wsy_mobileFlag && this.wsy_passFlag){
+      //   this.wsy_flag = true
+      // }
     },
     wsy_toggle() {
       this.$router.push("/wyl-sms");
@@ -96,7 +96,7 @@ export default {
       this.$router.push("/wyl-pass");
     },
    async wsy_Login() {
-      if(this.wsy_flag){
+      // if(this.wsy_flag){
        let { data } = await this.$http.post("/api/app/login",{
          mobile:this.mobile,
          password:this.password,
@@ -105,13 +105,13 @@ export default {
        console.log(data);
        if(data.code == 200){
          window.localStorage.setItem("login_info",JSON.stringify(data.data))
-         window.localStorage.setItem("token",JSON.stringify(data.data.remember_token))
+         window.sessionStorage.setItem("token",JSON.stringify(data.data.remember_token))
          this.$router.push("/lwh_my")
        }
-      }else{
-        this.wsy_mobileFlag = false
-        this.wsy_passFlag = false
-      }
+      // }else{
+      //   this.wsy_mobileFlag = false
+      //   this.wsy_passFlag = false
+      // }
     }
     // onSubmit(values) {
     //   console.log("submit", values);

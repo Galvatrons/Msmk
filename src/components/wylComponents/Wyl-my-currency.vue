@@ -2,11 +2,12 @@
   <div>
     <!-- 头部 -->
     <van-nav-bar
-     title="我的余额" 
-    left-arrow 
+      title="我的余额"
+      left-arrow
       right-text="余额明细"
-    @click-left="onClickLeft"
-      @click-right="onClickRight" />
+      @click-left="onClickLeft"
+      @click-right="onClickRight"
+    />
     <!-- 余额计数 -->
     <div class="My-text">
       <span class="span1">我的余额</span>
@@ -15,24 +16,21 @@
     <!-- 充值学习币数量 -->
     <div class="My-box">
       <div class="My-for" v-for="(item, index) in list" :key="index">
-        {{ item }}
-        <div class="My-for1">$500</div>
+        <div>{{ item }}学习币</div>
+        <div class="My-for1">￥ {{ item }}</div>
       </div>
     </div>
     <!-- 充值弹出层 -->
     <div class="button-vant">
-        <van-button  @click="showPopup" 
-    type="primary"
-     size="large"
-     color=" rgb(255, 81, 0)"
-     >立即充值</van-button>
+      <van-button @click="showPopup" type="primary" size="large" color=" rgb(255, 81, 0)">立即充值</van-button>
     </div>
-   
 
-   <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
-       <p><input type="radio" name="wx" id="">微信</p>
-       <input type="radio" name="wx" id="">支付宝
-   </van-popup>
+    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
+      <p>
+        <input type="radio" name="wx" id />微信
+      </p>
+      <input type="radio" name="wx" id />支付宝
+    </van-popup>
   </div>
 </template>
 
@@ -41,34 +39,34 @@ export default {
   data() {
     return {
       list: [
-        "30000.00学习币",
-        "30000.00学习币",
-        "20000.00学习币",
-        "10000.00学习币",
-        "8000.00学习币",
-        "5000.00学习币",
-        "3000.00学习币",
-        "0.01学习币",
+        "30000.00",
+        "30000.00",
+        "20000.00",
+        "10000.00",
+        "8000.00",
+        "5000.00",
+        "3000.00",
+        "0.01"
       ],
-    
-      show: false,
+
+      show: false
     };
   },
   methods: {
     onClickLeft() {
       this.$router.push({
-        path: "/lwh_my",
+        path: "/lwh_my"
       });
     },
-    onClickRight(){
-       this.$router.push({
-        path: "/wyl-my-ye",
+    onClickRight() {
+      this.$router.push({
+        path: "/wyl-my-ye"
       });
     },
-      showPopup() {
+    showPopup() {
       this.show = true;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -87,38 +85,38 @@ export default {
   color: rgb(233, 57, 57);
 }
 .My-box {
-  background: rgb(238, 238, 238);
+  background: #EEEEEE;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 0.2rem;
+  box-sizing: border-box;
 }
 .My-for {
-  width: 80%;
+  width: 100%;
   height: 0.5rem;
   background: rgb(255, 255, 255);
-  border-radius: 0.2rem;
-  margin: 0.1rem 0.35rem;
+  border-radius: 0.1rem;
   line-height: 0.5rem;
   font-size: 0.13rem;
-  float: left;
+  margin-bottom: 0.2rem;
+  padding: 0 .2rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .My-for1 {
-  width: 20%;
-  height: 0.5rem;
-  float: right;
-  /* background: tomato; */
+  /* width: 20%; */
+  /* height: 0.5rem; */
+  /* float: right; */
+  color: #E90000;
 }
-/* .van-button {
-  display: flex;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-} */
-.button-vant{
+.button-vant {
   width: 100%;
   position: absolute;
   bottom: 0;
- 
 }
 </style>

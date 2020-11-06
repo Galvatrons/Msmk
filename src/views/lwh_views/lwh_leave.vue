@@ -47,8 +47,7 @@ export default {
   // 定义事件
   methods: {
     lwh_btn(){
-      console.log(1)
-      this.$emit("lwh_leave")
+      this.$store.commit("wsyShowLeave",false)
     }
   },
   // 过滤器

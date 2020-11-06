@@ -21,7 +21,7 @@
           <span>已学习50%</span>
         </div>
         <div class="playback_wrapper">
-          <div class="playback_slide" v-for="item in 1" :key="item">
+          <div class="playback_slide" @click='jumpVideo()' v-for="item in 1" :key="item">
             <div class="slide_top">
               <div class="dian"></div>
               <span>自主招生冲刺讲座6-多元方程组与可转化为多元方程组问题</span>
@@ -138,6 +138,9 @@ export default {
       setTimeout(() => {
         this.$router.push("/Wyl-my-study");
       }, 1500);
+    },
+    jumpVideo(){
+      this.$router.push(`/video?video_id=30929276&id=100`)
     }
   }
 };

@@ -11,7 +11,7 @@ const routes = [
     name: '/',
     redirect: "/lwh_main",
     meta:{
-      title:"首页"
+      title:"每时每课"
     }
   },
   // 登录路由
@@ -186,7 +186,7 @@ const routes = [
     name: "Wyl-my-currency",
     component: () => import('../components/wylComponents/Wyl-my-currency.vue'),
     meta:{
-      title:"我的学习币"
+      title:"我的余额"
     }
   },
   //我的页面余额明细
@@ -369,44 +369,166 @@ const routes = [
   {
     path: "/yzMessage",
     name: "yzMessage",
-    component: () => import("../views/yzCourse/yzMessage.vue")
+    component: () => import("../views/yzCourse/yzMessage.vue"),
+    meta: {
+      title: "填写信息"
+    }
   },
   // 修改昵称页面
   {
     path: "/yzSetname",
     name: "yzSetname",
-    component: () => import("../views/yzCourse/yzSetname.vue")
+    component: () => import("../views/yzCourse/yzSetname.vue"),
+    meta: {
+      title: "修改昵称"
+    }
   },
   // 修改年龄页面
   {
     path: "/yzSetage",
     name: "yzSetage",
-    component: () => import("../views/yzCourse/yzSetage.vue")
+    component: () => import("../views/yzCourse/yzSetage.vue"),
+    meta: {
+      title: "修改年龄"
+    }
   },
   // 修改学科页面
   {
     path: "/yzSetsubject",
     name: "yzSetsubject",
-    component: () => import("../views/yzCourse/yzSetsubject.vue")
+    component: () => import("../views/yzCourse/yzSetsubject.vue"),
+    meta: {
+      title: "修改学科"
+    }
   },
   // 修改密码页面
   {
     path: "/yzAmendPass",
     name: "yzAmendPass",
-    component: () => import("../views/yzCourse/yzAmendPass.vue")
+    component: () => import("../views/yzCourse/yzAmendPass.vue"),
+    meta: {
+      title: "修改密码"
+    }
   },
   // 设置页面
   {
     path: "/yzSetting",
     name: "yzSetting",
-    component: () => import("../views/yzCourse/yzSetting")
+    component: () => import("../views/yzCourse/yzSetting"),
+    meta: {
+      title: "设置"
+    }
+  },
+  // 意见反馈
+  {
+    path: "/wsyFeedback",
+    name: "Feedback",
+    component: () => import("../views/wsy_component/wsyFeedback.vue"),
+    meta: {
+      title: "意见反馈"
+    }
   },
   // 修改密码页面
   {
     path: "/yzChangePass",
     name: "yzChangePass",
-    component: () => import("../views/yzCourse/yzChangePass")
-  }
+    component: () => import("../views/yzCourse/yzChangePass"),
+    meta: {
+      title: "修改密码"
+    }
+  },
+  // ==================     练习页面路由     ===============================
+  // 专点专练页面
+  {
+    path: "/point",
+    name: "point",
+    component: () => import("../views/wsy_component/wsy_point.vue"),
+    meta: {
+      title: "专点专练"
+    }
+  },
+  // 套卷练习页面
+  {
+    path: "/paper-package",
+    name: "paper-package",
+    component: () => import("../views/wsy_component/wsy_paperPackage.vue"),
+    meta: {
+      title: "套卷练习"
+    }
+  },
+  // 仿真模考页面
+  {
+    path: "/exam",
+    name: "exam",
+    component: () => import("../views/wsy_component/wsy_exam.vue"),
+    meta: {
+      title: "仿真模考"
+    }
+  },
+   // 错题练习页面
+   {
+    path: "/error-ques",
+    name: "error-ques",
+    component: () => import("../views/wsy_component/wsy_errorQues.vue"),
+    meta: {
+      title: "错题记录"
+    }
+  },
+   // 测评记录页面
+   {
+    path: "/assess",
+    name: "assess",
+    component: () => import("../views/wsy_component/wsy_assess.vue"),
+    meta: {
+      title: "测评记录"
+    }
+  },
+   // 习题收藏页面
+   {
+    path: "/ques-collect",
+    name: "ques-collect",
+    component: () => import("../views/wsy_component/wsy_quesCollect.vue"),
+    meta: {
+      title: "习题收藏"
+    }
+  },
+  // ==================     练习页面路由     ===============================
+  // 首页课程详情视频
+  {
+    path: "/video",
+    name: "video",
+    component: () => import("../views/wsy_component/wsy_video.vue"),
+    meta: {
+      title: "视频"
+    }
+  },
+  // 我的通知
+  {
+    path: "/message",
+    name: "message",
+    component: () => import("../views/wsy_component/wsy_message.vue"),
+    meta: {
+      title: "消息中心"
+    }
+  },
+  // 我的通知详情
+  {
+    path: "/message-detail",
+    name: "message-detail",
+    component: () => import("../views/wsy_component/wsyMessageDetail.vue"),
+    meta: {
+      title: "消息"
+    }
+  },
+  // 购买会员
+  {
+    path: "/vip",
+    name: "vip",
+    component: () => import("../views/wsy_component/vip.vue"),
+    meta: {
+      title: "会员"
+    }
+  },
 ]
 
 const router = new VueRouter({

@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="button_wrapper">
-        <button @click="onOutLogin">退出登陆</button>
+        <button @click="onOutLogin">退出登录</button>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@ export default {
     },
     onOutLogin() {
       sessionStorage.removeItem("token");
-      this.$router.push("/yzLogin");
+      this.$router.push("/Wyl-Login");
     },
   },
 };
@@ -87,10 +87,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.18rem;
+    font-size: 0.16rem;
     padding: 0 0.15rem;
     box-sizing: border-box;
-    color: gray;
+    color: #595959;
     .messItem {
       height: 100%;
       display: flex;
@@ -116,11 +116,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: .18rem;
     button {
       width: 90%;
       height: 0.5rem;
       border: none;
-      background-color: orange;
+      background: #EB6100;
       color: white;
       border-radius: 0.05rem;
     }
