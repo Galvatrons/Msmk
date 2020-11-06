@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     lwh_flag: true,
     filterId: "",
+<<<<<<< HEAD
     wsy_isClose:false,   //控制立即登录弹框状态
     wsy_isHint:false,
     wsy_isVerify:false,  //控制确认充值弹框状态
@@ -18,13 +19,34 @@ export default new Vuex.Store({
     wsy_Subject:"请选择",
     wsy_Class:"请选择",
     lwh_list:[{course_type:0,order_by:0,attr_val_id:""}],
+=======
+    wsy_isClose: false,   //控制立即登录弹框状态
+    wsy_isHint: true,
+    wsy_mobile: "15076978269",
+    wsy_sex: "保密",
+    wsy_Date: "请选择",
+    wsy_Site: "请选择",
+    wsy_Subject: "请选择",
+    wsy_Class: "请选择",
+    lwh_list: [{ course_type: 0, order_by: 0, attr_val_id: "" }],
+>>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
     yz_Mess: [],
     yz_Age: "",
     yz_Date: "",
     yz_Subject: [],
     yz_Grade: "",
     yzLoginMess: {},
+<<<<<<< HEAD
     wsyFlag:false  //留言组件显隐状态
+=======
+<<<<<<< HEAD
+    lwh_listnum:0,
+=======
+    yzGradeId: "",
+    yzClassify: "",
+    fenleiWrapper: []
+>>>>>>> 4811c799178cd82111e1a8f6ba356ece3fd087d6
+>>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
   },
   mutations: {
     lwh_btn(s, v) {
@@ -40,6 +62,7 @@ export default new Vuex.Store({
     wsy_Hint(state, bool) {
       state.wsy_isHint = bool
     },
+<<<<<<< HEAD
     wsy_Verify(state, bool) {
       state.wsy_isVerify = bool
     },
@@ -47,41 +70,44 @@ export default new Vuex.Store({
       state.wsy_isVerifyB = bool
     },
     changeMobile(state,value){
+=======
+    changeMobile(state, value) {
+>>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
       state.wsy_mobile = value
     },
-    changeSex(state,value){
+    changeSex(state, value) {
       state.wsy_sex = value
     },
-    changeDate(state,value){
+    changeDate(state, value) {
       state.wsy_Date = value
     },
-    changeSite(state,value){
+    changeSite(state, value) {
       state.wsy_Site = value
     },
-    changeSubject(state,value){
+    changeSubject(state, value) {
       state.wsy_Subject = value
     },
-    changeClass(state,value){
+    changeClass(state, value) {
       state.wsy_Class = value
     },
-    lwh_saveBtn(s,v){
-      s.lwh_obj.map((i)=>{
-        if(i.tit == v.type){
+    lwh_saveBtn(s, v) {
+      s.lwh_obj.map((i) => {
+        if (i.tit == v.type) {
           i.cont = v.value
         }
       })
     },
-    lwh_loadBtn(s,v){
-      s.lwh_load=v
+    lwh_loadBtn(s, v) {
+      s.lwh_load = v
     },
-    lwh_add(s,v){
+    lwh_add(s, v) {
 
       s.lwh_list[0].attr_val_id = v
     },
-    lwh_ads(s,v){
+    lwh_ads(s, v) {
       s.lwh_list[0].order_by = v
     },
-    lwh_adx(s,v){
+    lwh_adx(s, v) {
       s.lwh_list[0].course_type = v
     },
     yz_Mess(state, item) {
@@ -104,8 +130,32 @@ export default new Vuex.Store({
     yzLoginMess(state, item) {
       state.yzLoginMess = item
     },
+<<<<<<< HEAD
     wsyShowLeave(state,bool){
       state.wsyFlag = bool
+=======
+<<<<<<< HEAD
+    lwh_numList(s,v){
+      s.lwh_listnum=v
+=======
+    // 年级id
+    yzGradeId(state, id) {
+      state.yzGradeId = id
+    },
+    // 学科id
+    yzClassify(state, id) {
+      state.yzClassify = id
+    },
+    fenleiBox1(state, item) {
+      state.fenleiWrapper = item
+    },
+    fenleiBox2(state, item) {
+      state.fenleiWrapper = item
+    },
+    fenleiBox3(state,item){
+      state.fenleiWrapper = item
+>>>>>>> 4811c799178cd82111e1a8f6ba356ece3fd087d6
+>>>>>>> cd4c88d630242a4154101fa74ec33b774d75e945
     }
   },
   actions: {

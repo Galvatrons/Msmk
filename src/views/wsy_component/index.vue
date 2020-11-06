@@ -11,7 +11,7 @@
             :autoplay="2000"
             indicator-color="white"
           >
-            <van-swipe-item v-for="(item,index) in bannerList" :key="index">
+            <van-swipe-item v-for="(item, index) in bannerList" :key="index">
               <img :src="item.banner_img" />
             </van-swipe-item>
           </van-swipe>
@@ -33,15 +33,15 @@
           </ul>
         </div>
         <!-- 王淑岩上部导航区域 -->
-        <div class="wsy_list" v-for="(item,index) in list" :key="index">
+        <div class="wsy_list" v-for="(item, index) in list" :key="index">
           <!-- 名师阵容区 -->
-          <template v-if="(item.channel_info.type == 3)">
+          <template v-if="item.channel_info.type == 3">
             <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_item"
                 @click="toTeacherInfo(item.teacher_id)"
-                v-for="(item,index) in item.list"
+                v-for="(item, index) in item.list"
                 :key="index"
               >
                 <img :src="item.teacher_avatar" />
@@ -54,13 +54,13 @@
           </template>
           <!-- 名师阵容区 -->
           <!-- 精品课程区 -->
-          <template v-if="(item.channel_info.type == 1)">
+          <template v-if="item.channel_info.type == 1">
             <p class="title">{{ item.channel_info.name }}</p>
             <div class="wsy_content">
               <div
                 class="wsy_ii_item"
-                @click="ToCourseDetail(item.id,item.course_type)"
-                v-for="(item,index) in item.list"
+                @click="ToCourseDetail(item.id, item.course_type)"
+                v-for="(item, index) in item.list"
                 :key="index"
               >
                 <p>{{ item.title }}</p>
@@ -175,7 +175,7 @@ import BetterScroll from "better-scroll";
 export default {
   name: "wsy_index",
   components: {
-    WsyLogin
+    WsyLogin,
   },
   props: {},
   data() {
@@ -213,7 +213,7 @@ export default {
       recommendedCourse: {},
       // 明星讲师
       starLecturer: {},
-      list: [] //列表数据
+      list: [], //列表数据
     };
   },
   created() {},
@@ -222,9 +222,9 @@ export default {
     this.getIndex();
     this.bs = new BetterScroll(this.$refs.scrollBox, {
       probeType: 3,
-      click: true
+      click: true,
     });
-    this.bs.on("scroll", pos => {
+    this.bs.on("scroll", (pos) => {
       if (pos.y >= 0) {
         this.bs.scrollTo(0, 0);
       }
@@ -247,14 +247,14 @@ export default {
   },
   methods: {
     //   点击进入课程详情页面
-    ToCourseDetail(id,course_type) {
+    ToCourseDetail(id, course_type) {
       // window.localStorage.setItem("CourseInfo", JSON.stringify(info));
       this.$router.push({
-        path:"/CourseDetail",
-        query:{
+        path: "/CourseDetail",
+        query: {
           id,
-          course_type
-        }
+          course_type,
+        },
       });
     },
     // 获取轮播图数据
@@ -314,8 +314,8 @@ export default {
       this.$nextTick(() => {
         this.bs.refresh();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -471,13 +471,16 @@ export default {
 .wsy_ii_item {
   position: relative;
   width: 100%;
-  height: 2rem;
+  // height: 2rem;
   padding: 0 0.2rem;
   margin-top: 0.1rem;
   box-sizing: border-box;
   background: #fff;
   border-radius: 0.05rem;
   > :nth-child(1) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     width: 3.5rem;
     padding-top: 0.2rem;
     margin: 0;
@@ -489,6 +492,7 @@ export default {
   height: 0.3rem;
   line-height: 0.3rem;
   > p {
+    
     margin: 0;
     font-size: 0.1rem;
     color: #8c8c8c;

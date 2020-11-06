@@ -5,7 +5,7 @@
         <div class="head_left">
           <van-icon name="arrow-left" @click="onBack" />
         </div>
-        <div class="head_title">李老师9号地理大课堂开课啦</div>
+        <div class="head_title">{{ course.title }}</div>
         <div class="head_icon" @click="onCalendar">
           <van-icon name="calendar-o" size="0.2rem" />
         </div>
@@ -14,28 +14,45 @@
     <div class="study_box">
       <div>
         <div class="yz_progress">
-          <span>共7课时</span>
+          <span>共{{ course.section_num }}课时</span>
           <div class="progress_wrapper">
-            <van-progress inactive :percentage="50" :show-pivot="false" />
+            <van-progress
+              inactive
+              color="#f2826a"
+              :percentage="course.progress_rate"
+              :show-pivot="false"
+            />
           </div>
-          <span>已学习50%</span>
+          <span>已学习{{ course.progress_rate }}%</span>
         </div>
         <div class="playback_wrapper">
-          <div class="playback_slide" v-for="item in 9" :key="item">
+          <div
+            class="playback_slide"
+            v-for="(item, index) in periods"
+            :key="index"
+            @click="onVideo(item)"
+          >
             <div class="slide_top">
               <div class="dian"></div>
               <div class="slide_hui">[回放]</div>
-              <span>第一讲第一课时</span>
+              <span>{{ item.periods_title }}</span>
             </div>
             <div class="slide_center">
-              <span>李青</span>
-              <span>03月09日 18:30 - 19:30</span>
+              <span v-for="(data, i) in item.teachers" :key="i">{{
+                data.teacher_name
+              }}</span>
+              <span>{{ item.start_play }} - {{ item.end_play }}</span>
             </div>
             <div class="slide_bottom">
               <div>
-                <van-progress inactive :percentage="50" :show-pivot="false" />
+                <van-progress
+                  inactive
+                  color="#f2826a"
+                  :percentage="item.progress_rate"
+                  :show-pivot="false"
+                />
               </div>
-              <span>已观看50%</span>
+              <span>已观看{{ item.progress_rate }}%</span>
             </div>
           </div>
         </div>
@@ -95,6 +112,9 @@ export default {
       show: false,
       value: 3,
       commentValue: "",
+      id: this.$route.query.id,
+      course: {},
+      periods: [],
     };
   },
   mounted() {
@@ -111,13 +131,39 @@ export default {
         }
       });
     });
+    this.getData(); //获取数据
   },
   methods: {
+    // 获取数据
+    getData() {
+      this.$http.get(`/api/app/myStudy/course/${this.id}`).then((res) => {
+        // console.log(res.data.data);
+        this.course = res.data.data.course;
+        console.log(this.course);
+        this.periods = res.data.data.periods;
+        console.log(this.periods);
+      });
+    },
     onBack() {
       this.$router.push("/yz_courseDetail");
     },
     onCalendar() {
       this.$router.push("/StudyCalendar");
+    },
+    // 点击视频
+    onVideo(item) {
+      console.log(item.video_id);
+      console.log(item.id);
+      this.$http
+        .get(
+          `/api/app/getPcRoomCode/course_id=${item.id}/chapter_id=${item.video_id}?`
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.code == 201) {
+            Toast(res.data.msg);
+          }
+        });
     },
     showPopup() {
       this.show = true;

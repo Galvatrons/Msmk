@@ -27,13 +27,15 @@ export default {
   name: "",
   components: {},
   props: {},
+  
   data() {
     return {
+      wsy_mobile:""
     };
   },
   created() {},
   mounted() {
-    // this.nickName = 
+    this.lwh_Ajax()
     
   },
   activated() {},
@@ -45,21 +47,21 @@ export default {
     onClickLeft() {
       this.$router.back(1);
     },
-    wsy_save(){
-        this.$router.back(1)
-    }
+    async wsy_save(){
+      let { data } = await this.$http.put("https://www.365msmk.com/api/app/user",{
+        nickname:this.wsy_mobile
+      });
+      this.$router.back(1)
+    },
+    async lwh_Ajax() {
+      let { data } = await this.$http.get("https://www.365msmk.com/api/app/userInfo?");
+      this.wsy_mobile = data.data.nickname
+      console.log(data)
+    },
   },
   filters: {},
   computed: {
-    // ...mapState(['wsy_mobile'])
-    wsy_mobile:{
-      get(){
-        return this.$store.state.wsy_mobile
-      },
-      set(v){
-        this.$store.commit('changeMobile',v)
-      }
-    }
+    
   },
   watch: {}
 };

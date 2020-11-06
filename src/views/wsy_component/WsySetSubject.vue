@@ -13,7 +13,7 @@
     </div>
     <div class="wsy_info_box">
       <div class="box" v-for="(item,index) in list" :key="index">
-        <van-checkbox v-model="item.isCheck" shape="square">{{ item.text }}</van-checkbox>
+        <van-checkbox v-model="item.flag" shape="square">{{ item.name }}</van-checkbox>
       </div>
     </div>
   </div>
@@ -27,43 +27,14 @@ export default {
   data() {
     return {
         list:[
-            {
-                text:"语文",
-                isCheck:false,
-            },
-            {
-                text:"数学",
-                isCheck:false,
-            },
-            {
-                text:"英语",
-                isCheck:false,
-            },
-            {
-                text:"物理",
-                isCheck:false,
-            },
-            {
-                text:"化学",
-                isCheck:false,
-            },
-            {
-                text:"生物",
-                isCheck:false,
-            },
-            {
-                text:"政治",
-                isCheck:false,
-            },
-            {
-                text:"信息技术",
-                isCheck:false,
-            }
+           
         ]
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.lwh_class()
+  },
   activated() {},
   update() {},
   beforeRouteUpdate(to, from, next) {
@@ -73,16 +44,29 @@ export default {
     onClickLeft() {
       this.$router.back(1);
     },
-    wsy_save() {
-        let arr = this.list.filter(item=>{
-            return item.isCheck
-        })
-       let newArr = arr.map((item)=>{
-          return item.text
-        })
-        this.$store.commit('changeSubject',newArr.join(","))
-        
-      this.$router.push("/wsySetMyInfo");
+     //年级选择
+    async lwh_class(){
+      let {data} = await this.$http.get("https://www.365msmk.com/api/app/module/attribute/1?")
+      data.data[1].value.map((i)=>{
+        i.flag=false
+      })
+      this.list=data.data[1].value
+      console.log(this.list)
+    },
+    async wsy_save(){
+      let arr = []
+      this.list.map((i)=>{
+        if(i.flag){
+          arr.push({"attr_id":2,"attr_val_id":i.id})
+        }
+      })
+      let { data } = await this.$http.put(
+        "https://www.365msmk.com/api/app/user",
+        {
+          user_attr:arr
+        }
+      );
+      console.log(data)
     }
   },
   filters: {},
