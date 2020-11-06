@@ -7,16 +7,23 @@
         </div>
         <div class="head_title">修改个人信息</div>
         <div class="head_icon">
-            <p @click="wsy_save()">保存</p>
+          <p @click="wsy_save()">保存</p>
         </div>
       </div>
     </div>
     <div class="wsy_info_box">
-      <div class="box" v-for="(item,index) in list" :key="index" @click='setSex(item.text)'>
+      <div
+        class="box"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="sex(index, item)"
+      >
         <p>{{ item.text }}</p>
+        <p v-show="index == indexs">
+          <van-icon name="success" size="20" color="rgb(255, 81, 0)" />
+        </p>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -27,18 +34,24 @@ export default {
   props: {},
   data() {
     return {
-        list:[
-            {
-                text:"男",
-            },
-            {
-                text:"女",
-            }
-        ],
+      indexs: -1,
+      list: [
+        {
+          text: "男",
+          id: 0,
+        },
+        {
+          text: "女",
+          id: 1,
+        },
+      ],
+      cont: "",
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.lwh_Ajax()
+  },
   activated() {},
   update() {},
   beforeRouteUpdate(to, from, next) {
@@ -48,17 +61,29 @@ export default {
     onClickLeft() {
       this.$router.back(1);
     },
-    wsy_save(){
-        this.$router.back(1)
+    async lwh_Ajax() {
+      let { data } = await this.$http.get(
+        "https://www.365msmk.com/api/app/userInfo?"
+      );
+      this.indexs = data.data.sex;
     },
-    setSex(str){
-      this.$store.commit('changeSex',str)
-        this.$router.push("/wsySetMyInfo")
-    }
+    async wsy_save() {
+      let { data } = await this.$http.put(
+        "https://www.365msmk.com/api/app/user",
+        {
+          sex: this.cont,
+        }
+      );
+      this.$router.back(1);
+    },
+    sex(index, item) {
+      this.indexs = index;
+      this.cont = item.id;
+    },
   },
   filters: {},
   computed: {},
-  watch: {}
+  watch: {},
 };
 </script>
 
@@ -110,7 +135,7 @@ export default {
   padding: 0 0.2rem;
   box-sizing: border-box;
   background: #fff;
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
 }
 .box {
   width: 100%;
@@ -122,13 +147,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   color: #595959;
-  >input{
-      border: 0;
+  > input {
+    border: 0;
   }
-  >input::placeholder{
-      font-size: .2rem;
-      color: #000;
+  > input::placeholder {
+    font-size: 0.2rem;
+    color: #000;
   }
 }
-
 </style>

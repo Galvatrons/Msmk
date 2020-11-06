@@ -22,6 +22,7 @@ export default new Vuex.Store({
     yz_Subject: [],
     yz_Grade: "",
     yzLoginMess: {},
+    lwh_listnum:0,
   },
   mutations: {
     lwh_btn(s, v) {
@@ -96,6 +97,9 @@ export default new Vuex.Store({
     yzLoginMess(state, item) {
       state.yzLoginMess = item
     },
+    lwh_numList(s,v){
+      s.lwh_listnum=v
+    }
   },
   actions: {
   },
