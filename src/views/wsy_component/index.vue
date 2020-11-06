@@ -326,11 +326,11 @@ export default {
   margin-bottom: 0.1rem;
 }
 .wsy_flag_img {
-  width: 0.5rem;
-  height: 0.4rem;
+  width: 0.58rem;
+  height: 0.47rem;
   position: absolute;
   right: 0.2rem;
-  top: 0.4rem;
+  top: 0.8rem;
 }
 .wsy_box {
   width: 100%;

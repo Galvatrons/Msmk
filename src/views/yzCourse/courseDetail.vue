@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wsy_box">
     <div class="header_container">
       <div class="header_wrapper">
         <div class="head_left">
@@ -7,20 +7,12 @@
         </div>
         <div class="head_title" v-show="headShow == false">课程详情</div>
         <div class="head_title_active" v-show="headShow">
-          <span
-            @click="onIntroduce"
-            :class="spanActive == 1 ? 'span_active' : ''"
-            >课程介绍</span
-          >
-          <span @click="onOutline" :class="spanActive == 2 ? 'span_active' : ''"
-            >课程大纲</span
-          >
-          <span @click="onPing" :class="spanActive == 3 ? 'span_active' : ''"
-            >课程评价</span
-          >
+          <span @click="onIntroduce" :class="spanActive == 1 ? 'span_active' : ''">课程介绍</span>
+          <span @click="onOutline" :class="spanActive == 2 ? 'span_active' : ''">课程大纲</span>
+          <span @click="onPing" :class="spanActive == 3 ? 'span_active' : ''">课程评价</span>
         </div>
         <div class="head_icon" @click="showPopup">
-          <img src="../../assets/fenxiang.png" alt="" />
+          <img src="../../assets/fenxiang.png" alt />
         </div>
       </div>
     </div>
@@ -34,7 +26,7 @@
                 src="../../assets/img/wujiaoxing.png"
                 @click="wujiaoClickOK"
                 v-show="info.is_collect == 0"
-                alt=""
+                alt
               />
               <img
                 src="../../assets/img/wujiaoxing_active.png"
@@ -46,12 +38,14 @@
           </div>
           <div class="info_price">{{ info.price }}</div>
           <div class="info_classify">
-            共<span>{{ info.total_periods }}</span
-            >课时 <span>|</span>&nbsp; <span>{{ info.sales_num }}</span
-            >人已报名
+            共
+            <span>{{ info.total_periods }}</span>课时
+            <span>|</span>&nbsp;
+            <span>{{ info.sales_num }}</span>人已报名
           </div>
           <div class="info_time">
-            开课时间: <span>{{ info.start_play_year + "." }}</span>
+            开课时间:
+            <span>{{ info.start_play_year + "." }}</span>
             <span>{{ info.start_play_date | startDate }}</span>
             <span>{{ info.end_play_date | endDate }}</span>
           </div>
@@ -60,7 +54,7 @@
           <div>教学团队</div>
           <div class="teach_wrapper">
             <div class="teach_left" @click="onTeacherDetail">
-              <img :src="teacherItem.teacher_avatar" alt="" />
+              <img :src="teacherItem.teacher_avatar" alt />
               <span>{{ teacherItem.teacher_name }}</span>
             </div>
             <div class="teach_right"></div>
@@ -85,9 +79,11 @@
                 <div class="classify_title">{{ item.periods_title }}</div>
               </div>
               <div class="classify_slide_right_bottom">
-                <span v-for="(data, i) in item.teachers" :key="i">{{
+                <span v-for="(data, i) in item.teachers" :key="i">
+                  {{
                   data.teacher_name
-                }}</span>
+                  }}
+                </span>
                 <span>03月20日 08:00 - 10:30</span>
               </div>
             </div>
@@ -102,16 +98,13 @@
               :key="index"
               v-show="commentData.length >= 1"
             >
-              <div class="slide_left"><img src="favicon.ico" alt="" /></div>
+              <div class="slide_left">
+                <img src="favicon.ico" alt />
+              </div>
               <div class="slide_center">
                 <div class="slideCenter_top">
                   <span>{{ item.username }}</span>
-                  <van-rate
-                    v-model="item.gradeValue"
-                    size="16px"
-                    gutter="2px"
-                    readonly
-                  />
+                  <van-rate v-model="item.gradeValue" size="16px" gutter="2px" readonly />
                 </div>
                 <div class="slideCenter_bottom">
                   <span>{{ item.comment }}</span>
@@ -120,7 +113,7 @@
               <div class="slide_right">{{ item.time }}</div>
             </div>
             <div class="comment_none" v-show="commentData.length == 0">
-              <img src="../../assets/img/commentnone.png" alt="" />
+              <img src="../../assets/img/commentnone.png" alt />
               <div>暂无评论</div>
             </div>
           </div>
@@ -129,11 +122,9 @@
     </div>
     <van-popup v-model="show" round>
       <div class="erwei">
-        <div class="erwei_top">
-          分享
-        </div>
+        <div class="erwei_top">分享</div>
         <div class="erwei_bottom">
-          <img :src="imgUrl" alt="" />
+          <img :src="imgUrl" alt />
         </div>
       </div>
     </van-popup>
@@ -175,37 +166,37 @@ export default {
           username: "1231321",
           gradeValue: 4,
           comment: "不错",
-          time: "2020-09-02 21:03",
+          time: "2020-09-02 21:03"
         },
         {
           username: "杨铮",
           gradeValue: 3,
           comment: "挺好的",
-          time: "2020-09-02 21:03",
+          time: "2020-09-02 21:03"
         },
         {
           username: "杨铮",
           gradeValue: 3,
           comment: "挺好的",
-          time: "2020-09-02 21:03",
+          time: "2020-09-02 21:03"
         },
         {
           username: "杨铮",
           gradeValue: 3,
           comment: "挺好的",
-          time: "2020-09-02 21:03",
-        },
-      ],
+          time: "2020-09-02 21:03"
+        }
+      ]
     };
   },
   mounted() {
     this.$nextTick(() => {
-      this.yz_bs = new BetterScroll(".info_box", {
-        probeType: 3,
-        click: true,
-      });
-      // 上滑禁止
-      this.yz_bs.on("scroll", (pos) => {
+        this.yz_bs = new BetterScroll(".info_box", {
+          probeType: 3,
+          click: true
+        });
+        // 上滑禁止
+      this.yz_bs.on("scroll", pos => {
         // console.log(pos.y);
         if (pos.y < -345 && pos.y > -435) {
           this.spanActive = 1;
@@ -218,6 +209,7 @@ export default {
           this.headShow = false;
         }
       });
+      
     });
     // console.log(this.couDetailId);
     this.courseData();
@@ -226,9 +218,9 @@ export default {
       .post("/api/app/courseComment", {
         id: this.pinglunId,
         limit: 5,
-        page: 1,
+        page: 1
       })
-      .then((res) => {
+      .then(res => {
         console.log(res);
       });
   },
@@ -237,7 +229,7 @@ export default {
     courseData() {
       this.$http
         .get(`/api/app/courseInfo/basis_id=${this.couDetailId}`)
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.teacherItem = res.data.data.teachers[0];
           console.log(this.teacherItem);
@@ -254,7 +246,7 @@ export default {
     },
     // 课程大纲数据
     getOueline(id) {
-      this.$http.get(`/api/app/myStudy/course/${id}`).then((res) => {
+      this.$http.get(`/api/app/myStudy/course/${id}`).then(res => {
         console.log(res.data.data);
         this.chapter = res.data.data.periods;
         console.log(this.chapter);
@@ -274,10 +266,10 @@ export default {
         .get(
           `/api/app/getPcRoomCode/course_id=${item.id}/chapter_id=${item.video_id}?`
         )
-        .then((res) => {
+        .then(res => {
           console.log(res.data);
-          if(res.data.code == 201){
-            Toast(res.data.msg)
+          if (res.data.code == 201) {
+            Toast(res.data.msg);
           }
         });
       // window.location.href=`https://www.365msmk.com/api/app/getPcRoomCode/course_id=281/chapter_id=${item.video_id}?`
@@ -288,11 +280,11 @@ export default {
       console.log(url);
       QRCode.toDataURL(url)
         //在这里拿到地址，把它赋值给data里面定义的值imrUrl
-        .then((tpian) => {
+        .then(tpian => {
           console.log(tpian);
           this.imgUrl = tpian;
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
@@ -301,7 +293,7 @@ export default {
       if (this.wujiaoShow == true) {
         Toast({
           message: "收藏成功",
-          icon: "success",
+          icon: "success"
         });
       } else {
         Toast("取消收藏");
@@ -312,7 +304,7 @@ export default {
       // this.wujiaoShow = true;
       let { data } = await this.$http.post("/api/app/collect", {
         course_basis_id: this.pinglunId,
-        type: 1,
+        type: 1
       });
       console.log(data);
       this.courseData();
@@ -330,7 +322,7 @@ export default {
     onTeacherDetail() {
       this.$router.push({
         path: "/teacher",
-        query: { id: this.teacherItem.teacher_id },
+        query: { id: this.teacherItem.teacher_id }
       });
     },
     // 立即学习按钮
@@ -338,7 +330,7 @@ export default {
       // console.log(this.pinglunId);
       this.$router.push({
         path: "/yzStudyDetail",
-        query: { id: this.pinglunId },
+        query: { id: this.pinglunId }
       });
     },
     // 立即报名按钮
@@ -346,9 +338,9 @@ export default {
       this.$http
         .post("/api/app/order/downOrder", {
           shop_id: this.pinglunId,
-          type: 5,
+          type: 5
         })
-        .then((res) => {
+        .then(res => {
           console.log(res.data);
           if (res.data.code == 200) {
             this.courseData();
@@ -375,7 +367,7 @@ export default {
     },
     onPing() {
       this.spanActive = 3;
-    },
+    }
   },
   filters: {
     startDate(val) {
@@ -388,23 +380,42 @@ export default {
       var date = new Date(val * 1000);
       var timeStr = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()} ${date.getHours()}0:${date.getMinutes()}0`;
       return timeStr;
-    },
+    }
   },
+  watch: {
+    course: {
+      handler() {
+        console.log(1);
+
+        this.$nextTick(() => {
+          this.yz_bs.refresh();
+        });
+      },
+      deep: true
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.info_box {
+.wsy_box {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.info_box {
+  width: 100%;
+  // height: 100%;
+  flex: 1;
   background-color: rgb(245, 245, 245);
   overflow: hidden;
   margin-top: 0.48rem;
-  > {
+  > :nth-child(1) {
     width: 100%;
-    height: 101%;
-    position: relative;
-    padding-bottom: 1rem;
+    min-height: 101%;
+    // position: relative;
+    // padding-bottom: 1rem;
   }
 }
 .header_container {

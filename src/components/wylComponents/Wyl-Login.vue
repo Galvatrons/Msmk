@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { Toast } from "vant";
 export default {
   data() {
     return {
@@ -107,25 +108,11 @@ export default {
          window.localStorage.setItem("login_info",JSON.stringify(data.data))
          window.sessionStorage.setItem("token",JSON.stringify(data.data.remember_token))
          this.$router.push("/lwh_my")
+       }else if(data.code == 201){
+         Toast(data.msg)
        }
-      // }else{
-      //   this.wsy_mobileFlag = false
-      //   this.wsy_passFlag = false
-      // }
+     
     }
-    // onSubmit(values) {
-    //   console.log("submit", values);
-    // },
-    // add() {
-    //   this.$router.push({
-    //     path: "/wsy-sms",
-    //   });
-    // },
-    // add1() {
-    //   this.$router.push({
-    //     path: "/wsy-pass",
-    //   });
-    // },
   }
 };
 </script>

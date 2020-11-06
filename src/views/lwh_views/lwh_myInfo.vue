@@ -305,8 +305,9 @@ export default {
       this.datePopupIsShow = false;
     },
     async lwh_ct(con, val, index) {
-      console.log(val);
+      // 根据下标判断切换的是城市还是县
       switch (index) {
+        // 0为城市
         case 0:
           let { data: req } = await this.$http.get(
             `https://www.365msmk.com/api/app/sonArea/${val[index].code}`
@@ -318,6 +319,7 @@ export default {
 
           this.lwh_city.county_list = this.lwh_citys(res.data);
           break;
+          // 1为县
           case 1:
         
           let { data } = await this.$http.get(
@@ -330,7 +332,9 @@ export default {
           break;
       }
     },
+    // 点击确认获取当前城市id
     async lwh_cs(val) {
+      // 将获取id上传到服务器完成数据的更新
       let { data } = await this.$http.put(
         "https://www.365msmk.com/api/app/user",
         {
@@ -339,7 +343,9 @@ export default {
           district_id: val[2].code,
         }
       );
+      // 弹出层隐藏
       this.sitePopupIsShow = false;
+      // 重新获取数据
       this.lwh_Ajax();
     },
     // 修改学科

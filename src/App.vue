@@ -15,7 +15,7 @@
     </div>
     <!-- 点击留言 -->
     <div class="lwh_fixed" @click="wsyShowLeave()" v-drag>
-      <van-icon name="comment" color="#fff" size="0.3rem" />
+     <img src="../public/未标题-1.jpg" alt="">
     </div>
     <!-- 留言框弹出 -->
     <v-leave v-show="this.$store.state.wsyFlag"></v-leave>
@@ -146,6 +146,9 @@ body,
   align-items: center;
   justify-content: center;
   z-index: 100000;
+  >img{
+    width: 0.34rem;
+  }
 }
 .lwh_leave {
   width: 100%;
@@ -156,4 +159,5 @@ body,
   z-index: 100001;
   background: #f2f3f5;
 }
+
 </style>

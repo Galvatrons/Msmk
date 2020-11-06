@@ -10,10 +10,10 @@ const routes = [
     path: '/',
     name: '/',
     redirect: "/lwh_main",
-    meta:{
-      title:"每时每课"
-  }
-},
+    meta: {
+      title: "每时每课"
+    }
+  },
   // 登录路由
   {
     path: '/Wyl-Login',
@@ -59,13 +59,13 @@ const routes = [
   },
   // 讲师详情2
   {
-    path:"/yzTeahcerInfo",
-    name:"yzTeahcerInfo",
+    path: "/yzTeahcerInfo",
+    name: "yzTeahcerInfo",
     component: function () {
       return import('../views/yzCourse/yzTeahcerInfo.vue')
     },
-    meta:{
-      title:"讲师详情"
+    meta: {
+      title: "讲师详情"
     }
   },
   // 一对一
@@ -196,8 +196,8 @@ const routes = [
     path: "/wyl-my-currency",
     name: "Wyl-my-currency",
     component: () => import('../components/wylComponents/Wyl-my-currency.vue'),
-    meta:{
-      title:"我的余额"
+    meta: {
+      title: "我的余额"
     }
   },
   //我的页面余额明细
@@ -485,8 +485,8 @@ const routes = [
       title: "仿真模考"
     }
   },
-   // 错题练习页面
-   {
+  // 错题练习页面
+  {
     path: "/error-ques",
     name: "error-ques",
     component: () => import("../views/wsy_component/wsy_errorQues.vue"),
@@ -494,8 +494,8 @@ const routes = [
       title: "错题记录"
     }
   },
-   // 测评记录页面
-   {
+  // 测评记录页面
+  {
     path: "/assess",
     name: "assess",
     component: () => import("../views/wsy_component/wsy_assess.vue"),
@@ -503,8 +503,8 @@ const routes = [
       title: "测评记录"
     }
   },
-   // 习题收藏页面
-   {
+  // 习题收藏页面
+  {
     path: "/ques-collect",
     name: "ques-collect",
     component: () => import("../views/wsy_component/wsy_quesCollect.vue"),
@@ -574,6 +574,23 @@ const routes = [
     component: () => import("../views/wsy_component/wsy_exchange.vue"),
     meta: {
       title: "学习卡兑换"
+    }
+  },
+    {
+    path: "/yzOrderDetail",
+    name: "yzOrderDetail",
+    component: () => import("../views/yzCourse/yzOrderDetail"),
+    meta: {
+      title: "课程订单"
+    }
+  },
+  // 我的优惠券
+  {
+    path: "/yzMydiscount",
+    name: "yzMydiscount",
+    component: () => import("../views/yzCourse/yzMydiscount.vue"),
+    meta: {
+      title: "优惠卷"
     }
   },
   obj
