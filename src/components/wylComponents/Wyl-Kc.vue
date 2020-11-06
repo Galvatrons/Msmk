@@ -38,10 +38,11 @@
             </div>
           </div>
         </div>
-        <div v-show="show">
-          <img class="picture" src="@/assets/img/a.png" />
-          <div class="sxlh6">暂无订单</div>
-        </div>
+        
+        <div class="wsy_empty" v-show="show">
+                <img src="https://wap.365msmk.com/img/empty.0d284c2e.png" />
+                <span>暂无订单</span>
+              </div>
       </div>
     </div>
   </div>
@@ -230,6 +231,22 @@ export default {
         }
       }
     }
+  }
+}
+.wsy_empty {
+  width: 100%;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+  > img {
+    width: 1rem;
+    height: 1rem;
+  }
+  > span {
+    font-size: 0.16rem;
+    color: #8c9abc;
   }
 }
 </style>

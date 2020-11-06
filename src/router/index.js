@@ -553,7 +553,28 @@ const routes = [
   {
     path:"/yzOrderDetail",
     name:"yzOrderDetail",
-    component: () => import("../views/yzCourse/yzOrderDetail")
+    component: () => import("../views/yzCourse/yzOrderDetail"),
+    meta: {
+      title: "订单详情"
+    }
+  },
+  // 学习卡
+  {
+    path:"/card",
+    name:"card",
+    component: () => import("../views/wsy_component/wsy_card.vue"),
+    meta: {
+      title: "学习卡"
+    }
+  },
+  // 学习卡兑换
+  {
+    path:"/exchange",
+    name:"exchange",
+    component: () => import("../views/wsy_component/wsy_exchange.vue"),
+    meta: {
+      title: "学习卡兑换"
+    }
   },
   obj
 

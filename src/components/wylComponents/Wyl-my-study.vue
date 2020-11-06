@@ -5,7 +5,7 @@
         ><van-icon name="arrow-left" size="20"
       /></span>
       <p>我的学习</p>
-      <span><van-icon name="calendar-o" size="20" /></span>
+      <span @click='toStudySalendar' ><van-icon name="calendar-o" size="20" /></span>
     </div>
     <!-- 标签栏 -->
     <div class="lwh_bs">
@@ -47,7 +47,7 @@
                 class="lwh_cont"
                 v-for="item in lwh_cont"
                 :key="item.course_id"
-                
+                @click='toDetail(item.course_id)'
               >
                 <p>{{ item.title }}</p>
                 <div>
@@ -122,7 +122,13 @@ export default {
       console.log(this.lwh_cont, val);
       this.lwh_addAjax(val);
     },
-    
+    toDetail(course_id){
+      this.$router.push(`/study-detail?course_id=${course_id}`);
+    },
+    // 跳转到学习日历
+    toStudySalendar(){
+      this.$router.push("/StudyCalendar")
+    }
   },
   watch: {
     lwh_cont() {
