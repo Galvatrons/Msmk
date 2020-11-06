@@ -5,10 +5,10 @@
         <!-- 下拉菜单分类部分 -->
         <van-dropdown-item title="分类" ref="item">
           <div class="yz_classify_wrapper">
-            <div class="yz_grade">年级</div>
+            <div class="yz_grade">{{gradeList.name}}</div>
             <div class="yz_grade_slide">
               <span
-                v-for="(item, index) in grade"
+                v-for="(item, index) in gradeList.child"
                 :key="index"
                 @click="onGrade(index,item)"
                 :class="gradeActive == index ? 'grade_active' : ''"
@@ -16,10 +16,10 @@
             </div>
           </div>
           <div class="yz_classify_wrapper">
-            <div class="yz_grade">学科</div>
+            <div class="yz_grade">{{subjectList.name}}</div>
             <div class="yz_grade_slide">
               <span
-                v-for="(item, index) in classify"
+                v-for="(item, index) in subjectList.child"
                 :key="index"
                 :class="classifyActive == index ? 'grade_active' : ''"
                 @click="onClassify(index,item)"
@@ -60,53 +60,12 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   data() {
     return {
-      grade: [
-        {
-          id: 1,
-          name: "初一"
-        },
-        {
-          id: 2,
-          name: "初二"
-        },
-        {
-          id: 3,
-          name: "初三"
-        },
-        {
-          id: 4,
-          name: "高一"
-        },
-        {
-          id: 5,
-          name: "高二"
-        }
-      ],
-      classify: [
-        {
-          id: 7,
-          name: "语文"
-        },
-        {
-          id: 8,
-          name: "数学"
-        },
-        {
-          id: 9,
-          name: "英语"
-        },
-        {
-          id: 12,
-          name: "物理"
-        },
-        {
-          id: 13,
-          name: "化学"
-        }
-      ],
+      gradeList:[],
+      subjectList:[],
       lwh_AjaxList: [
         { id: 0, cont: "综合排序" },
         { id: 1, cont: "最新" },
@@ -133,26 +92,40 @@ export default {
       lwh_arr_a: "",
       lwh_arr_b: "",
       courseList: [],
-      appCourseType: []
+      appCourseType: [],
+      filterList:[]
     };
   },
   mounted() {
     // 特色课分类下拉数据
     this.$http.get("/api/app/courseClassify").then(res => {
-      console.log(res.data.data.appCourseType);
-      this.appCourseType = res.data.data.appCourseType;
+      console.log(res.data.data.attrclassify[0]);
+      
+      this.gradeList = res.data.data.attrclassify[0]
+      console.log(this.gradeList);
+      this.subjectList = res.data.data.attrclassify[1]
+      console.log(this.subjectList);
     });
     // 下拉数据获取
     this.lwh_AjaxAdd();
+    // 特色课筛选下拉数据
+    axios.get("http://120.53.31.103:84/api/app/courseClassify").then((res)=>{
+      console.log(res.data.data);
+      this.appCourseType = res.data.data.appCourseType;
+      console.log(this.appCourseType);
+    })
   },
   methods: {
     onGrade(index, item) {
       this.gradeActive = index;
       this.arr_a = item.id;
+      // this.$store.commit("yzGradeId",item.id)
+      console.log(item.id);
     },
     onClassify(index, item) {
       this.classifyActive = index;
       this.arr_b = item.id;
+      // this.$store.commit("yzClassify",item.id)
     },
     onClickReset() {
       this.$refs.item.toggle();

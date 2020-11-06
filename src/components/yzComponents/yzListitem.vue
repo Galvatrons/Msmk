@@ -9,30 +9,36 @@
       >
         <div class="yz_list_slide_title">{{ item.title }}</div>
         <div class="yz_list_slide_time">
-          <van-icon name="clock-o" />
-          <div class="yz_time_date">{{ item.time }}</div>
-          <div class="yz_gang">|</div>
           <div class="yz_time_hour">
             共
-            <span>{{ item.total_periods }}</span>课时
+            <span>{{ item.total_periods }}</span
+            >课时
           </div>
         </div>
         <div class="yz_list_slide_user">
           <div class="yz_user_image">
             <img :src="item.teachers_list[0].teacher_avatar" alt />
           </div>
-          <div class="yz_user_name">{{ item.teachers_list[0].teacher_name }}</div>
-          <img src="../../assets/img/apply.png" alt v-show="item.apply" class="yz_img_apply" />
+          <div class="yz_user_name">
+            {{ item.teachers_list[0].teacher_name }}
+          </div>
+          <img
+            src="../../assets/img/apply.png"
+            alt
+            v-show="item.has_buy == 1"
+            class="yz_img_apply"
+          />
         </div>
         <div class="yz_list_slide_apply">
           <div class="yz_apply_peo">
-            <span>{{ item.sales_num }}</span>人已报名
+            <span>{{ item.sales_num }}</span
+            >人已报名
           </div>
           <div v-show="item.price == 0" class="yz_apply_price">免费</div>
-          <div
-          v-show="item.price != 0"
-          class="yz_apply_price_true"
-          >{{ item.price | toFixed }}</div>
+          <div v-show="item.price != 0" class="yz_apply_price_true">
+            <img src="@/assets/img/jinbi.png" alt="">
+            <span>{{ item.price | toFixed }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -49,22 +55,15 @@ export default {
       yz_bs: null,
       appCourseType: [],
       newData: [],
-      limit:4
+      limit: 4,
     };
   },
   methods: {
     onClickDetail(item) {
-      console.log(item.teachers_list[0].teacher_avatar);
-      console.log(item.teachers_list[0].teacher_name);
       this.$router.push("/yz_courseDetail");
-      var obj = {
-        id: item.id,
-        teacher_avatar: item.teachers_list[0].teacher_avatar,
-        teacher_name: item.teachers_list[0].teacher_name
-      };
-      localStorage.setItem("couDetailId", JSON.stringify(obj));
+      localStorage.setItem("courseId", item.id);
     },
-    async lwh_AaaAjax(a = 0, b = 0, c = "",limit=4) {
+    async lwh_AaaAjax(a = 0, b = 0, c = "", limit = 4) {
       let { data } = await this.$http.get(
         `/api/app/courseBasis?page=1&limit=${limit}&`,
         {
@@ -73,12 +72,13 @@ export default {
             classify_id: "",
             order_by: b,
             attr_val_id: c,
-            is_vip: 0
-          }
+            is_vip: 0,
+          },
         }
       );
       this.newData = data.data.list;
-    }
+      console.log(this.newData);
+    },
   },
   mounted() {
     console.log(this.filterId);
@@ -93,7 +93,7 @@ export default {
         setTimeout(() => {
           console.log(this.list.slice(2, 4));
           var newList = this.list.slice(2, 4);
-          newList.forEach(element => {
+          newList.forEach((element) => {
             this.list.push(element);
           });
         }, 1000);
@@ -104,18 +104,18 @@ export default {
     this.$nextTick(() => {
       this.yz_bs = new BetterScroll(".yz_list_container", {
         probeType: 2,
-        click: true
+        click: true,
       });
-      let flag = true
-      this.yz_bs.on("scroll", pos => {
-        if(pos.y <= this.yz_bs.maxScrollY + 50 && flag){
-          flag = false
-          setTimeout(()=>{
-            this.limit += 1
-            this.lwh_AaaAjax(0,0,"",this.limit);
+      let flag = true;
+      this.yz_bs.on("scroll", (pos) => {
+        if (pos.y <= this.yz_bs.maxScrollY + 50 && flag) {
+          flag = false;
+          setTimeout(() => {
+            this.limit += 1;
+            this.lwh_AaaAjax(0, 0, "", this.limit);
             this.yz_bs.refresh();
-            flag = true
-          },2000)
+            flag = true;
+          }, 2000);
         }
       });
     });
@@ -143,8 +143,8 @@ export default {
         console.log(val);
         this.lwh_AaaAjax(val[0].course_type, val[0].order_by);
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
     // showData() {
@@ -162,8 +162,8 @@ export default {
     filterId() {
       return this.$store.state.filterId;
     },
-    ...mapState(["lwh_list"])
-  }
+    ...mapState(["lwh_list"]),
+  },
 };
 </script>
 
@@ -183,7 +183,7 @@ export default {
   }
   .yz_list_slide {
     width: 100%;
-    height: 2rem;
+    // height: 2rem;
     background-color: white;
     border-radius: 0.05rem;
     padding: 0 0.18rem;
@@ -192,7 +192,7 @@ export default {
     margin-top: 0.17rem;
     .yz_list_slide_title {
       font-size: 0.18rem;
-      margin-top: 0.3rem;
+      margin-top: 0.2rem;
     }
     .yz_list_slide_time {
       font-size: 0.14rem;
@@ -242,7 +242,8 @@ export default {
     }
     .yz_list_slide_apply {
       width: 100%;
-      height: 0.5rem;
+      // height: 0.5rem;
+      padding: 0.1rem 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -258,6 +259,10 @@ export default {
     .yz_apply_price_true {
       color: orange;
       font-size: 0.2rem;
+      img{
+        width: 0.2rem;
+        vertical-align: middle;
+      }
     }
   }
 }

@@ -21,7 +21,16 @@
       <!-- 日历 -->
       <div>
         <p>日期</p>
-        <ul>
+        <van-calendar
+          title="日历"
+          :poppable="false"
+          :show-confirm="false"
+          :show-title="false"
+          :show-subtitle="false"
+          @select="onSelect"
+          :style="{ height: '200px' }"
+        />
+        <!-- <ul>
           <li v-for="(item, index) in lwh_date" :key="index">{{ item }}</li>
         </ul>
         <div>
@@ -39,7 +48,7 @@
             }}</font>
             <span :class="{ lwh_span_default: item.flag }">今天</span>
           </p>
-        </div>
+        </div> -->
       </div>
       <!-- 时间选择 -->
 
@@ -68,8 +77,8 @@
     </div>
     <!-- 底部重置按钮 -->
     <div class="lwh_btn" v-show="lwh_flag != 0">
-      <button>重置</button>
-      <button>确认</button>
+      <button @click="onReset">重置</button>
+      <button @click="onClickOk">确认</button>
     </div>
     <!-- 开始时间 -->
     <van-popup v-model="show" position="bottom" :style="{ height: '45%' }">
@@ -114,12 +123,12 @@
             <p class="lwh_tit">老师类型</p>
             <ul>
               <li
-                v-for="(item, index) in lwh_term_list"
+                v-for="(item, index) in typeList"
                 :key="index"
                 :class="{ lwh_term_default: index == lwh_term_listIndex }"
                 @click="lwh_btn_type(index, item)"
               >
-                {{ item }}
+                {{ item.level_name }}
               </li>
             </ul>
           </div>
@@ -146,57 +155,65 @@
                 v-for="(item, index) in lwh_term_six"
                 :key="index"
                 :class="{ lwh_term_six: index == lwh_term_sixIndex }"
-                @click="lwh_term_sixIndex = index"
+                @click="onSex(item, index)"
               >
-                {{ item }}
+                {{ item.title }}
               </p>
             </div>
           </div>
           <!-- 年级 -->
           <div>
-            <p class="lwh_tit">年级</p>
+            <p class="lwh_tit">{{ gradeList.attr_name }}</p>
             <div>
               <p
-                v-for="(item, index) in lwh_term_grade"
+                v-for="(item, index) in gradeList.child"
                 :key="index"
                 :class="{ lwh_term_grade: index == lwh_term_gradeIndex }"
-                @click="lwh_term_gradeIndex = index"
+                @click="onGrade(item, index)"
               >
-                {{ item }}
+                {{ item.attr_val_name }}
               </p>
             </div>
           </div>
           <!-- 学科 -->
 
           <div>
-            <p class="lwh_tit">学科</p>
+            <p class="lwh_tit">{{ subjectList.attr_name }}</p>
             <div>
               <p
-                v-for="(item, index) in lwh_term_subject"
+                v-for="(item, index) in subjectList.child"
                 :key="index"
                 :class="{ lwh_term_subject: index == lwh_term_subjectIndex }"
-                @click="lwh_term_subjectIndex = index"
+                @click="onSubject(item, index)"
               >
-                {{ item }}
+                {{ item.attr_val_name }}
               </p>
             </div>
           </div>
         </div>
 
-        <!-- 全部老师选择 -->
+        <!-- 老师列表 -->
         <div class="lwh_cont" v-if="lwh_flag == 0">
-          <div class="wsy_item" v-for="(item, index) in lwh_list" :key="index">
+          <div
+            class="wsy_item"
+            v-for="(item, index) in techerList"
+            :key="index"
+            @click="toOtoPlan(item)"
+          >
             <div>
-              <img :src="item.img" />
+              <img :src="item.avatar" />
               <div>
                 <p>
-                  {{ item.cont }}
-                  <span>{{ item.type }}</span>
+                  {{ item.real_name }}
+                  <!-- <span class="gzSpan">{{ item.is_collect }}</span> -->
                 </p>
-                <p>{{ item.age }}年教龄</p>
+                <p>
+                  <span class="xbSpan">{{ item.sex | sexFilter }}</span
+                  >{{ item.teach_age }}年教龄
+                </p>
               </div>
             </div>
-            <div>关注</div>
+            <div>预约</div>
           </div>
           <div class="lwh_cont_foot">没有更多了</div>
         </div>
@@ -207,6 +224,7 @@
 
 <script>
 import BetterScroll from "better-scroll";
+import axios from "axios";
 export default {
   name: "",
   components: {},
@@ -302,6 +320,31 @@ export default {
       ],
       lwh_flag: 0,
       lwh_date: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      // 年级列表
+      gradeList: [],
+      // 年级id
+      GradeId: "",
+      // 学科列表
+      subjectList: [],
+      // 学科id
+      subjectID: "",
+      // 老师类型列表
+      typeList: [],
+      // 老师类型ID
+      typeID: "",
+      // 性别id
+      sexId: "",
+      // 关注id
+      guanzhuId: 0,
+      // 上课id
+      shangkeId: 0,
+      fenleiBox: [],
+      // 老师列表
+      techerList: [],
+      // 开始时间
+      startTime:"",
+      // 结束时间
+      endTime:"",
       lwh_arr: [],
       lwh_index: null,
       show: false,
@@ -327,31 +370,18 @@ export default {
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAAXNSR0IArs4c6QAAAqpJREFUWAntmT1Lw0AcxpNIKYV0cOlQpRUkxS/hCzgKFieXLg6ugp9A/ASCq4KLi5NUcBR8mfwG0iDYog7t4JBAKcXW5znvQpqqg16bCjm43iV3vf/vnrtc6FPT+CG5rjuL5nKv11tDOY+cR7aRdSQfg7wiP1qWdYmy6jjO83cDm181NBqNfLvd3jdNc6vf70991Uf3PcR6R6yTTCazVygUOIGBNAQKFdeh4Cl6ZQd6ju/Cg8IVqHsRDjkAWqvVdtB4gJlZoU5XqJ+lUqlb27Zfcrkcl+zPqdls2r7vz3S73SUMtom8qgaFuj3Ud0ul0mFwT1WoJADPFSQ6u8jbmNmN6jPKEvGXEfsI2WEcwiJvKGWFonJPPqBdLDc63KXT6XKxWHwbJVx07Hq9Pt3pdKqAXZRtHvbsAvesWGI+OCFINw5IglEYxoZQrgTNSjbD5BGEGTwhi6cbG3llXMstYYYKbgM80NdsAPQ78hwVLStI1K/ihiScZOBDbEi2siUPc95jOvssJuIzYCEjFeUbRyQeQaoedxlhmScoX4si8ZxU9bjLCEueoMG7W9dhrmOSERaboP8iJaC6lylRNFFUtwK6x0v2aKKobgV0j5fs0URR3QroHi/Zo6NQNLBoaLPoDvDb8VqtVtj78rn0gXNGL+i3A+v+nud5wW85MhL0UQWRhpW6jLWMsNBDFSaqgqKrNikpYCEjFa3SNpF0q7RT4iaVDMKGlGxVC/bJM2yTEwWH+hFdNXU97pKxyaDiko2M4hylHY0Gj41ocGj9xQEbsh2FR0omyWYIUOE/wo6GzHR6CbsI2PtxbgPGYkzGJgNZsDcrys8XRi4bmP6FNf6JahiY2UT+2SCWXkGyxMa9oB2N6nHoNAh3GUldxjpmbDJEgwwsfbQR6k7MH2IfQYM7P4m00d0AAAAASUVORK5CYII=",
         },
       ],
-      lwh_term_six: ["男", "女"],
-      lwh_term_grade: [
-        "一年级",
-        "二年级",
-        "三年级",
-        "四年级",
-        "五年级",
-        "六年级",
-        "初一",
-        "初二",
-        "初三",
-        "高一",
-        "高二",
-        "高三",
+      lwh_term_six: [
+        {
+          title: "男",
+          id: 0,
+        },
+        {
+          title: "女",
+          id: 1,
+        },
       ],
       lwh_term_gradeIndex: null,
-      lwh_term_subject: [
-        "语文",
-        "数学",
-        "英语",
-        "物理",
-        "化学",
-        "生物",
-        "信息技术",
-      ],
+
       lwh_term_subjectIndex: null,
       lwh_term_sixIndex: null,
       lwh_term_listIndex: null,
@@ -367,6 +397,10 @@ export default {
     this.$nextTick(() => {
       this.lwh_bsBox();
     });
+    // 老师条件获取事件调用===
+    this.getCondition();
+    // 老师列表获取事件调用
+    this.getTeacherList();
   },
   activated() {},
   update() {},
@@ -375,10 +409,63 @@ export default {
   },
   methods: {
     onClickLeft() {
-      this.$router.back(1);
+      this.$router.go(-1);
     },
     onClickRight() {
       this.$router.push("/search");
+    },
+    // 老师条件获取=========
+    getCondition() {
+      axios
+        .get("https://www.365msmk.com/api/app/otoCourseOptions?")
+        .then((res) => {
+          // console.log(res.data.data);
+          this.gradeList = res.data.data.attrList[0];
+          // console.log(this.gradeList);
+          this.subjectList = res.data.data.attrList[1];
+          // console.log(this.subjectList);
+          this.typeList = res.data.data.otoTeacherLevel;
+          // console.log(this.typeList);
+        });
+    },
+    // 老师列表数据获取====
+    getTeacherList(
+      typeID,
+      GradeId,
+      subjectID,
+      sexId,
+      guanzhuId,
+      shangkeId,
+      fenleiBox,
+      startTime,
+      endTime
+    ) {
+      axios
+        .get("https://www.365msmk.com/api/app/otoCourse", {
+          params: {
+            page: 1,
+            limit: 10,
+            start_time: startTime,
+            end_time: endTime,
+            level_id: typeID || "",
+            is_collect: guanzhuId,
+            is_attended: shangkeId,
+            sex: sexId,
+            attr_val_id: fenleiBox,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.techerList = res.data.data;
+        });
+    },
+    // 点击进入预约课程
+    toOtoPlan(item) {
+      // console.log(item.teacher_id);
+      this.$router.push({
+        path: "/wsyOto-plan",
+        query: { id: item.teacher_id },
+      });
     },
     // 滑动事件
     lwh_bsBox() {
@@ -398,7 +485,116 @@ export default {
         });
       }, 200);
     },
-
+    // 点击年级分类
+    onGrade(item, index) {
+      this.lwh_term_gradeIndex = index;
+      this.GradeId = item.attr_val_id;
+      if (this.subjectID == "") {
+        this.fenleiBox = [0, this.GradeId];
+      } else {
+        this.fenleiBox = [this.subjectID, this.GradeId];
+      }
+      this.$store.commit("fenleiBox1",this.fenleiBox)
+      console.log(this.fenleiBox);
+    },
+    // 点击学科分类
+    onSubject(item, index) {
+      this.lwh_term_subjectIndex = index;
+      this.subjectID = item.attr_val_id;
+      if (this.GradeId == "") {
+        this.fenleiBox = [this.subjectID, 0];
+      } else {
+        this.fenleiBox = [this.subjectID, this.GradeId];
+      }
+      this.$store.commit("fenleiBox2",this.fenleiBox)
+      console.log(this.fenleiBox);
+    },
+    // 点击老师类型
+    lwh_btn_type(index, item) {
+      this.lwh_term_listIndex = index;
+      this.lwh_trem_obj.trem_type = item;
+      console.log(item.level_id);
+      this.typeID = item.level_id;
+    },
+    // 点击性别
+    onSex(item, index) {
+      this.lwh_term_sixIndex = index;
+      console.log(item.id);
+      this.sexId = item.id;
+    },
+    // 点击只看
+    lwh_btn_check(index, item) {
+      this.lwh_term_check[index].flag = !this.lwh_term_check[index].flag;
+      if (index == 0) {
+        if (this.guanzhuId == 0) {
+          this.guanzhuId = 1;
+        } else {
+          this.guanzhuId = 0;
+        }
+      }
+      if (index == 1) {
+        if (this.shangkeId == 0) {
+          this.shangkeId = 1;
+        } else {
+          this.shangkeId = 0;
+        }
+      }
+    },
+    // 点击日历
+    onSelect(value) {
+      let date = new Date(value);
+      console.log(date);
+      let timeStr = date.getDate();
+      console.log(timeStr);
+    },
+    // 结束时间
+    lwh_confirm(val) {
+      console.log(val);
+      this.endTime = this.startTime = `%20${val}`
+      console.log(this.endTime);
+      this.leavetime = val;
+      this.shows = false;
+    },
+    // 开始时间
+    btn(value) {
+      console.log(value);
+      this.startTime = `%20${value}`
+      console.log(this.startTime);
+      this.currentTime = value;
+      this.show = false;
+    },
+    // 点击底部确认
+    onClickOk() {
+      let box = []
+      box = this.fenleiWrapper.join(",")
+      this.$store.commit("fenleiBox3",this.fenleiBox)
+      this.getTeacherList(
+        this.typeID,
+        this.GradeId,
+        this.subjectID,
+        this.sexId,
+        this.guanzhuId,
+        this.shangkeId,
+        box,
+        this.startTime,
+        this.endTime
+      );
+      this.lwh_flag = 0;
+    },
+    // 点击底部重置
+    onReset() {
+      this.lwh_term_listIndex = null;
+      this.lwh_term_sixIndex = null;
+      this.lwh_term_gradeIndex = null;
+      this.lwh_term_subjectIndex = null;
+      this.typeID = "";
+      this.GradeId = "";
+      this.subjectID = "";
+      this.guanzhuId = "";
+      this.shangkeId = "";
+      this.getTeacherList();
+      this.lwh_flag = 0;
+    },
     lwh_btn(index) {
       if (this.lwh_flag == 1 && index == 1) {
         this.lwh_flag = 0;
@@ -483,33 +679,31 @@ export default {
         this.lwh_index = index;
       }
     },
-    lwh_confirm(val) {
-      this.leavetime = val;
-      this.shows = false;
-    },
-    btn(value) {
-      this.currentTime = value;
-      this.show = false;
-    },
+    
     lwh_btn_list() {
       for (let index = 0; index < 20; index++) {
         this.lwh_term_list.push(`M${index + 1}`);
       }
     },
-    lwh_btn_type(index, time) {
-      this.lwh_term_listIndex = index;
-      this.lwh_trem_obj.trem_type = time;
-    },
-    lwh_btn_check(index, item) {
-      this.lwh_term_check[index].flag = !this.lwh_term_check[index].flag;
+  },
+  filters: {
+    sexFilter(val) {
+      if (val == 0) {
+        return "男";
+      } else {
+        return "女";
+      }
     },
   },
-  filters: {},
-  computed: {},
+  computed: {
+    fenleiWrapper(){
+      return this.$store.state.fenleiWrapper
+    }
+  },
   watch: {},
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .wsy_oto {
   width: 100%;
   height: 100%;
@@ -538,6 +732,7 @@ export default {
     text-align: center;
     background: #fff;
     line-height: 0.44rem;
+
     > img {
       width: 0.1rem;
       margin-bottom: 0.03rem;
@@ -583,13 +778,17 @@ export default {
       height: 0.4rem;
       margin-left: 0.15rem;
       // flex: 1;
+      .gzSpan {
+        color: red;
+        font-size: 0.15rem;
+        margin-left: 0.06rem;
+      }
       > p {
         width: 1rem;
         margin: 0.01rem;
-        > span {
-          color: red;
+        .xbSpan {
           font-size: 0.12rem;
-          margin-left: 0.1rem;
+          margin-right: 0.1rem;
         }
       }
       > :nth-child(1) {
@@ -626,7 +825,7 @@ export default {
   z-index: 2;
   > div:nth-of-type(1) {
     width: 100%;
-    
+
     background: #fff;
     > p {
       width: 100%;
@@ -869,9 +1068,11 @@ export default {
         background: #f5f5f5;
         color: #646464;
         margin-right: 0.23rem;
+        font-size: 0.14rem;
       }
       > .lwh_term_grade {
         color: #eb6100;
+        font-size: 0.14rem;
       }
     }
   }
@@ -895,9 +1096,11 @@ export default {
         background: #f5f5f5;
         color: #646464;
         margin-right: 0.23rem;
+        font-size: 0.14rem;
       }
       > .lwh_term_subject {
         color: #eb6100;
+        font-size: 0.14rem;
       }
     }
   }

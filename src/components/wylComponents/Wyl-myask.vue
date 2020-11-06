@@ -1,50 +1,114 @@
 <template>
-     
   <div id="shopping">
     <div class="content">
       <div class="top">约课记录</div>
-      <van-tabs swipeable>
-        <van-tab class="sxlvan1" title="待上课">
-          <img class="picture" src="../../assets/img/a.png" />
-          <div class="sxlh6">请登录后查看相关内容</div>
-          <router-link to="/Wyl-Login">
-            <div class="registration">登录/注册</div>
-          </router-link>
-        </van-tab>
-
-        <van-tab title="已上课">
-          <img class="picture" src="../../assets/img/a.png" />
-          <div class="sxlh6">请登录后查看相关内容</div>
-          <router-link to="/Wyl-Login">
-            <div class="registration">登录/注册</div>
-          </router-link>
-        </van-tab>
-
-        <van-tab title="已取消">
-          <img class="picture" src="../../assets/img/a.png" />
-          <div class="sxlh6">还没有取消上课记录</div>
-          <router-link to="/Wyl-Login">
-            <div class="registration">登录/注册</div>
-          </router-link>
-        </van-tab>
+      <van-tabs v-model="active" @click="onTitle">
+        <van-tab
+          v-for="(item, index) in title"
+          :key="index"
+          :title="item.title"
+        ></van-tab>
       </van-tabs>
+      <div v-show="token">
+        <div class="btn_wrapper" v-show="isShow">
+          <img src="@/assets/img/a.png" alt="" />
+          <div class="hnit" v-show="hnitShow == 1">还没有待上课记录哦</div>
+          <div class="hnit" v-show="hnitShow == 2">还没有上课记录哦</div>
+          <div class="hnit" v-show="hnitShow == 3">还没有取消上课记录哦</div>
+          <div>
+            <button v-show="bthShow" @click="onClass">立即约课</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn_wrapper" v-show="!token">
+        <img src="@/assets/img/a.png" alt="" />
+        <div class="hnit">请登陆后查看相关内容</div>
+        <div>
+          <button @click="onLogin">登陆/注册</button>
+        </div>
+      </div>
     </div>
-        
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      active: 0,
+      title: [
+        {
+          title: "待上课",
+          id: 1,
+        },
+        {
+          title: "已上课",
+          id: 2,
+        },
+        {
+          title: "已取消",
+          id: 3,
+        },
+      ],
+      list: [],
+      isShow: false,
+      hnitShow: 1,
+      bthShow: true,
+      titleId: 1,
+      token: sessionStorage.getItem("token"),
+      
+    };
+  },
+  mounted() {
+    this.getData(this.titleId);
+
+    // console.log(this.token);
   },
   methods: {
-    
+    // 点击标题切换
+    onTitle(value) {
+      console.log(value + 1);
+      this.titleId = value + 1;
+      this.hnitShow = value + 1;
+      if (value + 1 == 3) {
+        this.bthShow = false;
+      } else {
+        this.bthShow = true;
+      }
+      this.getData(this.titleId);
+    },
+    // 获取数据
+    getData(titleId) {
+      this.$http
+        .post("/api/app/oto/myInviteCourse/index", {
+          limit: 10,
+          page: 1,
+          type: titleId,
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          this.list = res.data.data.list;
+          if (this.list.length == 0) {
+            this.isShow = true;
+          } else {
+            this.isShow = false;
+          }
+        });
+    },
+    // 点击立即约课
+    onClass() {
+      this.$router.push("/oto");
+    },
+    //立即登陆
+    onLogin() {
+      this.$router.push("/Wyl-Login")
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #id {
   background: rgb(240, 242, 245);
 }
@@ -86,5 +150,29 @@ export default {
   margin-top: 0.1rem;
   color: gray;
   /* font-weight: 800; */
+}
+.btn_wrapper {
+  width: 100%;
+  height: 2.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.1rem;
+  div {
+    width: 100%;
+    text-align: center;
+    color: gray;
+
+    button {
+      background-color: #eb6100;
+      color: white;
+      width: 0.8rem;
+      height: 0.3rem;
+      border: none;
+      border-radius: 0.03rem;
+      font-size: 0.13rem;
+    }
+  }
 }
 </style>

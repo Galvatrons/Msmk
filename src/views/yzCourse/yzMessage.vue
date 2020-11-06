@@ -79,7 +79,12 @@
     </van-action-sheet>
     <!-- 地面板 -->
     <van-action-sheet v-model="cityShow">
-      <van-picker show-toolbar title="标题" :columns="columns" />
+      <van-area
+        title="标题"
+        :area-list="areaList"
+        @confirm="onCityConfirm"
+        @change="onChangeCity"
+      />
     </van-action-sheet>
     <!-- 年级面板 -->
     <van-action-sheet v-model="gradeShow">
@@ -120,16 +125,62 @@ export default {
         "高二",
         "高三",
       ],
+      areaList: {
+        province_list: {},
+        city_list: {},
+        county_list: {},
+      },
     };
   },
   mounted() {
     // this.$http.get("/app/module/attribute/1").then((res) => {
     //   console.log(res);
     // });
+    this.getCityData();
+    console.log(this.areaList);
   },
   methods: {
     onBack() {
       this.$router.go(-1);
+    },
+    // 获取城市数据
+    getCityData() {
+      this.$http.get("/api/app/sonArea/0?").then((res) => {
+        console.log(res.data.data);
+        // this.areaList.province_list = res.data.data
+        let obj = {};
+        for (let i = 0; i < res.data.data.length; i++) {
+          obj[res.data.data[i].id] = res.data.data[i].area_name;
+        }
+        console.log(obj);
+        this.areaList.province_list = obj;
+      });
+      
+    },
+    // 改变省或市或区的时候触发事件
+    onChangeCity(picker, data, index) {
+      console.log(picker, data, index);
+      if (index == 0) {
+        this.$http.get(`/api/app/sonArea/${data[index].code}?`).then((res) => {
+          console.log(res);
+          let obj = {};
+          for (let i = 0; i < res.data.data.length; i++) {
+            obj[res.data.data[i].id] = res.data.data[i].area_name;
+          }
+          console.log(obj);
+          this.areaList.city_list = obj;
+        });
+      } else if (index == 1) {
+        this.$http.get(`/api/app/sonArea/${data[index].code}?`).then((res) => {
+          console.log(res);
+          let obj = {};
+          for (let i = 0; i < res.data.data.length; i++) {
+            obj[res.data.data[i].id] = res.data.data[i].area_name;
+          }
+          console.log(obj);
+          this.areaList.county_list = obj;
+        });
+      }
     },
     onNickname() {
       this.$router.push("/yzSetname");
@@ -145,6 +196,10 @@ export default {
     },
     onSubject() {
       this.$router.push("/yzSetsubject");
+    },
+    // 点击城市选择确定按钮
+    onCityConfirm(value) {
+      console.log(value);
     },
     onGrade() {
       this.gradeShow = true;

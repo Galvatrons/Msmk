@@ -119,7 +119,7 @@ export default {
   margin-left: 0.05rem;
 }
 .item-text .p1 {
-  width: 3rem;
+  width: 2.2rem;
   font-size: 0.12rem;
   color: #afa3a3;
   white-space: nowrap;

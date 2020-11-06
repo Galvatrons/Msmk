@@ -471,7 +471,7 @@ export default {
 .wsy_ii_item {
   position: relative;
   width: 100%;
-  height: 2rem;
+  // height: 2rem;
   padding: 0 0.2rem;
   margin-top: 0.1rem;
   box-sizing: border-box;

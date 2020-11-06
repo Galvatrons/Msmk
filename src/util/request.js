@@ -22,8 +22,13 @@ window.localStorage.setItem("deviceid",deviceid)
 const serve = axios.create({
 
     // baseURL: 'http://120.53.31.103:84',
+<<<<<<< HEAD
     baseURL:"https://www.365msmk.com/",
     timeout: "30000"
+=======
+    baseURL:"https://www.365msmk.com",
+    timeout: "3000"
+>>>>>>> 4811c799178cd82111e1a8f6ba356ece3fd087d6
 
 })
 
