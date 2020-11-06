@@ -105,7 +105,7 @@ export default {
        console.log(data);
        if(data.code == 200){
          window.localStorage.setItem("login_info",JSON.stringify(data.data))
-         window.localStorage.setItem("token",JSON.stringify(data.data.remember_token))
+         window.sessionStorage.setItem("token",JSON.stringify(data.data.remember_token))
          this.$router.push("/lwh_my")
        }
       }else{

@@ -1,37 +1,11 @@
 <template>
   <div>
-        <van-tabs swipeable>
-        <van-tab  title="全部订单">
-           
-          <img class="picture" src="../../../assets/img/a.png" />
-          <div class="sxlh6">暂无订单</div>
-     
-        </van-tab>
-           <van-tab  title="待支付">
-            <img class="picture" src="../../../assets/img/a.png" />  
-          <div class="sxlh6">暂无订单</div>
-         
-        </van-tab>
-           <van-tab  title="已完成">
-          <img class="picture" src="../../../assets/img/a.png" />
-          <div class="sxlh6">暂无订单</div>
-        
-        </van-tab>
-           <van-tab title="已取消">
-          <img class="picture" src="../../../assets/img/a.png" />
-          <div class="sxlh6">暂无订单</div>
-        
-        </van-tab>
-
-       
-      </van-tabs>
+  
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style scoped>

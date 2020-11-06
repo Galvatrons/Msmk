@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import obj from "./aaa"
 
 Vue.use(VueRouter)
 
@@ -52,6 +52,17 @@ const routes = [
     name: 'teacher',
     component: function () {
       return import('../views/wsy_component/WsyTeacherInfo')
+    },
+    meta:{
+      title:"讲师详情"
+    }
+  },
+  // 讲师详情2
+  {
+    path:"/yzTeahcerInfo",
+    name:"yzTeahcerInfo",
+    component: function () {
+      return import('../views/yzCourse/yzTeahcerInfo.vue')
     },
     meta:{
       title:"讲师详情"
@@ -406,7 +417,14 @@ const routes = [
     path: "/yzChangePass",
     name: "yzChangePass",
     component: () => import("../views/yzCourse/yzChangePass")
-  }
+  },
+  // 订单详情
+  {
+    path:"/yzOrderDetail",
+    name:"yzOrderDetail",
+    component: () => import("../views/yzCourse/yzOrderDetail")
+  },
+  obj
 ]
 
 const router = new VueRouter({

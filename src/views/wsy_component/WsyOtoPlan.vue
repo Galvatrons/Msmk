@@ -12,18 +12,29 @@
         <div class="wsy_teacher_info">
           <div class="wsy_item">
             <div>
-              <img
-                src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/2019wX5ZNRNxBT1577773182.jpg"
-              />
+              <img :src="teacherItem.avatar" />
               <div>
                 <p>
-                  马学斌
-                  <span>M10</span>
+                  {{ teacherItem.teacher_name }}
+                  <span>{{ teacherItem.level_name }}</span>
                 </p>
                 <p>30年教龄</p>
               </div>
             </div>
             <div @click="attentionTeacher()">查看详情</div>
+          </div>
+        </div>
+        <div class="chooseTime">选择时间(北京时间)</div>
+        <div class="Time_tabs">
+          <div class="tab_top">
+            <van-tabs @click="onTime">
+              <van-tab
+                v-for="(item, index) in timeData"
+                :key="index"
+                :title="item"
+              >
+              </van-tab>
+            </van-tabs>
           </div>
         </div>
         <div class="wsy_empty">
@@ -32,13 +43,14 @@
         </div>
       </div>
     </div>
-    <div class="wsy_bottom" @click="toOtoPlan()">立即预约</div>
+    <div class="wsy_bottom" @click="attentionTeacher()">查看详情</div>
   </div>
 </template>
 
 <script>
 import BetterScroll from "better-scroll";
 import { Toast } from "vant";
+import axios from "axios";
 export default {
   name: "",
   components: {},
@@ -47,22 +59,25 @@ export default {
     return {
       bs: null,
       activeName: "a",
-      teacherId: 0,
-      attentionFlag: false
+      teacherId: this.$route.query.id,
+      attentionFlag: false,
+      teacherItem: [],
+      timeData: [],
     };
   },
   created() {},
   mounted() {
-    this.teacherId = this.$route.query.id;
+    console.log(this.teacherId);
     this.getTeacherInfo(this.teacherId);
     this.$nextTick(() => {
       setTimeout(() => {
         this.bs = new BetterScroll(this.$refs.scrollBox, {
           probeType: 2,
-          click: true
+          click: true,
         });
       }, 500);
     });
+    this.getTimeData();
   },
   activated() {},
   update() {},
@@ -75,28 +90,46 @@ export default {
       this.$router.back(1);
     },
     // 获取老师详情
-    async getTeacherInfo(id) {
-      let data = await this.$http.get(`/api/app/teacher/info/${id}`);
-      let dataB = await this.$http.get(`/api/app/teacher/${id}`);
-      console.log(data);
-      console.log(dataB);
+    getTeacherInfo(id) {
+      axios
+        .get(`https://www.365msmk.com/api/app/teacher/${id}?`)
+        .then((res) => {
+          // console.log(res.data.data);
+          this.teacherItem = res.data.data.teacher;
+          // console.log(this.teacherItem);
+        });
     },
-    // 关注讲师
+    // 查看详情上
     async attentionTeacher() {
-      this.$router.push(`/teacher?id=${this.teacherId}`);
-      // this.attentionFlag = !this.attentionFlag;
-      // let data = await this.$http.get(
-      //   `/api/app/teacher/collect/${this.teacherId}`
-      // );
-      // console.log(data);
-      // if (data.data.code == 200) {
-      //   Toast.fail(data.data.msg);
-      // }
+      this.$router.push({
+        path: "/teacher",
+        query: { id: this.teacherId },
+      });
     },
-    // 跳转到预约课程页面
-    toOtoPlan() {
-      this.$router.push("");
-    }
+    onTime(value) {
+      console.log(value);
+    },
+    // 获取时间数据
+    async getTimeData() {
+      let { data } = await this.$http.post("/api/app/teacher/invite", {
+        is_next: 0,
+        teacher_id: this.teacherId,
+        week_day: 5,
+      });
+      let date = new Date();
+      console.log(date.getUTCDay());
+      let timeStr = `${date.getMonth()}月${date.getDate()}日`;
+      console.log(timeStr);
+      console.log(data.data.weekDateList);
+      this.timeData = data.data.weekDateList;
+    },
+    // 查看详情下
+    // attentionTeacher() {
+    //   this.$router.push({
+    //     path: "/teacher",
+    //     query: { id: this.teacherId },
+    //   });
+    // },
   },
   filters: {},
   computed: {},
@@ -105,12 +138,12 @@ export default {
       this.$nextTick(() => {
         this.bs.refresh();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .wsy_box {
   width: 100%;
   height: 100%;
@@ -164,6 +197,7 @@ export default {
   position: relative;
   margin-bottom: 0.2rem;
 }
+
 .wsy_item {
   position: absolute;
   top: -0.6rem;
@@ -269,7 +303,6 @@ export default {
   }
 }
 
-
 .wsy_ii_info {
   width: 100%;
   height: 0.4rem;
@@ -307,6 +340,31 @@ export default {
 }
 .van-tabs {
   height: 100%;
+}
+.chooseTime {
+  width: 90%;
+  height: 0.2rem;
+  border-left: 0.05rem solid orangered;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding-left: 0.1rem;
+  box-sizing: border-box;
+}
+.Time_tabs {
+  width: 90%;
+  height: 0.6rem;
+  background-color: white;
+  margin: 0.1rem auto;
+  border-radius: 0.05rem;
+  .tab_top {
+    width: 100%;
+    // height: 80%;
+    border-bottom: 0.001rem solid gray;
+    .van-tabs__wrap--scrollable .van-tab {
+      height: 1rem;
+    }
+  }
 }
 .wsy_empty {
   width: 100%;

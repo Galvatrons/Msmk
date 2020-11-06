@@ -34,7 +34,7 @@ export default {
     },
     onOutLogin() {
       sessionStorage.removeItem("token");
-      this.$router.push("/yzLogin");
+      this.$router.push("/Wyl-Login");
     },
   },
 };

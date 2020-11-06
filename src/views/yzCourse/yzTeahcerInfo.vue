@@ -15,18 +15,14 @@
               <img :src="teacherInfo.avatar" />
               <div>
                 <p>
-                  <span>{{ teacherInfo.teacher_name }}</span>
-                  <span>{{ teacherInfo.level_name }}</span>
+                  <span>{{ teacherInfo.real_name }}</span>
+                  <span>M10</span>
                 </p>
-                <p>{{ teacherInfo.teach_age }}年教龄</p>
+                <p>30年教龄</p>
               </div>
             </div>
-            <div v-show="attentionFlag == 2" @click="attentionTeacher()">
-              关注
-            </div>
-            <p v-show="attentionFlag == 1" @click="attentionTeacher()">
-              已关注
-            </p>
+            <div v-show="attentionFlag == 2" @click="attentionTeacher()">关注</div>
+            <p v-show="attentionFlag == 1" @click="attentionTeacher()">已关注</p>
           </div>
         </div>
         <div class="wsy_tab">
@@ -55,15 +51,15 @@
             <!-- 主讲课程区域 -->
             <van-tab title="主讲课程" name="b">
               <ul class="masterCourse">
-                <li v-for="(item, index) in mainCourse" :key="index">
+                <li v-for="(item,index) in mainCourse" :key="index">
                   <div class="wsy_ii_item" @click="ToCourseDetail()">
-                    <p>{{ item.title }}</p>
+                    <p>{{item.title}}</p>
                     <div class="wsy_ii_time">
                       <!-- <p>共{{ item. }}课时</p> -->
                     </div>
                     <div
                       class="wsy_ii_teacher"
-                      v-for="(item, index) in item.teachers_list"
+                      v-for="(item,index) in item.teachers_list"
                       :key="index"
                     >
                       <img :src="item.teacher_avatar" />
@@ -72,9 +68,7 @@
 
                     <div class="wsy_ii_info">
                       <span>{{ item.sales_num }}人已报名</span>
-                      <span class="wsy_good" v-show="item.price == 0"
-                        >免费</span
-                      >
+                      <span class="wsy_good" v-show="item.price == 0">免费</span>
                       <span class="wsy_price" v-show="item.price != 0">
                         <img
                           src="https://msmk2019.oss-cn-shanghai.aliyuncs.com/uploads/image/20191HHDExgz0u1567065946.png"
@@ -116,6 +110,7 @@
 // real_name: "杨岭"
 import BetterScroll from "better-scroll";
 import { Toast } from "vant";
+import axios from "axios"
 export default {
   name: "",
   components: {},
@@ -128,7 +123,7 @@ export default {
       attentionFlag: 1,
       teacherInfo: {},
       mainCourse: [],
-      CourseComment: [],
+      CourseComment:[]
     };
   },
   created() {},
@@ -141,9 +136,9 @@ export default {
       setTimeout(() => {
         this.bs = new BetterScroll(this.$refs.scrollBox, {
           probeType: 3,
-          click: true,
+          click: true
         });
-        this.bs.on("scroll", (pos) => {
+        this.bs.on("scroll", pos => {
           if (pos.y >= 0) {
             this.bs.scrollTo(0, 0);
           }
@@ -162,22 +157,17 @@ export default {
       this.$router.back(1);
     },
     // 获取老师详情
-    async getTeacherInfo(id) {
+    getTeacherInfo(id) {
       // let { data } = await this.$http.get(`/api/app/teacher/info/${id}`);
-      let { data } = await this.$http.get(`/api/app/teacher/${id}`);
+      axios.get(`https://www.365msmk.com/api/app/teacher/${id}?`).then((res)=>{
+          console.log(res);
+      })
       // console.log(data.data);
-      console.log(data.data);
-      this.attentionFlag = data.data.flag;
+      console.log(dataB.data);
+      this.attentionFlag = dataB.data.flag;
       console.log(this.attentionFlag);
-
-      this.teacherInfo = data.data.teacher;
-      console.log(this.teacherInfo);
+      this.teacherInfo = dataB.data.teacher;
     },
-    // 关注讲师2
-    // async concern(id) {
-    //   let data = await this.$http.get(`/api/app/teacher/${id}?`);
-    //   console.log(data + "===============");
-    // },
     // 关注讲师
     async attentionTeacher() {
       let data = await this.$http.get(
@@ -188,15 +178,13 @@ export default {
         Toast.fail(data.data.msg);
         this.getTeacherInfo(this.teacherId);
       }
-      // let dataB = await this.$http.get(`/api/app/teacher/${this.teacherId}?`);
-      //  console.log(dataB);
     },
     // 获取主讲课程数据
     async getmainCourse() {
       let { data } = await this.$http.post("/api/app/teacher/mainCourse", {
         limit: 10,
         page: 1,
-        teacher_id: this.teacherId,
+        teacher_id: this.teacherId
       });
       this.mainCourse = data.data.list;
       console.log(this.mainCourse);
@@ -206,14 +194,14 @@ export default {
       let { data } = await this.$http.post("/api/app/teacher/comment", {
         limit: 10,
         page: 1,
-        teacher_id: this.teacherId,
+        teacher_id: this.teacherId
       });
-      this.CourseComment = data.data.comment.list;
+     this.CourseComment = data.data.comment.list
     },
     // 跳转到预约课程页面
     toOtoPlan() {
       this.$router.push(`/wsyOto-plan?id=${this.teacherId}`);
-    },
+    }
   },
   filters: {},
   computed: {},
@@ -222,12 +210,12 @@ export default {
       this.$nextTick(() => {
         this.bs.refresh();
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .wsy_box {
   width: 100%;
   height: 100%;
@@ -329,7 +317,7 @@ export default {
       > p {
         width: 1.5rem;
         margin: 0.01rem;
-        :nth-child(2) {
+        :nth-child(2){
           color: red;
           font-size: 0.12rem;
           margin-left: 0.1rem;
