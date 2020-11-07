@@ -159,7 +159,43 @@ body,
   z-index: 100001;
   background: #f2f3f5;
 }
+<<<<<<< HEAD
 // .wh_content_all{
 //   // background: #fff !in;
 // }
+=======
+.wh_content_all{
+  background-color: #fff!important;
+}
+.wh_item_date{
+  color: #000 !important;
+}
+.wh_content_item{
+  color: #000 !important;
+}
+.wh_top_changge li{
+  color: #000 !important;
+}
+.wh_content_item .wh_isToday{
+  background-color: #eb6100 !important;
+  color: #fff !important;
+}
+.wh_top_changge li{
+  color: #000 !important;
+}
+.wh_jiantou2 {
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid #000 !important;
+    border-right: 2px solid #000 !important;
+    transform: rotate(45deg);
+}
+.wh_jiantou1 {
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid #000 !important;
+    border-left: 2px solid #000 !important;
+    transform: rotate(45deg);
+}
+>>>>>>> a47fe7a6f1c3e3bb1319a0aaa3b0a4851b0f1ed9
 </style>

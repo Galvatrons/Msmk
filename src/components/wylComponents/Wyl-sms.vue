@@ -99,7 +99,7 @@ export default {
       //   return false;
       // }
       // if (this.wsy_mobileFlag) {
-        // this.CAPTCHAFlag = true;
+        this.CAPTCHAFlag = true;
         setInterval(() => {
           this.wsy_second--;
           if (this.wsy_second == 0) {

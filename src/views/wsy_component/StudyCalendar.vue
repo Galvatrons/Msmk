@@ -56,9 +56,7 @@ export default {
 .card{
   background: #fff;
 }
-.wh_content_all{
-  background-color: #fff!important;
-}
+
 .card div:nth-child(1){
     background-color:#BDC0BA;
     padding-bottom:0;
