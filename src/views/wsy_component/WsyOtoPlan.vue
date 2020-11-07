@@ -26,15 +26,31 @@
         </div>
         <div class="chooseTime">选择时间(北京时间)</div>
         <div class="Time_tabs">
-          <div class="tab_top">
-            <van-tabs @click="onTime">
+          <div class="tab_top" ref="tab">
+            <div class="tab_in">
+              <div
+                v-for="(item, index) in timeData"
+                :key="index"
+                @click="onSlide(item, index)"
+                :class="[
+                  activeShow == index ? 'top_slide_active' : 'top_slide',
+                  item.status == false ? 'top_slide_active2' : 'top_slide',
+                ]"
+              >
+                <div>{{ item.week }}</div>
+                <div>{{ item.day }}</div>
+                <p></p>
+              </div>
+            </div>
+
+            <!-- <van-tabs @click="onTime">
               <van-tab
                 v-for="(item, index) in timeData"
                 :key="index"
                 :title="item"
               >
               </van-tab>
-            </van-tabs>
+            </van-tabs> -->
           </div>
         </div>
         <div class="wsy_empty">
@@ -58,11 +74,85 @@ export default {
   data() {
     return {
       bs: null,
+      bt: null,
+      clickShow: false,
+      activeShow: 5,
       activeName: "a",
       teacherId: this.$route.query.id,
       attentionFlag: false,
       teacherItem: [],
-      timeData: [],
+      timeData: [
+        {
+          day: "11/02",
+          week: "周一",
+          status: false,
+        },
+        {
+          day: "11/03",
+          week: "周二",
+          status: false,
+        },
+        {
+          day: "11/04",
+          week: "周三",
+          status: false,
+        },
+        {
+          day: "11/05",
+          week: "周四",
+          status: false,
+        },
+        {
+          day: "11/06",
+          week: "周五",
+          status: false,
+        },
+        {
+          day: "11/07",
+          week: "周六",
+          status: true,
+        },
+        {
+          day: "11/08",
+          week: "周日",
+          status: true,
+        },
+        {
+          day: "11/09",
+          week: "周一",
+          status: true,
+        },
+        {
+          day: "11/10",
+          week: "周二",
+          status: true,
+        },
+        {
+          day: "11/11",
+          week: "周三",
+          status: true,
+        },
+        {
+          day: "11/12",
+          week: "周四",
+          status: true,
+        },
+        {
+          day: "11/13",
+          week: "周五",
+          status: true,
+        },
+        {
+          day: "11/14",
+          week: "周六",
+          status: true,
+        },
+        {
+          day: "11/15",
+          week: "周日",
+          status: true,
+        },
+      ],
     };
   },
   created() {},
@@ -74,6 +164,16 @@ export default {
         this.bs = new BetterScroll(this.$refs.scrollBox, {
           probeType: 2,
           click: true,
+        });
+      }, 500);
+    });
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.bt = new BetterScroll(this.$refs.tab, {
+          probeType: 3,
+          click: true,
+          scrollX: true,
+          scrollY: false,
         });
       }, 500);
     });
@@ -106,6 +206,14 @@ export default {
         query: { id: this.teacherId },
       });
     },
+    // 点击时间
+    onSlide(item, index) {
+      if (item.status == true) {
+        this.activeShow = index;
+      } else {
+        return;
+      }
+    },
     onTime(value) {
       console.log(value);
     },
@@ -121,7 +229,7 @@ export default {
       let timeStr = `${date.getMonth()}月${date.getDate()}日`;
       console.log(timeStr);
       console.log(data.data.weekDateList);
-      this.timeData = data.data.weekDateList;
+      // this.timeData = data.data.weekDateList;
     },
     // 查看详情下
     // attentionTeacher() {
@@ -353,16 +461,74 @@ export default {
 }
 .Time_tabs {
   width: 90%;
-  height: 0.6rem;
+  height: 0.8rem;
   background-color: white;
   margin: 0.1rem auto;
   border-radius: 0.05rem;
   .tab_top {
     width: 100%;
-    // height: 80%;
+    height: 80%;
     border-bottom: 0.001rem solid gray;
-    .van-tabs__wrap--scrollable .van-tab {
-      height: 1rem;
+    overflow: hidden;
+    .tab_in {
+      width: 10rem;
+      height: 100%;
+      display: flex;
+      .top_slide {
+        width: 0.6rem;
+        height: 100%;
+        // background-color: chocolate;
+        margin: 0 0.1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 0.14rem;
+        // color: gray;
+        padding: 0.1rem 0;
+        box-sizing: border-box;
+      }
+      .top_slide_active {
+        width: 0.6rem;
+        height: 100%;
+        // background-color: chocolate;
+        margin: 0 0.1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 0.14rem;
+        color: orangered;
+        padding: 0.1rem 0;
+        box-sizing: border-box;
+        // border-bottom: 0.037rem solid rgb(0, 153, 255);
+        position: relative;
+        p {
+          position: absolute;
+          bottom: 0;
+          left: 0.15rem;
+          width: 0.2rem;
+          height: 0.035rem;
+          background-color: rgb(0, 102, 255);
+          border-radius: 0.3rem;
+        }
+      }
+      .top_slide_active2 {
+        width: 0.6rem;
+        height: 100%;
+        // background-color: chocolate;
+        margin: 0 0.1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 0.14rem;
+        color: gray;
+        padding: 0.1rem 0;
+        box-sizing: border-box;
+        position: relative;
+        // border-bottom: 0.037rem solid rgb(0, 153, 255);
+      }
     }
   }
 }

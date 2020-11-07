@@ -21,7 +21,7 @@
       <!-- 日历 -->
       <div>
         <p>日期</p>
-        <van-calendar
+        <!-- <van-calendar
           title="日历"
           :poppable="false"
           :show-confirm="false"
@@ -29,8 +29,8 @@
           :show-subtitle="false"
           @select="onSelect"
           :style="{ height: '200px' }"
-        />
-        <!-- <ul>
+        /> -->
+        <ul>
           <li v-for="(item, index) in lwh_date" :key="index">{{ item }}</li>
         </ul>
         <div>
@@ -48,7 +48,7 @@
             }}</font>
             <span :class="{ lwh_span_default: item.flag }">今天</span>
           </p>
-        </div> -->
+        </div>
       </div>
       <!-- 时间选择 -->
 
@@ -342,9 +342,9 @@ export default {
       // 老师列表
       techerList: [],
       // 开始时间
-      startTime:"",
+      startTime: "",
       // 结束时间
-      endTime:"",
+      endTime: "",
       lwh_arr: [],
       lwh_index: null,
       show: false,
@@ -494,7 +494,7 @@ export default {
       } else {
         this.fenleiBox = [this.subjectID, this.GradeId];
       }
-      this.$store.commit("fenleiBox1",this.fenleiBox)
+      this.$store.commit("fenleiBox1", this.fenleiBox);
       console.log(this.fenleiBox);
     },
     // 点击学科分类
@@ -506,7 +506,7 @@ export default {
       } else {
         this.fenleiBox = [this.subjectID, this.GradeId];
       }
-      this.$store.commit("fenleiBox2",this.fenleiBox)
+      this.$store.commit("fenleiBox2", this.fenleiBox);
       console.log(this.fenleiBox);
     },
     // 点击老师类型
@@ -550,7 +550,7 @@ export default {
     // 结束时间
     lwh_confirm(val) {
       console.log(val);
-      this.endTime = this.startTime = `%20${val}`
+      this.endTime = this.startTime = `%20${val}`;
       console.log(this.endTime);
       this.leavetime = val;
       this.shows = false;
@@ -558,16 +558,16 @@ export default {
     // 开始时间
     btn(value) {
       console.log(value);
-      this.startTime = `%20${value}`
+      this.startTime = `%20${value}`;
       console.log(this.startTime);
       this.currentTime = value;
       this.show = false;
     },
     // 点击底部确认
     onClickOk() {
-      let box = []
-      box = this.fenleiWrapper.join(",")
-      this.$store.commit("fenleiBox3",this.fenleiBox)
+      let box = [];
+      box = this.fenleiWrapper.join(",");
+      this.$store.commit("fenleiBox3", this.fenleiBox);
       this.getTeacherList(
         this.typeID,
         this.GradeId,
@@ -611,47 +611,62 @@ export default {
     lwh_btn_data() {
       let date = new Date();
       let num = 0;
-      // 晚上12点时间获取
-      const start = new Date(
-        new Date(new Date().toLocaleDateString()).getTime() +
-          24 * 60 * 60 * 1000 -
-          1
-      );
-      console.log(start); //Mon Dec 04 2017 23:59:59 GMT+0800 (中国标准时间)
-      // 现在时间获取
-      let b = date.getTime();
-      // 12点时间-现在时间
-      let c = start.getTime() - b;
-      // 保存下标到本地
-      let indexadd = JSON.parse(window.localStorage.getItem("indexadd"));
-      let indexdel = JSON.parse(window.localStorage.getItem("indexdel"));
-      // 倒计时到达12点数值减1
-      setTimeout(() => {
-        indexadd--;
-        window.localStorage.setItem("indexadd", indexadd);
-        indexdel--;
-        window.localStorage.setItem("indexdel", indexdel);
-
-        if (indexdel == 0) {
-          indexadd = 0;
-          window.localStorage.setItem("indexadd", indexadd);
-          indexdel = 13;
-          window.localStorage.setItem("indexdel", indexdel);
-        }
-      }, c);
+      // // 晚上12点时间获取
+      // const start = new Date(
+      //   new Date(new Date().toLocaleDateString()).getTime() +
+      //     24 * 60 * 60 * 1000 -
+      //     1
+      // );
+      // // 现在时间获取
+      // let b = date.getTime();
+      // // 12点时间-现在时间
+      // let c = start.getTime() - b;
+      // // 保存下标到本地
+      // let indexadd = JSON.parse(window.localStorage.getItem("indexadd"));
+      // let indexdel = JSON.parse(window.localStorage.getItem("indexdel"));
+      // // 倒计时到达12点数值减1
+      // setTimeout(() => {
+      //   indexadd--;
+      //   window.localStorage.setItem("indexadd", indexadd);
+      //   indexdel--;
+      //   window.localStorage.setItem("indexdel", indexdel);
+      //   if (indexdel == 0) {
+      //     indexadd = 0;
+      //     window.localStorage.setItem("indexadd", indexadd);
+      //     indexdel = 13;
+      //     window.localStorage.setItem("indexdel", indexdel);
+      //   }
+      // }, c);
       let onum = 0;
-      for (let index = indexadd; index <= indexdel; index++) {
+      let a = [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+      ];
+
+      for (let index = 0; index <= a.length; index++) {
         onum++;
-        if (this.lwh_dates(index) == date.getDate()) {
+        if (a[index] == date.getDate()) {
           this.lwh_arr[onum] = {
-            date: this.lwh_dates(index),
+            date: a[index],
             flag: true,
             id: index,
           };
           num = index;
         } else {
           this.lwh_arr[onum] = {
-            date: this.lwh_dates(index),
+            date: a[index],
             flag: false,
             id: index,
           };
@@ -664,8 +679,6 @@ export default {
         }
       });
       this.lwh_arr.splice(0, 1);
-      console.log(indexadd, indexdel);
-      console.log(this.lwh_arr);
     },
     lwh_dates(num) {
       let date = new Date();
@@ -679,7 +692,7 @@ export default {
         this.lwh_index = index;
       }
     },
-    
+
     lwh_btn_list() {
       for (let index = 0; index < 20; index++) {
         this.lwh_term_list.push(`M${index + 1}`);
@@ -696,9 +709,9 @@ export default {
     },
   },
   computed: {
-    fenleiWrapper(){
-      return this.$store.state.fenleiWrapper
-    }
+    fenleiWrapper() {
+      return this.$store.state.fenleiWrapper;
+    },
   },
   watch: {},
 };
