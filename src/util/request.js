@@ -36,9 +36,7 @@ serve.interceptors.request.use((config) => {
     }
     config.headers.deviceid = deviceid;
     config.headers.devicetype = "H5";
-    // if (window.sessionStorage.getItem('token')) {
-    //     config.headers.Authorization = window.sessionStorage.getItem('token')
-    // }
+   
     Toast.loading({
         message: '加载中...',
         forbidClick: true,

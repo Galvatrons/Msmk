@@ -60,13 +60,15 @@ export default {
           arr.push({"attr_id":2,"attr_val_id":i.id})
         }
       })
+      
       let { data } = await this.$http.put(
         "https://www.365msmk.com/api/app/user",
         {
-          user_attr:arr
+          user_attr:JSON.stringify(arr)
         }
       );
-      console.log(data)
+      this.$router.back(1);
+      
     }
   },
   filters: {},

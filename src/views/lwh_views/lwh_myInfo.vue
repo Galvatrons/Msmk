@@ -80,7 +80,7 @@
       <div class="box" @click="toSetSubject">
         <div class="left">
           <span>学科</span>
-          <span>{{ xk }}</span>
+          <span>{{ xk.join(" ") }}</span>
         </div>
         <div class="right">
           <van-icon color="#CACACA" size="24px" name="arrow" />
@@ -149,10 +149,14 @@
         <li @click="show_head = false">取消</li>
       </ul>
     </van-popup>
+
+   
   </div>
+
 </template>
 
 <script>
+import BetterScroll from "better-scroll";
 import axios from "axios";
 import { Toast } from "vant";
 export default {
@@ -172,12 +176,13 @@ export default {
       columns: [],
       classColumns: [],
       xj: "",
-      xk: "",
+      xk: [],
       lwh_city: {
         province_list: {},
         city_list: {},
         county_list: {},
       },
+      lwh_bs:null,
     };
   },
   created() {},
@@ -187,6 +192,18 @@ export default {
     // this.sitePopshi(110000);
     // this.sitePopqu(110100);
     this.lwh_class();
+
+    this.$nextTick(() => {
+      this.lwh_bs = new BetterScroll(".lwh_is", {
+        probeType: 2,
+        click: true,
+        scrollX:true,
+        scrollY:false
+      });
+      // 上滑禁止
+       console.log(this.lwh_bs)
+    });
+  
   },
   activated() {},
   update() {},
@@ -202,9 +219,18 @@ export default {
         "https://www.365msmk.com/api/app/userInfo?"
       );
       this.lwh_info = data.data;
-      this.xj = data.data.attr[0].attr_value;
-      this.xk = data.data.attr[1].attr_value;
-      console.log(data);
+      this.xk=[]
+      data.data.attr.map((i)=>{
+        if(i.attr == "学科"){
+        this.xk.push(i.attr_value)
+        }else if(i.attr == "年级"){
+          console.log(this.xj)
+          this.xj=i.attr_value
+        }
+      })
+      this.xj = this.xj==""?"请选择":this.xj
+
+      console.log(this.xk);
     },
     //年级选择
     async lwh_class() {
@@ -354,14 +380,17 @@ export default {
     },
     // 修改年纪
     async onConfirm(value) {
+      let arr = [{attr_id:1,attr_val_id:value.id},{attr_id:2,attr_val_id:7}]
+      
       let { data } = await this.$http.put(
         "https://www.365msmk.com/api/app/user",
         {
-          user_attr: `[{"attr_id":1,"attr_val_id":${value.id}},{"attr_id":2,"attr_val_id":7}]`,
+          user_attr: JSON.stringify(arr),
         }
       );
-      console.log(data, value);
+      console.log(data,JSON.stringify(arr));
       this.classPopupIsShow = false;
+      this.lwh_Ajax();
     },
     onChange(picker, value, index) {
       //   Toast(`当前值：${value}, 当前索引：${index}`);
@@ -484,4 +513,5 @@ export default {
     border: none;
   }
 }
+
 </style>
