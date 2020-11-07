@@ -187,6 +187,8 @@ export default {
   },
   created() {},
   mounted() {
+    console.log(this.qr_text);
+    
     this.$nextTick(() => {
       this.wsy_bs = new BetterScroll(this.$refs.scrollBox, {
         probeType: 3,

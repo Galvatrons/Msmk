@@ -159,11 +159,6 @@ body,
   z-index: 100001;
   background: #f2f3f5;
 }
-<<<<<<< HEAD
-// .wh_content_all{
-//   // background: #fff !in;
-// }
-=======
 .wh_content_all{
   background-color: #fff!important;
 }
@@ -197,5 +192,4 @@ body,
     border-left: 2px solid #000 !important;
     transform: rotate(45deg);
 }
->>>>>>> a47fe7a6f1c3e3bb1319a0aaa3b0a4851b0f1ed9
 </style>

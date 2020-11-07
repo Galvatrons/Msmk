@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
     next(true)
 
   }
-  if (to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path !="/Wyl-Login") {
+  if (to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path != "/Wyl-Login") {
 
     next()
     store.commit("lwh_loadBtn", true)
@@ -65,11 +65,10 @@ router.beforeEach((to, from, next) => {
       next("/Wyl-Login")
       store.commit("lwh_loadBtn", false)
     }, 200);
-  } else if( to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path =="/Wyl-Login"){
+  } else if (to.path == "/lwh_my" && !window.sessionStorage.getItem("token") && from.path == "/Wyl-Login") {
     next("/lwh_main")
   } else {
     next()
-
   }
 
 
